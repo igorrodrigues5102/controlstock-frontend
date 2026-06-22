@@ -398,6 +398,77 @@ function deslogarUsuario() {
 
 
 // =======================================================================
+// BLOCO: 🪟 FUNÇÕES DE CONTROLE DOS MODAIS E AUTENTICAÇÃO
+// =======================================================================
+function abrirAuthModal() {
+    document.getElementById('modalAuth').classList.add('aberto');
+}
+
+function fecharAuthModal() {
+    document.getElementById('modalAuth').classList.remove('aberto');
+}
+
+function mudarAbasAuth(aba) {
+    document.querySelectorAll('.aba-auth').forEach(b => b.classList.remove('ativa'));
+    document.querySelectorAll('.secao-auth').forEach(s => s.classList.remove('ativa'));
+    document.getElementById('aba-' + aba).classList.add('ativa');
+    document.getElementById('form-' + aba).classList.add('ativa');
+}
+
+function fecharModalRomaneio() {
+    document.getElementById('modalRomaneio').classList.remove('aberto');
+}
+
+function fecharModalGateway() {
+    document.getElementById('modalGatewayPagamento').classList.remove('aberto');
+}
+
+function loginSocialSimulado(provedor) {
+    alert(`🔒 Login com ${provedor} é uma demonstração acadêmica. Use o formulário de e-mail.`);
+}
+
+function executarLoginCorporativo() {
+    ejecutarLoginCorporativo();
+}
+
+function carregarHistoricoPedidos() {
+    if (!usuarioLogado) return;
+    const corpo = document.getElementById('lista-pedidos-corpo');
+    if (!corpo) return;
+    corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando...</td></tr>";
+
+    fetch(`${API_BASE_URL}/api/pedidos/historico/${usuarioLogado.email}`)
+        .then(res => res.json())
+        .then(pedidos => {
+            corpo.innerHTML = "";
+            if (!pedidos || pedidos.length === 0) {
+                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Nenhum romaneio encontrado.</td></tr>";
+                return;
+            }
+            pedidos.forEach(p => {
+                corpo.innerHTML += `
+                    <tr>
+                        <td><b>${p.codigo || p.id}</b></td>
+                        <td>${p.dataEmissao || p.data || '-'}</td>
+                        <td style="color:var(--cor-sucesso); font-weight:bold;">${p.status || 'Faturado'}</td>
+                        <td style="text-align:right; font-weight:bold;">R$ ${parseFloat(p.total || 0).toFixed(2)}</td>
+                        <td style="text-align:center;">
+                            <button class="btn-detalhes" onclick="verDetalhesRomaneio(${p.id})">Ver</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(() => {
+            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico.</td></tr>";
+        });
+}
+
+function verDetalhesRomaneio(id) {
+    document.getElementById('modalRomaneio').classList.add('aberto');
+}
+
+// =======================================================================
 // BLOCO: 🗂️ NAVEGAÇÃO ENTRE ABAS DO MARKETPLACE
 // =======================================================================
 function mudarAba(nomeAba) {
