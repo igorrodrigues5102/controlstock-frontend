@@ -42,7 +42,9 @@ function iniciarCarrosselAutomatico() {
 // Dispara o carrossel de forma segura após a página carregar
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => setTimeout(iniciarCarrosselAutomatico, 1500));
-} else 
+} else {
+    setTimeout(iniciarCarrosselAutomatico, 1500);
+}
 
 
 // =======================================================================
@@ -487,7 +489,10 @@ function carregarProdutosDaAPI() {
                     </div>
                 `;
             });
+            // O LUGAR CERTO É AQUI (FORA E ANTES DO CATCH):
+            setTimeout(iniciarCarrosselAutomatico, 1000);
         }).catch(() => { 
+            
             vitrine.innerHTML = "<p style='color:var(--cor-erro);font-weight:bold;'>Servidor Backend Desconectado.</p>"; 
         });
 }
@@ -1219,7 +1224,7 @@ function iniciarCarrosselAutomatico() {
             // Avança 300 pixels para o lado de forma suave
             container.scrollBy({ left: 300, behavior: 'smooth' });
         }
-    }, 4000); // Tenta mover a cada 4 segundos
+    }, 3000); // Tenta mover a cada 4 segundos
 }
 
 // Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
