@@ -47,41 +47,74 @@ if (document.readyState === 'loading') {
 }
 
 
-// =======================================================================
-// BLOCO 2: 🧭 CONTROLE DE NAVEGAÇÃO (ABAS E ABRE/FECHA MODAIS)
-// =======================================================================
-function mudarAba(nomeAba) {
-    document.querySelectorAll('.aba-painel').forEach(a => a.classList.remove('ativa'));
-    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('ativo'));
+function abrirModal(id) {
+    const prod = listaProdutosGlobal.find(p => p.id === id);
+    if (!prod) return;
+
+    document.getElementById('modalTitulo').innerText = prod.nome;
+    document.getElementById('modalPreco').innerText = `R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
+
+    tamanhoSelectedNoModal = null; 
+    const btnAddModal = document.getElementById('btn-add-modal');
+    if (btnAddModal) {
+        btnAddModal.disabled = true;
+        btnAddModal.innerText = "🛒 Escolha um Tamanho";
+    }
+
+    const campoCep = document.getElementById('cep-frete');
+    const containerResultado = document.getElementById('resultado-frete-modal');
+    if (campoCep) campoCep.value = "";
+    if (containerResultado) containerResultado.innerHTML = "";
+
+    if (prod.fotos && prod.fotos.length > 0) {
+        fotosDoProdutoModal = prod.fotos.map(f => f.url);
+    } else {
+        fotosDoProdutoModal = ['https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500'];
+    }
     
-    document.getElementById(`aba-${nomeAba}`).classList.add('ativa');
-    
-    if (nomeAba === 'vitrine') document.getElementById('btn-vitrine').classList.add('ativo');
-    if (nomeAba === 'carrinho') document.getElementById('btn-carrinho').classList.add('ativo');
-    if (nomeAba === 'historico') document.getElementById('btn-historico').classList.add('ativo');
-    if (nomeAba === 'admin') document.getElementById('btn-admin').classList.add('ativo');
+    fotoCarrosselAtual = 0;
+    mostrarFotoCarrossel();
+    gerarIndicadoresCarrossel();
+
+    const containerTamanhos = document.getElementById('container-tamanhos-botoes');
+    if (containerTamanhos) {
+        containerTamanhos.innerHTML = ""; 
+        const listaTamanhosPadrao = ["P", "M", "G", "GG"];
+        
+        listaTamanhosPadrao.forEach(tam => {
+            const botao = document.createElement('button');
+            botao.className = "btn-tamanho-opcao";
+            botao.innerText = tam;
+            
+            botao.onclick = () => {
+                document.querySelectorAll('.btn-tamanho-opcao').forEach(b => b.classList.remove('selecionado'));
+                botao.classList.add('selecionado');
+                tamanhoSelectedNoModal = tam; 
+                
+                if (btnAddModal) {
+                    const esgotado = prod.quantidadeAtual <= 0;
+                    btnAddModal.disabled = esgotado;
+                    btnAddModal.innerText = esgotado ? "❌ Esgotado" : `🛒 Adicionar Tamanho ${tam}`;
+                }
+            };
+            containerTamanhos.appendChild(botao);
+        });
+    }
+
+    if (btnAddModal) {
+        btnAddModal.onclick = () => {
+            adicionarAoCarrinho(prod.id, prod.nome, prod.preco, prod.quantidadeAtual, tamanhoSelectedNoModal);
+            fecharModal(); 
+        };
+    }
+
+    document.getElementById('modalDetalhes').classList.add('aberto');
 }
 
-function abrirAuthModal() { document.getElementById('modalAuth').classList.add('aberto'); }
-function fecharAuthModal() { document.getElementById('modalAuth').classList.remove('aberto'); }
-
-function abrirModal(id) {
+function fecharModal() {
     document.getElementById('modalDetalhes').classList.remove('aberto');
 }
-
-function fecharModalGateway() {
-    document.getElementById('modalGatewayPagamento').classList.remove('aberto');
-}
-
-function mudarAbasAuth(tipo) {
-    document.querySelectorAll('.aba-auth').forEach(a => a.classList.remove('ativa'));
-    document.querySelectorAll('.secao-auth').forEach(s => s.classList.remove('ativa'));
-    
-    document.getElementById(`aba-${tipo}`).classList.add('ativa');
-    document.getElementById(`form-${tipo}`).classList.add('ativa');
-}
-
-
 // =======================================================================
 // BLOCO 2.1: 🔀 CONTROLE DO FLUXO DO CHECKOUT (WIZARD EM ETAPAS)
 // =======================================================================
