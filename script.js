@@ -419,6 +419,7 @@ function aplicarCupomDesconto() {
 // =======================================================================
 function carregarProdutosDaAPI() {
     const vitrine = document.getElementById('vitrine-produtos');
+    if (!vitrine) return;
     vitrine.innerHTML = "<p style='color: var(--cor-subtexto);'>Buscando catálogo no banco...</p>";
 
     fetch(`${API_BASE_URL}/api/produtos`)
@@ -457,20 +458,17 @@ function carregarProdutosDaAPI() {
                             
                             <div class="container-botoes-card">
                                 <button class="btn-detalhes" onclick="abrirModal(${prod.id})">🔍 Detalhes</button>
-                                <button class="btn-add" ${esgotado ? "disabled" : ""} onclick="adicionarAoCarrinho(${prod.id}, '${prod.nome}', ${prod.preco}, ${prod.quantidadeAtual})">${esgotado ? 'Esgotado' : 'Adicionar'}</button>
+                                <button class="btn-add" ${esgotado ? "disabled" : ""} onclick="abrirModal(${prod.id})">${esgotado ? 'Esgotado' : 'Adicionar'}</button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-            // O LUGAR CERTO É AQUI (FORA E ANTES DO CATCH):
             setTimeout(iniciarCarrosselAutomatico, 1000);
         }).catch(() => { 
-            
             vitrine.innerHTML = "<p style='color:var(--cor-erro);font-weight:bold;'>Servidor Backend Desconectado.</p>"; 
         });
 }
-
 // =======================================================================
 // BLOCO 7: 🧮 LOGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
 // =======================================================================
