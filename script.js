@@ -761,10 +761,27 @@ function baixarRomaneioPDF() {
 // BLOCO 10: ⚙️ COMUNICAÇÃO DE ADMINISTRAÇÃO (LOTE, GESTÃO AVANÇADA E CADASTROS)
 // =======================================================================
 function registrarEntradaLote() {
-    const id = parseInt(document.getElementById('lote-id').value);
-    const qtd = parseInt(document.getElementById('lote-qtd').value);
-    const obs = document.getElementById('lote-obs').value.trim();
+    // Captura os elementos do HTML de forma segura
+    const inputId = document.getElementById('lote-id');
+    const inputQtd = document.getElementById('lote-qtd');
+    const inputObs = document.getElementById('lote-obs');
 
+    // Valida se os elementos existem na tela antes de ler o valor
+    if (!inputId || !inputQtd) {
+        console.error("Erro de portfólio: Os inputs 'lote-id' ou 'lote-qtd' não foram encontrados no HTML.");
+        return;
+    }
+
+    // Pega os valores e converte garantindo que não fiquem vazios
+    const id = parseInt(inputId.value, 10);
+    const qtd = parseInt(inputQtd.value, 10);
+    const obs = inputObs ? inputObs.value.trim() : "Carga de reabastecimento.";
+
+    // Validação robusta de Portfólio (Impede o envio de dados zerados ou inválidos)
+    if (isNaN(id) || isNaN(qtd) || qtd <= 0) {
+        alert("⚠️ Por favor, informe um ID válido e uma Quantidade maior que zero!");
+        return;
+    
     if (!id || !qtd) { alert("⚠️ Preencha o ID e a Quantidade do lote."); return; }
 
     fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
