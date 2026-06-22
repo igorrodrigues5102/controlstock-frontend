@@ -97,7 +97,7 @@ function abrirModal(id) {
     mostrarFotoCarrossel();
     gerarIndicadoresCarrossel();
 
-    // 🎯 GERAR OS BOTÕES DE TAMANHO DINAMICAMENTE DENTRO DO MODAL
+// 🎯 GERAR OS BOTÕES DE TAMANHO DINAMICAMENTE DENTRO DO MODAL
     const containerTamanhos = document.getElementById('container-tamanhos-botoes');
     if (containerTamanhos) {
         containerTamanhos.innerHTML = ""; // Reseta os botões antigos
@@ -139,13 +139,12 @@ function abrirModal(id) {
         };
     }
 
-    document.getElementById('modalDetalhes').classList.add('aberto');
-}
-    
+    // 📸 CONTROLE DE FOTOS E REFRESH DO MODAL
     fotoCarrosselAtual = 0;
     mostrarFotoCarrossel();
     gerarIndicadoresCarrossel();
 
+    // 🚀 ABRE O MODAL NA TELA
     document.getElementById('modalDetalhes').classList.add('aberto');
 }
 
