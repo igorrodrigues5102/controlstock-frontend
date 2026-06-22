@@ -42,9 +42,8 @@ function iniciarCarrosselAutomatico() {
 // Dispara o carrossel de forma segura após a página carregar
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => setTimeout(iniciarCarrosselAutomatico, 1500));
-} else {
-    setTimeout(iniciarCarrosselAutomatico, 1500);
-}
+} else 
+
 
 // =======================================================================
 // BLOCO 2: 🧭 CONTROLE DE NAVEGAÇÃO (ABAS E ABRE/FECHA MODAIS)
