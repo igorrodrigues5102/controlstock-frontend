@@ -14,7 +14,7 @@ let descontoCupomAtivo = 0; // Armazena o valor bruto deduzido pelo cupom
 console.log("O motor lógico do script.js foi carregado com sucesso!");
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
-
+var produtoAtualIndex = 0; // Mudamos de 'let' para 'var'
 let intervaloCarrossel;
 
 function iniciarCarrosselAutomatico() {
