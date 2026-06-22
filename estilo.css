@@ -191,10 +191,9 @@ h2, h3, .logo {
 }
 
 .lista-produtos {
-    display: flex;             /* Alinha os produtos lado a lado */
-    overflow-x: auto;          /* Permite deslizar para o lado */
-    scroll-behavior: smooth;   /* Deixa o movimento do carrossel suave */
-    gap: 20px;                 /* Dá espaço entre os cards */
+    display: grid;                             /* Transforma em Grade */
+    grid-template-columns: repeat(4, 1fr);     /* Trava em exatamente 4 colunas iguais */
+    gap: 20px;                                 /* Dá espaço entre os cards */
     padding: 15px 5px;
 }
 
