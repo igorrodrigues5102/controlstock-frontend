@@ -13,39 +13,7 @@ let descontoCupomAtivo = 0; // Armazena o valor bruto deduzido pelo cupom
 
 console.log("O motor lógico do script.js foi carregado com sucesso!");
 
-// ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
-var produtoAtualIndex = 0; // Mudamos de 'let' para 'var'
 let intervaloCarrossel;
-
-function iniciarCarrosselAutomatico() {
-    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
-
-    intervaloCarrossel = setInterval(() => {
-        // Busca os cards de produtos na tela
-        const cards = document.querySelectorAll('#container-produtos .card-produto') || document.querySelectorAll('#produtos-container .card-produto');
-        if (cards.length <= 1) return; 
-
-        produtoAtualIndex++;
-        if (produtoAtualIndex >= cards.length) {
-            produtoAtualIndex = 0; 
-        }
-
-        // Faz o scroll suave até o próximo produto
-        cards[produtoAtualIndex].scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        });
-    }, 4000); // Rola a cada 4 segundos
-}
-
-// Dispara o carrossel de forma segura após a página carregar
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(iniciarCarrosselAutomatico, 1500));
-} else {
-    setTimeout(iniciarCarrosselAutomatico, 1500);
-}
-
 
 function abrirModal(id) {
     const prod = listaProdutosGlobal.find(p => p.id === id);
@@ -373,30 +341,6 @@ function aplicarSessaoUsuario() {
     atualizarInterface();
 }
 
-function deslogarUsuario() {
-    usuarioLogado = null;
-    localStorage.removeItem('controlstock_sessao');
-    
-    document.getElementById('btn-entrar-topo').style.display = "flex";
-    document.getElementById('painel-user-topo').style.display = "none";
-    document.getElementById('alerta-login-checkout').style.display = "block";
-    document.getElementById('painel-admin-bloqueado').style.display = "block";
-    document.getElementById('painel-admin-liberado').style.display = "none";
-    
-    document.getElementById('login-email').value = "";
-    document.getElementById('login-senha').value = "";
-    document.getElementById('cad-nome').value = "";
-    document.getElementById('cad-email').value = "";
-    document.getElementById('cad-cpf').value = ""; 
-    document.getElementById('cad-senha').value = "";
-    document.getElementById('msg-cpf-cad').innerText = "";
-    
-    carregarProdutosDaAPI();
-    atualizarInterface();
-    mudarAba('vitrine');
-}
-
-
 // =======================================================================
 // BLOCO: 🪟 FUNÇÕES DE CONTROLE DOS MODAIS E AUTENTICAÇÃO
 // =======================================================================
@@ -424,7 +368,7 @@ function fecharModalGateway() {
 }
 
 function loginSocialSimulado(provedor) {
-    alert(`🔒 Login com ${provedor} é uma demonstração acadêmica. Use o formulário de e-mail.`);
+    alert('🔒 Login com ' + provedor + ' é uma demonstração acadêmica. Use o formulário de e-mail.');
 }
 
 function executarLoginCorporativo() {
@@ -436,32 +380,19 @@ function carregarHistoricoPedidos() {
     const corpo = document.getElementById('lista-pedidos-corpo');
     if (!corpo) return;
     corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando...</td></tr>";
-
-    fetch(`${API_BASE_URL}/api/pedidos/historico/${usuarioLogado.email}`)
+    fetch(API_BASE_URL + '/api/pedidos/historico/' + usuarioLogado.email)
         .then(res => res.json())
         .then(pedidos => {
-            corpo.innerHTML = "";
+            corpo.innerHTML = '';
             if (!pedidos || pedidos.length === 0) {
                 corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Nenhum romaneio encontrado.</td></tr>";
                 return;
             }
             pedidos.forEach(p => {
-                corpo.innerHTML += `
-                    <tr>
-                        <td><b>${p.codigo || p.id}</b></td>
-                        <td>${p.dataEmissao || p.data || '-'}</td>
-                        <td style="color:var(--cor-sucesso); font-weight:bold;">${p.status || 'Faturado'}</td>
-                        <td style="text-align:right; font-weight:bold;">R$ ${parseFloat(p.total || 0).toFixed(2)}</td>
-                        <td style="text-align:center;">
-                            <button class="btn-detalhes" onclick="verDetalhesRomaneio(${p.id})">Ver</button>
-                        </td>
-                    </tr>
-                `;
+                corpo.innerHTML += '<tr><td><b>' + (p.codigo || p.id) + '</b></td><td>' + (p.dataEmissao || p.data || '-') + '</td><td style="color:var(--cor-sucesso); font-weight:bold;">' + (p.status || 'Faturado') + '</td><td style="text-align:right; font-weight:bold;">R$ ' + parseFloat(p.total || 0).toFixed(2) + '</td><td style="text-align:center;"><button class="btn-detalhes" onclick="verDetalhesRomaneio(' + p.id + ')">Ver</button></td></tr>';
             });
         })
-        .catch(() => {
-            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico.</td></tr>";
-        });
+        .catch(() => { corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico.</td></tr>"; });
 }
 
 function verDetalhesRomaneio(id) {
@@ -472,28 +403,14 @@ function verDetalhesRomaneio(id) {
 // BLOCO: 🗂️ NAVEGAÇÃO ENTRE ABAS DO MARKETPLACE
 // =======================================================================
 function mudarAba(nomeAba) {
-    // Esconde todas as abas
     document.querySelectorAll('.aba-painel').forEach(aba => aba.classList.remove('ativa'));
-
-    // Remove o estado ativo de todos os botões do menu
     document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('ativo'));
-
-    // Mostra a aba selecionada
     const abaAlvo = document.getElementById('aba-' + nomeAba);
     if (abaAlvo) abaAlvo.classList.add('ativa');
-
-    // Ativa o botão correspondente no menu
     const btnAlvo = document.getElementById('btn-' + nomeAba);
     if (btnAlvo) btnAlvo.classList.add('ativo');
-
-    // Ações específicas por aba
-    if (nomeAba === 'carrinho') {
-        atualizarInterface();
-        avancarWizard(1);
-    }
-    if (nomeAba === 'historico' && usuarioLogado) {
-        carregarHistoricoPedidos();
-    }
+    if (nomeAba === 'carrinho') { atualizarInterface(); avancarWizard(1); }
+    if (nomeAba === 'historico' && usuarioLogado) { carregarHistoricoPedidos(); }
     if (nomeAba === 'admin') {
         if (usuarioLogado && usuarioLogado.nivel === 'ADMIN') {
             document.getElementById('painel-admin-bloqueado').style.display = 'none';
@@ -506,6 +423,30 @@ function mudarAba(nomeAba) {
         }
     }
 }
+
+function deslogarUsuario() {
+    usuarioLogado = null;
+    localStorage.removeItem('controlstock_sessao');
+    
+    document.getElementById('btn-entrar-topo').style.display = "flex";
+    document.getElementById('painel-user-topo').style.display = "none";
+    document.getElementById('alerta-login-checkout').style.display = "block";
+    document.getElementById('painel-admin-bloqueado').style.display = "block";
+    document.getElementById('painel-admin-liberado').style.display = "none";
+    
+    document.getElementById('login-email').value = "";
+    document.getElementById('login-senha').value = "";
+    document.getElementById('cad-nome').value = "";
+    document.getElementById('cad-email').value = "";
+    document.getElementById('cad-cpf').value = ""; 
+    document.getElementById('cad-senha').value = "";
+    document.getElementById('msg-cpf-cad').innerText = "";
+    
+    carregarProdutosDaAPI();
+    atualizarInterface();
+    mudarAba('vitrine');
+}
+
 
 // =======================================================================
 // 🎯 MOTOR DE VALIDAÇÃO E CÁLCULO DE CUPONS DE DESCONTO (MARKETPLACE)
@@ -1386,9 +1327,6 @@ setInterval(() => {
 }, 3000);
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
-produtoAtualIndex = 0;
-intervaloCarrossel = null;
-
 function iniciarCarrosselAutomatico() {
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
 
