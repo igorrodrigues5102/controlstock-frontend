@@ -1207,26 +1207,25 @@ setInterval(() => {
  intervaloCarrossel;
 
 function iniciarCarrosselAutomatico() {
-    // Limpa qualquer intervalo ativo para não duplicar o timer
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
 
-    // Define que a cada 4000 milissegundos (4 segundos) o carrossel avança
     intervaloCarrossel = setInterval(() => {
-        const cards = document.querySelectorAll('#container-produtos .card-produto');
-        if (cards.length <= 1) return; // Se tiver só 1 produto ou nenhum, não precisa rodar
+        // AJUSTADO: Agora aponta exatamente para o ID 'vitrine-produtos' do seu HTML
+        const cards = document.querySelectorAll('#vitrine-produtos .card-produto');
+        if (cards.length <= 1) return; 
 
         produtoAtualIndex++;
         if (produtoAtualIndex >= cards.length) {
-            produtoAtualIndex = 0; // Volta para o primeiro produto
+            produtoAtualIndex = 0; 
         }
 
-        // Faz o scroll suave até o produto atual da vez
+        // Faz o deslize suave até o próximo card de produto
         cards[produtoAtualIndex].scrollIntoView({
             behavior: 'smooth',
             block: 'nearest',
             inline: 'center'
         });
-    }, 4000);
+    }, 4000); // Roda a cada 4 segundos
 }
 
 // Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
