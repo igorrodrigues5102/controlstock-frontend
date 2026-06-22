@@ -1210,22 +1210,17 @@ function iniciarCarrosselAutomatico() {
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
 
     intervaloCarrossel = setInterval(() => {
-        // AJUSTADO: Agora aponta exatamente para o ID 'vitrine-produtos' do seu HTML
-        const cards = document.querySelectorAll('#vitrine-produtos .card-produto');
-        if (cards.length <= 1) return; 
+        const container = document.getElementById('vitrine-produtos');
+        if (!container) return;
 
-        produtoAtualIndex++;
-        if (produtoAtualIndex >= cards.length) {
-            produtoAtualIndex = 0; 
+        // Se chegou no final da rolagem, volta para o início (0)
+        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            // Avança 300 pixels para o lado de forma suave
+            container.scrollBy({ left: 300, behavior: 'smooth' });
         }
-
-        // Faz o deslize suave até o próximo card de produto
-        cards[produtoAtualIndex].scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        });
-    }, 4000); // Roda a cada 4 segundos
+    }, 4000); // Tenta mover a cada 4 segundos
 }
 
 // Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
