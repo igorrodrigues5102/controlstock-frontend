@@ -230,6 +230,15 @@ h2, h3, .logo {
 
 .info-corpo-card {
     padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;                   /* Ocupa todo o espaço vertical livre do card */
+}
+/* Container que segura os botões Detalhes e Adicionar */
+.container-botoes-card {
+    margin-top: auto;          /* Empurra o grupo de botões totalmente para o rodapé */
+    display: flex;
+    gap: 10px;                 /* Dá um espaço elegante de 10px entre os dois botões */
 }
 
 .nome-prod {
