@@ -13,7 +13,38 @@ let descontoCupomAtivo = 0; // Armazena o valor bruto deduzido pelo cupom
 
 console.log("O motor lógico do script.js foi carregado com sucesso!");
 
+// ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
+var produtoAtualIndex = 0; // Mudamos de 'let' para 'var'
 let intervaloCarrossel;
+
+function iniciarCarrosselAutomatico() {
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+
+    intervaloCarrossel = setInterval(() => {
+        // Busca os cards de produtos na tela
+        const cards = document.querySelectorAll('#container-produtos .card-produto') || document.querySelectorAll('#produtos-container .card-produto');
+        if (cards.length <= 1) return; 
+
+        produtoAtualIndex++;
+        if (produtoAtualIndex >= cards.length) {
+            produtoAtualIndex = 0; 
+        }
+
+        // Faz o scroll suave até o próximo produto
+        cards[produtoAtualIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }, 4000); // Rola a cada 4 segundos
+}
+
+// Dispara o carrossel de forma segura após a página carregar
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(iniciarCarrosselAutomatico, 1500));
+} else {
+    setTimeout(iniciarCarrosselAutomatico, 1500);
+}
 
 
 function abrirModal(id) {
@@ -365,6 +396,45 @@ function deslogarUsuario() {
     mudarAba('vitrine');
 }
 
+
+// =======================================================================
+// BLOCO: 🗂️ NAVEGAÇÃO ENTRE ABAS DO MARKETPLACE
+// =======================================================================
+function mudarAba(nomeAba) {
+    // Esconde todas as abas
+    document.querySelectorAll('.aba-painel').forEach(aba => aba.classList.remove('ativa'));
+
+    // Remove o estado ativo de todos os botões do menu
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('ativo'));
+
+    // Mostra a aba selecionada
+    const abaAlvo = document.getElementById('aba-' + nomeAba);
+    if (abaAlvo) abaAlvo.classList.add('ativa');
+
+    // Ativa o botão correspondente no menu
+    const btnAlvo = document.getElementById('btn-' + nomeAba);
+    if (btnAlvo) btnAlvo.classList.add('ativo');
+
+    // Ações específicas por aba
+    if (nomeAba === 'carrinho') {
+        atualizarInterface();
+        avancarWizard(1);
+    }
+    if (nomeAba === 'historico' && usuarioLogado) {
+        carregarHistoricoPedidos();
+    }
+    if (nomeAba === 'admin') {
+        if (usuarioLogado && usuarioLogado.nivel === 'ADMIN') {
+            document.getElementById('painel-admin-bloqueado').style.display = 'none';
+            document.getElementById('painel-admin-liberado').style.display = 'block';
+            atualizarDashboardAdmin();
+            carregarTabelasInventarioEAuditoria();
+        } else {
+            document.getElementById('painel-admin-bloqueado').style.display = 'block';
+            document.getElementById('painel-admin-liberado').style.display = 'none';
+        }
+    }
+}
 
 // =======================================================================
 // 🎯 MOTOR DE VALIDAÇÃO E CÁLCULO DE CUPONS DE DESCONTO (MARKETPLACE)
@@ -1245,6 +1315,9 @@ setInterval(() => {
 }, 3000);
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
+produtoAtualIndex = 0;
+intervaloCarrossel = null;
+
 function iniciarCarrosselAutomatico() {
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
 
