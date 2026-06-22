@@ -901,3 +901,32 @@ button {
     background: #3b82f6 !important;
     transform: translateY(-1px);
 }
+/* =======================================================================
+   🔮 BOTOES DE SELEÇÃO DE TAMANHO PREMIUM (P, M, G, GG)
+   ======================================================================= */
+.btn-tamanho-opcao {
+    background: #050507;
+    color: #fff;
+    border: 2px solid #2a253b;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;                  /* Faz todos os botões terem a mesma largura */
+    text-align: center;
+}
+
+.btn-tamanho-opcao:hover {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+/* Estado ativo: Quando o cliente clica no tamanho */
+.btn-tamanho-opcao.selecionado {
+    background: rgba(217, 70, 239, 0.1) !important;
+    border-color: var(--cor-destaque) !important;
+    color: #fff !important;
+    box-shadow: 0 0 15px var(--cor-destaque);
+}
