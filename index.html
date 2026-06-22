@@ -318,20 +318,29 @@
                 <div class="carrossel-indicadores" id="carrossel-pontos"></div>
             </div>
             <div class="modal-conteudo">
-                <div class="modal-titulo" id="modalTitulo">Nome do Produto</div>
-                <div class="modal-preco" id="modalPreco">R$ 0,00</div>
-                <div class="modal-descricao" id="modalDescricao">Descrição detalhada...</div>
-                <div class="container-frete-modal" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #334155;">
-                    <label for="cep-frete" style="font-size: 13px; color: var(--cor-subtexto); display: block; margin-bottom: 8px;">🚚 Simular Frete e Prazo de Entrega:</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="cep-frete" placeholder="Digite seu CEP" maxlength="9" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 14px;">
-                        <button onclick="calcularFreteSimulado()" style="background: var(--cor-primaria); color: #fff; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px;">Calcular</button>
-                    </div>
-                    <div id="resultado-frete-modal" style="margin-top: 10px; font-size: 13px; line-height: 1.4;"></div>
-                </div>
+    <div class="modal-titulo" id="modalTitulo">Nome do Produto</div>
+    <div class="modal-preco" id="modalPreco">R$ 0,00</div>
+    <div class="modal-descricao" id="modalDescricao">Descrição detalhada...</div>
+    
+    <div class="seletor-tamanho-modal" style="margin-top: 20px;">
+        <label style="font-size: 12px; color: var(--cor-subtexto); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">📐 Selecione o Tamanho:</label>
+        <div id="container-tamanhos-botoes" style="display: flex; gap: 10px;">
             </div>
-        </div>
     </div>
+
+    <button id="btn-add-modal" class="btn-add" style="width: 100%; padding: 12px; margin-top: 20px; font-size: 14px; border-radius: 8px;" disabled>
+        🛒 Escolha um Tamanho
+    </button>
+
+    <div class="container-frete-modal" style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #334155;">
+        <label for="cep-frete" style="font-size: 13px; color: var(--cor-subtexto); display: block; margin-bottom: 8px;">🚚 Simular Frete e Prazo de Entrega:</label>
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="cep-frete" placeholder="Digite seu CEP" maxlength="9" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 14px;">
+            <button onclick="calcularFreteSimulado()" style="background: var(--cor-primaria); color: #fff; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px;">Calcular</button>
+        </div>
+        <div id="resultado-frete-modal" style="margin-top: 10px; font-size: 13px; line-height: 1.4;"></div>
+    </div>
+</div>
 
     <div class="modal-background" id="modalRomaneio">
         <div class="modal-container" style="max-width: 600px;">
