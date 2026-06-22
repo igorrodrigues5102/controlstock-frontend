@@ -1,6 +1,4 @@
-// =======================================================================
-// ControlStock — script.js (Versão Unificada Avançada — Produção Railway)
-// =======================================================================
+// ControlStock - script.js
 
 // URL BASE DA API NA NUVEM (RAILWAY)
 const API_BASE_URL = 'https://controlstock-backend-production.up.railway.app';
@@ -84,7 +82,7 @@ function mudarAbasAuth(tipo) {
 // =======================================================================
 // BLOCO 2.1: 🔀 CONTROLE DO FLUXO DO CHECKOUT (WIZARD EM ETAPAS)
 // =======================================================================
-function avanzarWizard(passo) {
+function avancarWizard(passo) {
     // Esconde as seções da esquerda
     document.getElementById('checkout-secao-itens').style.display = 'none';
     document.getElementById('checkout-secao-endereco').style.display = 'none';
