@@ -1111,7 +1111,6 @@ function calcularFreteSimulado() {
     }
 }
 
-
 // =======================================================================
 // BLOCO 13: 🔌 INICIALIZAÇÃO DOS EVENT LISTENERS DO DOM
 // =======================================================================
@@ -1233,8 +1232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-});
-
+}); // 🎯 FECHAMENTO EXATO DO DOMContentLoaded AQUI!
 
 // =======================================================================
 // INTERVALO DE EXECUÇÃO EM TEMPO REAL (ATUALIZA A CADA 3 SEGUNDOS)
@@ -1248,8 +1246,8 @@ setInterval(() => {
 }, 3000);
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
- produtoAtualIndex = 0;
- intervaloCarrossel;
+produtoAtualIndex = 0;
+intervaloCarrossel = null;
 
 function iniciarCarrosselAutomatico() {
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
@@ -1294,9 +1292,6 @@ function iniciarCarrosselAutomatico() {
     }, 3000); // Troca a foto a cada 3 segundos de forma automática
 }
 
-// Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
-// Procure onde os produtos são desenhados na tela e adicione a chamada abaixo após o loop:
-// iniciarCarrosselAutomatico();
 // Sistema Centralizado de Notificações Toast para o Portfólio
 function mostrarToast(mensagem, tipo = 'sucesso') {
     const container = document.getElementById('toast-container');
