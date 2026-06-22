@@ -1341,5 +1341,4 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
         toast.style.transform = 'translateX(50px)';
         setTimeout(() => toast.remove(), 400);
     }, 3000);
-}
 });
