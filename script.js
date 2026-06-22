@@ -781,7 +781,7 @@ function registrarEntradaLote() {
     if (isNaN(id) || isNaN(qtd) || qtd <= 0) {
         alert("⚠️ Por favor, informe um ID válido e uma Quantidade maior que zero!");
         return;
-    
+    }
     if (!id || !qtd) { alert("⚠️ Preencha o ID e a Quantidade do lote."); return; }
 
     fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
