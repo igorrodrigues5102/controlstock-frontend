@@ -1342,3 +1342,4 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
         setTimeout(() => toast.remove(), 400);
     }, 3000);
 });
+}
