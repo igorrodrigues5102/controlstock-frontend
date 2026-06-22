@@ -3,7 +3,8 @@ const API_BASE_URL = 'https://controlstock-backend-production.up.railway.app';
 // =======================================================================
 // BLOCO 1: 🌌 ESTADO GLOBAL DO MARKETPLACE (VARIÁVEIS DE MEMÓRIA)
 // =======================================================================
-let carrinho = JSON.parse(localStorage.getItem('controlstock_carrinho')) || {};let listaProdutosGlobal = [];
+let carrinho = JSON.parse(localStorage.getItem('controlstock_carrinho')) || {};
+let listaProdutosGlobal = [];
 let usuarioLogado = JSON.parse(localStorage.getItem('controlstock_sessao')) || null;
 let cpfCadastroValido = false;
 let fotoCarrosselAtual = 0;
@@ -1077,7 +1078,7 @@ function calcularFreteSimulado() {
 // =======================================================================
 document.addEventListener('DOMContentLoaded', () => {
     carregarProdutosDaAPI();
-
+    atualizarInterface();
     if (usuarioLogado) {
         aplicarSessaoUsuario();
     }
