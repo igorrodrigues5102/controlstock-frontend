@@ -1,6 +1,3 @@
-// ControlStock - script.js
-
-// URL BASE DA API NA NUVEM (RAILWAY)
 const API_BASE_URL = 'https://controlstock-backend-production.up.railway.app';
 
 // =======================================================================
