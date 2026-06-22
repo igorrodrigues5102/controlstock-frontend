@@ -475,7 +475,7 @@ function carregarProdutosDaAPI() {
                 vitrine.innerHTML += `
                     <div class="card-produto ${classeAlertaCritico}">
                         <div class="container-foto">
-                            <img src="${urlPrimeiraFoto}" class="foto-prod" alt="${prod.nome}" onerror="this.src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500'">
+                            <img src="${urlPrimeiraFoto}" id="img-card-${prod.id}" class="foto-prod" alt="${prod.nome}" onerror="this.src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500'">
                         </div>
                         <div class="info-corpo-card">
                             <div class="nome-prod">${prod.nome}</div>
@@ -1213,18 +1213,44 @@ setInterval(() => {
 function iniciarCarrosselAutomatico() {
     if (intervaloCarrossel) clearInterval(intervaloCarrossel);
 
-    intervaloCarrossel = setInterval(() => {
-        const container = document.getElementById('vitrine-produtos');
-        if (!container) return;
+    // Cria um objeto na memória para controlar qual foto cada produto está exibindo
+    const indicesFotosProdutos = {};
 
-        // Se chegou no final da rolagem, volta para o início (0)
-        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
-            container.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-            // Avança 300 pixels para o lado de forma suave
-            container.scrollBy({ left: 300, behavior: 'smooth' });
-        }
-    }, 3000); // Tenta mover a cada 4 segundos
+    intervaloCarrossel = setInterval(() => {
+        if (!listaProdutosGlobal || listaProdutosGlobal.length === 0) return;
+
+        listaProdutosGlobal.forEach(prod => {
+            // Cria a lista de fotos disponíveis para este produto
+            const fotosDisponiveis = [];
+            if (prod.fotos && prod.fotos.length > 0) {
+                prod.fotos.forEach(f => fotosDisponiveis.push(f.url));
+            } else {
+                // Fallback caso venha do cadastro básico simplificado
+                if (prod.url1) fotosDisponiveis.push(prod.url1);
+                if (prod.url2) fotosDisponiveis.push(prod.url2);
+                if (prod.url3) fotosDisponiveis.push(prod.url3);
+            }
+
+            // Se o produto tiver mais de uma foto, faz o slide acontecer
+            if (fotosDisponiveis.length > 1) {
+                if (indicesFotosProdutos[prod.id] === undefined) {
+                    indicesFotosProdutos[prod.id] = 0;
+                }
+
+                // Avança para a próxima foto
+                indicesFotosProdutos[prod.id]++;
+                if (indicesFotosProdutos[prod.id] >= fotosDisponiveis.length) {
+                    indicesFotosProdutos[prod.id] = 0; // Volta para a primeira
+                }
+
+                // Alvo exato da tag img do card deste produto específico
+                const imgElement = document.getElementById(`img-card-${prod.id}`);
+                if (imgElement) {
+                    imgElement.src = fotosDisponiveis[indicesFotosProdutos[prod.id]];
+                }
+            }
+        });
+    }, 3000); // Troca a foto a cada 3 segundos de forma automática
 }
 
 // Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
