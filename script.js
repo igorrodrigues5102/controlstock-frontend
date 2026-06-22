@@ -1204,7 +1204,7 @@ setInterval(() => {
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
  produtoAtualIndex = 0;
-let intervaloCarrossel;
+ intervaloCarrossel;
 
 function iniciarCarrosselAutomatico() {
     // Limpa qualquer intervalo ativo para não duplicar o timer
