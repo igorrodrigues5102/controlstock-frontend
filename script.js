@@ -503,20 +503,26 @@ function carregarProdutosDaAPI() {
 // =======================================================================
 function adicionarAoCarrinho(id, nome, preco, estoqueMaximo) {
     if (carrinho[id]) {
-        if (carrinho[id].qtd >= estoqueMaximo) { 
-            mostrarToast(`Estoque limite atingido. Máximo disponível: ${estoqueMaximo} un.`, 'aviso'); 
-            return; 
+        if (carrinho[id].qtd >= estoqueMaximo) {
+            mostrarToast(`Estoque limite atingido. Máximo disponível: ${estoqueMaximo}`, 'aviso');
+            return;
         }
         carrinho[id].qtd += 1;
-    } else { 
-        carrinho[id] = { id: id, nome: nome, precoOriginal: preco, qtd: 1 }; 
+    } else {
+        carrinho[id] = { id: id, nome: nome, precoOriginal: preco, qtd: 1 };
     }
     
-    // Dispara o Toast de sucesso na tela!
     mostrarToast(`✓ ${nome} adicionado ao carrinho!`, 'sucesso');
     atualizarInterface();
 }
 
+function removerDoCarrinho(id) {
+    if (carrinho[id]) {
+        delete carrinho[id];
+        mostrarToast("Item removido do carrinho.", 'aviso');
+        atualizarInterface();
+    }
+}
 function atualizarInterface() {
     const corpo = document.getElementById('corpo-carrinho');
     if (!corpo) return;
@@ -538,7 +544,7 @@ function atualizarInterface() {
                 tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -10%</span>"; 
             }
             let subtotalItem = item.qtd * precoFinal; totalGeral += subtotalItem;
-            corpo.innerHTML += `<tr><td><b>${item.nome}</b>${tagAtacado}</td><td style="text-align:center;">${item.qtd}</td><td style="text-align:right;">R$ ${precoFinal.toFixed(2)}</td><td style="text-align:right;font-weight:bold;">R$ ${subtotalItem.toFixed(2)}</td></tr>`;
+           corpo.innerHTML += `<tr><td><button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:var(--cor-erro); cursor:pointer; margin-right:8px;">❌</button><b>${item.nome}</b>${tagAtacado}</td><td style="text-align:center;">${item.qtd}</td><td style="text-align:right;">R$ ${precoFinal.toFixed(2)}</td><td style="text-align:right;font-weight:bold;">R$ ${subtotalItem.toFixed(2)}</td></tr>`;
         });
     }
 
