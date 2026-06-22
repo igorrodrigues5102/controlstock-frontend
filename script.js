@@ -501,28 +501,44 @@ function carregarProdutosDaAPI() {
 // =======================================================================
 // BLOCO 7: 🧮 LOGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
 // =======================================================================
-function adicionarAoCarrinho(id, nome, preco, estoqueMaximo) {
-    if (carrinho[id]) {
-        if (carrinho[id].qtd >= estoqueMaximo) {
-            mostrarToast(`Estoque limite atingido. Máximo disponível: ${estoqueMaximo}`, 'aviso');
+function adicionarAoCarrinho(id, nome, preco, estoqueMaximo, tamanhoEscolhido) {
+    // Caso o usuário tente burlar e não selecione o tamanho, barra aqui
+    if (!tamanhoEscolhido) {
+        mostrarToast("⚠️ Por favor, selecione um tamanho nas especificações!", "aviso");
+        return;
+    }
+
+    // Cria uma chave única combinando ID e Tamanho (Ex: "3-M")
+    const chaveItem = `${id}-${tamanhoEscolhido}`;
+
+    if (carrinho[chaveItem]) {
+        if (carrinho[chaveItem].qtd >= estoqueMaximo) {
+            mostrarToast(`Estoque limite atingido para o tamanho ${tamanhoEscolhido}.`, 'aviso');
             return;
         }
-        carrinho[id].qtd += 1;
+        carrinho[chaveItem].qtd += 1;
     } else {
-        carrinho[id] = { id: id, nome: nome, precoOriginal: preco, qtd: 1 };
+        carrinho[chaveItem] = { 
+            id: id, 
+            nome: nome, 
+            precoOriginal: preco, 
+            qtd: 1, 
+            tamanho: tamanhoEscolhido // Salva o tamanho na memória do item
+        };
     }
     
-    mostrarToast(`✓ ${nome} adicionado ao carrinho!`, 'sucesso');
+    mostrarToast(`✓ ${nome} (${tamanhoEscolhido}) adicionado ao carrinho!`, 'sucesso');
     atualizarInterface();
 }
 
-function removerDoCarrinho(id) {
-    if (carrinho[id]) {
-        delete carrinho[id];
+function removerDoCarrinho(chaveItem) {
+    if (carrinho[chaveItem]) {
+        delete carrinho[chaveItem];
         mostrarToast("Item removido do carrinho.", 'aviso');
         atualizarInterface();
     }
 }
+
 function atualizarInterface() {
     const corpo = document.getElementById('corpo-carrinho');
     if (!corpo) return;
@@ -534,17 +550,35 @@ function atualizarInterface() {
         corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--cor-subtexto);">Seu carrinho está vazio.</td></tr>`;
         descontoCupomAtivo = 0;
     } else {
-        chaves.forEach(id => {
-            let item = carrinho[id]; let precoFinal = item.precoOriginal; let tagAtacado = "";
+        chaves.forEach(chave => {
+            let item = carrinho[chave]; 
+            let precoFinal = item.precoOriginal; 
+            let tagAtacado = "";
             itensTotais += item.qtd;
+            
             if (item.qtd >= 5) { 
                 let descUnidade = item.precoOriginal * 0.10; 
                 precoFinal = item.precoOriginal - descUnidade; 
                 descontoAtacadoGeral += (descUnidade * item.qtd); 
                 tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -10%</span>"; 
             }
-            let subtotalItem = item.qtd * precoFinal; totalGeral += subtotalItem;
-           corpo.innerHTML += `<tr><td><button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:var(--cor-erro); cursor:pointer; margin-right:8px;">❌</button><b>${item.nome}</b>${tagAtacado}</td><td style="text-align:center;">${item.qtd}</td><td style="text-align:right;">R$ ${precoFinal.toFixed(2)}</td><td style="text-align:right;font-weight:bold;">R$ ${subtotalItem.toFixed(2)}</td></tr>`;
+            
+            let subtotalItem = item.qtd * precoFinal; 
+            totalGeral += subtotalItem;
+            
+            // Adiciona uma tag estilizada com o tamanho do produto logo ao lado do nome
+            let tagTamanhoHtml = `<span style="background: #27273a; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px;">TAM: ${item.tamanho}</span>`;
+
+            corpo.innerHTML += `
+                <tr>
+                    <td>
+                        <button onclick="removerDoCarrinho('${chave}')" style="background:none; border:none; color:var(--cor-erro); cursor:pointer; margin-right:8px;">❌</button>
+                        <b>${item.nome}</b>${tagTamanhoHtml}${tagAtacado}
+                    </td>
+                    <td style="text-align:center;">${item.qtd}</td>
+                    <td style="text-align:right;">R$ ${precoFinal.toFixed(2)}</td>
+                    <td style="text-align:right;font-weight:bold;">R$ ${subtotalItem.toFixed(2)}</td>
+                </tr>`;
         });
     }
 
@@ -570,7 +604,6 @@ function atualizarInterface() {
     }
     localStorage.setItem('controlstock_carrinho', JSON.stringify(carrinho));
 }
-
 
 // =======================================================================
 // BLOCO 8: 🚚 LOGÍSTICA DE ENTREGA E FRETE DO CHECKOUT
@@ -762,7 +795,6 @@ function baixarRomaneioPDF() {
     janelaImpressao.document.close();
     janelaImpressao.print();
 }
-
 // =======================================================================
 // BLOCO 10: ⚙️ COMUNICAÇÃO DE ADMINISTRAÇÃO (LOTE, GESTÃO AVANÇADA E CADASTROS)
 // =======================================================================
