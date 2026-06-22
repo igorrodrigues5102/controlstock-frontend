@@ -65,7 +65,7 @@ function mudarAba(nomeAba) {
 function abrirAuthModal() { document.getElementById('modalAuth').classList.add('aberto'); }
 function fecharAuthModal() { document.getElementById('modalAuth').classList.remove('aberto'); }
 
-function abrirModal(id) {function fecharModal() {
+function abrirModal(id) {
     document.getElementById('modalDetalhes').classList.remove('aberto');
 }
 
