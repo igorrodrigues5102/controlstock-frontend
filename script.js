@@ -768,6 +768,7 @@ function baixarRomaneioPDF() {
     janelaImpressao.document.close();
     janelaImpressao.print();
 }
+}
 // =======================================================================
 // BLOCO 10: ⚙️ COMUNICAÇÃO DE ADMINISTRAÇÃO (LOTE, GESTÃO AVANÇADA E CADASTROS)
 // =======================================================================
@@ -1341,3 +1342,4 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
         setTimeout(() => toast.remove(), 400);
     }, 3000);
 }
+});
