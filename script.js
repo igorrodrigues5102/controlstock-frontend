@@ -788,7 +788,7 @@ function registrarEntradaLote() {
     fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ produtoId: id, quantity: qtd, observacao: obs })
+        body: JSON.stringify({ ProdutoId: id, Quantidade: qtd, Observacao: obs })
     })
     .then(res => {
         if (!res.ok) throw new Error("Erro ao registrar entrada.");
