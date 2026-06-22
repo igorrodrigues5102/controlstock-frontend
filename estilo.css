@@ -2,17 +2,17 @@
    CSS BLOCO 1: 🌌 VARIÁVEIS DE AMBIENTE (PALETA ROXO & ROSA NEON)
    ======================================================================= */
 :root {
-    --bg-principal: #000000;       /* Fundo do site 100% Preto */
-    --bg-card: #0d0d11;            /* Cards grafite escuro */
-    --cor-texto: #ffffff;          /* Títulos e Textos Brancos */
+    --bg-principal: #000000;
+    --bg-card: #0d0d11;
+    --cor-texto: #ffffff;
     --cor-subtexto: #94a3b8;
-    
-    /* Paleta Neon Roxa & Acentos */
-    --cor-primaria: #a855f7;       /* Roxo Neon */
-    --cor-destaque: #d946ef;       /* Rosa/Fúcsia Neon */
+    --cor-primaria: #a855f7;
+    --cor-destaque: #d946ef;
     --cor-sucesso: #10b981;
-    --cor-erro: #ef4444;           /* Vermelho de Alerta Crítico */
+    --cor-erro: #ef4444;
     --cor-botao: #833471;
+    --sidebar-width: 260px;
+    --header-height: 70px;
 }
 
 /* =======================================================================
@@ -33,26 +33,28 @@ body {
     overflow-x: hidden;
 }
 
-/* TÍTULOS COM SOBREADO ROXO NEON */
 h2, h3, .logo {
     color: #ffffff !important;
     text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.4);
     margin-bottom: 15px;
 }
 
-
 /* =======================================================================
    CSS BLOCO 3: 🧭 SIDEBAR CORPORATIVA (PAINEL DE NAVEGAÇÃO LATERAL)
    ======================================================================= */
 .sidebar {
-    width: 260px;
+    width: var(--sidebar-width);
     background-color: #050507;
     border-right: 1px solid #1e1b29;
     padding: 25px 15px;
     position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    z-index: 50;
+    overflow-y: auto;
 }
 
 .logo {
@@ -62,9 +64,7 @@ h2, h3, .logo {
     margin-bottom: 5px;
 }
 
-.logo span {
-    color: var(--cor-destaque);
-}
+.logo span { color: var(--cor-destaque); }
 
 .sub {
     font-size: 11px;
@@ -102,6 +102,16 @@ h2, h3, .logo {
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
+/* Badge do carrinho */
+.badge-carrinho {
+    background: var(--cor-destaque);
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+}
 
 /* =======================================================================
    CSS BLOCO 4: 🏢 HEADER SUPERIOR FIXO (SESSÃO E LOGIN)
@@ -109,9 +119,9 @@ h2, h3, .logo {
 .header-superior {
     position: fixed;
     top: 0;
-    left: 260px;
+    left: var(--sidebar-width);
     right: 0;
-    height: 70px;
+    height: var(--header-height);
     background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid #1e1b29;
@@ -119,7 +129,7 @@ h2, h3, .logo {
     align-items: center;
     justify-content: flex-end;
     padding: 0 30px;
-    z-index: 10;
+    z-index: 40;
 }
 
 .btn-login-topo {
@@ -132,6 +142,7 @@ h2, h3, .logo {
     font-weight: 600;
     font-size: 13px;
     transition: all 0.3s;
+    white-space: nowrap;
 }
 
 .btn-login-topo:hover {
@@ -149,6 +160,7 @@ h2, h3, .logo {
 .avatar-topo {
     width: 36px;
     height: 36px;
+    min-width: 36px;
     background-color: var(--cor-primaria);
     color: #fff;
     border-radius: 50%;
@@ -170,20 +182,18 @@ h2, h3, .logo {
     margin-top: 2px;
 }
 
-
 /* =======================================================================
    CSS BLOCO 5: 📦 VITRINE DIGITAL (GRID E COMPORTAMENTO DOS CARDS)
    ======================================================================= */
 .conteudo-principal {
-    margin-left: 260px;
-    margin-top: 70px;
+    margin-left: var(--sidebar-width);
+    margin-top: var(--header-height);
     padding: 35px;
-    width: calc(100% - 260px);
+    width: calc(100% - var(--sidebar-width));
+    min-width: 0;
 }
 
-.aba-painel {
-    display: none;
-}
+.aba-painel { display: none; }
 
 .aba-painel.ativa {
     display: block;
@@ -191,9 +201,9 @@ h2, h3, .logo {
 }
 
 .lista-produtos {
-    display: grid;                             /* Transforma em Grade */
-    grid-template-columns: repeat(4, 1fr);     /* Trava em exatamente 4 colunas iguais */
-    gap: 20px;                                 /* Dá espaço entre os cards */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     padding: 15px 5px;
 }
 
@@ -206,7 +216,7 @@ h2, h3, .logo {
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 380px;    /* Garante espaço suficiente para foto + textos + botões */
+    min-height: 380px;
 }
 
 .card-produto:hover {
@@ -217,29 +227,30 @@ h2, h3, .logo {
 
 .container-foto {
     width: 100%;
-    height: 200px;        /* Deixe com a mesma altura da foto */
+    height: 200px;
     background-color: #050507;
     position: relative;
-    overflow: hidden;     /* Garante que nada saia para fora do bloco */
+    overflow: hidden;
 }
 
 .foto-prod {
     width: 100%;
-    height: 100%;         /* Corrigido para 100% para obedecer o container */
-    object-fit: cover;    /* Corta a imagem perfeitamente sem amassar */
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .info-corpo-card {
     padding: 18px;
     display: flex;
     flex-direction: column;
-    flex: 1;                   /* Ocupa todo o espaço vertical livre do card */
+    flex: 1;
 }
-/* Container que segura os botões Detalhes e Adicionar */
+
 .container-botoes-card {
-    margin-top: auto;          /* Empurra o grupo de botões totalmente para o rodapé */
+    margin-top: auto;
     display: flex;
-    gap: 10px;                 /* Dá um espaço elegante de 10px entre os dois botões */
+    gap: 10px;
 }
 
 .nome-prod {
@@ -262,7 +273,6 @@ h2, h3, .logo {
     margin-bottom: 15px;
 }
 
-
 /* =======================================================================
    CSS BLOCO 6: 🚨 ANIMAÇÕES LIVE (ALERTA CRÍTICO PULSANTE DE ESTOQUE)
    ======================================================================= */
@@ -275,7 +285,6 @@ h2, h3, .logo {
     0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
     100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
 }
-
 
 /* =======================================================================
    CSS BLOCO 7: 🧮 BOTÕES GERAIS E ESTILIZAÇÃO INTERNA DE AÇÕES
@@ -297,9 +306,7 @@ button {
     font-size: 13px;
 }
 
-.btn-detalhes:hover {
-    background-color: #3f3f5a;
-}
+.btn-detalhes:hover { background-color: #3f3f5a; }
 
 .btn-add {
     flex: 1;
@@ -320,9 +327,8 @@ button {
     cursor: not-allowed;
 }
 
-
 /* =======================================================================
-   CSS BLOCO 8: 📊 CARDS DE INDICADORES DO ADMIN (VALORES DO SQLITE)
+   CSS BLOCO 8: 📊 CARDS DE INDICADORES DO ADMIN
    ======================================================================= */
 .grid-metricas {
     display: grid;
@@ -357,9 +363,8 @@ button {
     color: #ffffff;
 }
 
-
 /* =======================================================================
-   CSS BLOCO 9: 📋 FORMULÁRIOS OPERACIONAIS E ESTILIZAÇÃO DE TABELAS
+   CSS BLOCO 9: 📋 FORMULÁRIOS OPERACIONAIS E TABELAS
    ======================================================================= */
 .secao-admin-flex {
     display: grid;
@@ -375,15 +380,9 @@ button {
     border: 1px solid #1e1b29;
 }
 
-.bloco-form h3 {
-    font-size: 16px;
-    margin-bottom: 15px;
-    color: #fff;
-}
+.bloco-form h3 { font-size: 16px; margin-bottom: 15px; color: #fff; }
 
-.campo {
-    margin-bottom: 15px;
-}
+.campo { margin-bottom: 15px; }
 
 .campo label {
     display: block;
@@ -429,15 +428,6 @@ button {
     cursor: not-allowed;
 }
 
-.btn-exportar-csv {
-    background-color: var(--cor-sucesso);
-    color: #fff;
-}
-
-.btn-exportar-csv:hover {
-    box-shadow: 0 0 12px var(--cor-sucesso);
-}
-
 .tabela-carrinho {
     width: 100%;
     border-collapse: collapse;
@@ -465,14 +455,29 @@ button {
     gap: 30px;
     flex-wrap: wrap;
     margin-top: 20px;
+    align-items: flex-start;
 }
 
-.carrinho-esquerda { flex: 1.7; min-width: 300px; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid #1e1b29;}
-.carrinho-direita { flex: 1; min-width: 280px; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid #1e1b29;}
+.carrinho-esquerda {
+    flex: 1.7;
+    min-width: 300px;
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #1e1b29;
+}
 
+.carrinho-direita {
+    flex: 1;
+    min-width: 280px;
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #1e1b29;
+}
 
 /* =======================================================================
-   CSS BLOCO 10: 🪟 ESTRUTURA DOS MODAIS FLUTUANTES (GLOBAL)
+   CSS BLOCO 10: 🪟 ESTRUTURA DOS MODAIS FLUTUANTES
    ======================================================================= */
 .modal-background {
     position: fixed;
@@ -485,6 +490,7 @@ button {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
+    padding: 15px;
 }
 
 .modal-background.aberto {
@@ -492,18 +498,23 @@ button {
     pointer-events: auto;
 }
 
-/* 🎯 CORREÇÃO HISTÓRICA: Ativa a rolagem para o frete aparecer no PC e Mobile */
 .modal-container {
     background-color: #0b0b0f;
     border: 1px solid #2a253b;
     border-radius: 12px;
     padding: 30px;
-    width: 90%;
+    width: 100%;
     max-width: 480px;
     position: relative;
     box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
-    max-height: 85vh;       /* Define a altura limite do container */
-    overflow-y: auto;       /* Cria barra de rolagem se o frete estourar o tamanho */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-container-detalhes {
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-fechar {
@@ -514,11 +525,32 @@ button {
     font-size: 16px;
     cursor: pointer;
     border: none;
+    z-index: 2;
 }
 
 .modal-fechar:hover { color: #fff; }
 
-/* ELEMENTOS INTERNOS DO CARROSSEL */
+.modal-titulo {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.modal-preco {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--cor-destaque);
+    margin-bottom: 8px;
+}
+
+.modal-descricao {
+    font-size: 13px;
+    color: var(--cor-subtexto);
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
 .carrossel-container {
     position: relative;
     width: 100%;
@@ -527,12 +559,14 @@ button {
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .modal-foto {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .carrossel-nav {
@@ -580,7 +614,9 @@ button {
     box-shadow: 0 0 8px var(--cor-primaria);
 }
 
-/* INTERFACE INTERNA DE LOGIN/CADASTRO */
+/* =======================================================================
+   CSS BLOCO 11: 🛍️ MODAL DE LOGIN/CADASTRO
+   ======================================================================= */
 .alternar-autenticacao {
     display: flex;
     width: 100%;
@@ -605,7 +641,11 @@ button {
 }
 
 .aba-auth:hover { color: #fff; }
-.aba-auth.ativa { color: var(--cor-primaria); border-bottom: 2px solid var(--cor-primaria); text-shadow: 0 0 8px rgba(168, 85, 247, 0.5); }
+.aba-auth.ativa {
+    color: var(--cor-primaria);
+    border-bottom: 2px solid var(--cor-primaria);
+    text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
 
 .secao-auth { display: none; }
 .secao-auth.ativa { display: block; animation: fadeIn 0.3s ease; }
@@ -617,14 +657,7 @@ button {
     to { opacity: 1; transform: translateY(0); }
 }
 
-
-/* =======================================================================
-   CSS BLOCO 11: 🛍️ TELA DE LOGIN MODERNA (PADRÃO GRANDES MARKETPLACES)
-   ======================================================================= */
-#modalAuth .modal-container {
-    max-width: 420px;
-    padding: 34px 30px;
-}
+#modalAuth .modal-container { max-width: 420px; padding: 34px 30px; }
 
 .container-sociais {
     display: flex;
@@ -655,13 +688,8 @@ button {
     background-color: #f4f4f5;
 }
 
-.btn-social.apple {
-    background-color: #f1f1f3;
-}
-
-.btn-social.apple:hover {
-    background-color: #e4e4e7;
-}
+.btn-social.apple { background-color: #f1f1f3; }
+.btn-social.apple:hover { background-color: #e4e4e7; }
 
 .divisor-ou {
     display: flex;
@@ -674,8 +702,7 @@ button {
     margin: 24px 0 18px 0;
 }
 
-.divisor-ou::before,
-.divisor-ou::after {
+.divisor-ou::before, .divisor-ou::after {
     content: '';
     flex: 1;
     height: 1px;
@@ -694,7 +721,6 @@ button {
     border-radius: 10px;
     font-size: 15px;
     font-weight: 700;
-    letter-spacing: 0.2px;
     cursor: pointer;
     margin-top: 8px;
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
@@ -707,30 +733,13 @@ button {
     box-shadow: 0 10px 26px rgba(217, 70, 239, 0.45);
 }
 
-.btn-acao-auth:active {
-    transform: translateY(0);
-    filter: brightness(0.96);
-}
-
-#modalAuth .campo input {
-    padding: 13px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-#modalAuth .campo label {
-    font-size: 12.5px;
-    font-weight: 600;
-    margin-bottom: 7px;
-}
-
+#modalAuth .campo input { padding: 13px 14px; border-radius: 10px; font-size: 14px; }
+#modalAuth .campo label { font-size: 12.5px; font-weight: 600; margin-bottom: 7px; }
 
 /* =======================================================================
-   🔮 CSS BLOCO 12: MÉTODOS DE PAGAMENTO EXPERIÊNCIA PREMIUM (VERDE NEON)
+   CSS BLOCO 12: 🔮 MÉTODOS DE PAGAMENTO NEON
    ======================================================================= */
-.opcoes-pagamento-neon input[type="radio"] {
-    display: none;
-}
+.opcoes-pagamento-neon input[type="radio"] { display: none; }
 
 .opcoes-pagamento-neon {
     display: flex;
@@ -745,49 +754,15 @@ button {
     align-items: center;
     background: #0f172a;
     border: 2px solid #334155;
-    padding: 10px 14px;       /* Compactado perfeitamente conforme solicitado */
+    padding: 10px 14px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.lado-esquerdo-neon {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.icone-neon {
-    font-size: 24px;
-    line-height: 1;
-    display: inline-block;
-}
-
-.texto-neon {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-.seta-neon {
-    font-size: 22px;
-    color: #334155;
-    font-weight: bold;
-    transition: transform 0.2s, color 0.3s;
 }
 
 .card-pagamento-neon:hover {
-    transform: translateY(-2px);
     border-color: var(--cor-sucesso);
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-
-.card-pagamento-neon:hover .seta-neon {
-    color: var(--cor-sucesso);
-    transform: translateX(4px);
 }
 
 .opcoes-pagamento-neon input[type="radio"]:checked + .card-pagamento-neon {
@@ -796,113 +771,8 @@ button {
     box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 8px rgba(16, 185, 129, 0.2);
 }
 
-.opcoes-pagamento-neon input[type="radio"]:checked + .card-pagamento-neon .texto-neon {
-    color: var(--cor-sucesso);
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-}
-
-.opcoes-pagamento-neon input[type="radio"]:checked + .card-pagamento-neon .seta-neon {
-    color: var(--cor-sucesso);
-}
-
-
 /* =======================================================================
-   📱 CSS BLOCO 13: RESPONSIVIDADE E ADAPTAÇÃO MOBILE (CONTROLSTOCK+)
-   ======================================================================= */
-@media (max-width: 768px) {
-    
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .sidebar .menu-btn {
-        width: 100%;
-        margin: 4px 0;
-        padding: 12px;
-        font-size: 14px;
-    }
-
-    .header-superior {
-        left: 0;
-        width: 100%;
-        position: relative;
-        padding: 10px 15px;
-        justify-content: center;
-        background: #1e293b;
-    }
-
-    .conteudo-principal {
-        margin-left: 0;
-        padding: 15px;
-        width: 100%;
-    }
-
-    .lista-produtos {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
-        gap: 15px;
-    }
-
-    .card-produto {
-        max-width: 100%;
-    }
-
-    .checkout-container {
-        grid-template-columns: 1fr !important;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    #painel-admin-liberado > div {
-        grid-template-columns: 1fr !important;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .linha-dupla {
-        grid-template-columns: 1fr !important;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .carrinho-esquerda, 
-    #aba-historico > div, 
-    #painel-admin-liberado > div:last-child {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .tabela-carrinho {
-        min-width: 500px;
-    }
-
-    .modal-container-detalhes {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .carrossel-container {
-        width: 100% !important;
-        height: 250px;
-    }
-}
-
-/* Hover auxiliar para o botão de frete dentro do modal */
-.container-frete-modal button:hover {
-    background: #3b82f6 !important;
-    transform: translateY(-1px);
-}
-/* =======================================================================
-   🔮 BOTOES DE SELEÇÃO DE TAMANHO PREMIUM (P, M, G, GG)
+   🔮 BOTÕES DE TAMANHO (P, M, G, GG)
    ======================================================================= */
 .btn-tamanho-opcao {
     background: #050507;
@@ -914,7 +784,7 @@ button {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    flex: 1;                  /* Faz todos os botões terem a mesma largura */
+    flex: 1;
     text-align: center;
 }
 
@@ -923,10 +793,225 @@ button {
     box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
 }
 
-/* Estado ativo: Quando o cliente clica no tamanho */
 .btn-tamanho-opcao.selecionado {
     background: rgba(217, 70, 239, 0.1) !important;
     border-color: var(--cor-destaque) !important;
     color: #fff !important;
     box-shadow: 0 0 15px var(--cor-destaque);
+}
+
+/* =======================================================================
+   📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE COMPLETA
+   ======================================================================= */
+
+/* TABLET: 769px - 1024px */
+@media (max-width: 1024px) and (min-width: 769px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .lista-produtos {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* MOBILE: até 768px */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+        --header-height: 60px;
+    }
+
+    /* ── BODY ── */
+    body {
+        flex-direction: column;
+    }
+
+    /* ── SIDEBAR vira navbar horizontal no topo ── */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 12px 10px;
+        flex-direction: column;
+        align-items: stretch;
+        border-right: none;
+        border-bottom: 1px solid #1e1b29;
+        overflow-y: visible;
+    }
+
+    .logo { font-size: 20px; text-align: center; }
+    .sub { text-align: center; margin-bottom: 15px; }
+
+    /* Botões do menu em grid 2x2 */
+    .sidebar .menu-btn {
+        width: 100%;
+        padding: 11px 10px;
+        font-size: 13px;
+        margin-bottom: 6px;
+        text-align: center;
+    }
+
+    /* ── HEADER ── */
+    .header-superior {
+        position: relative;
+        left: 0;
+        width: 100%;
+        height: auto;
+        min-height: var(--header-height);
+        padding: 10px 15px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* ── CONTEÚDO PRINCIPAL ── */
+    .conteudo-principal {
+        margin-left: 0;
+        margin-top: 0;
+        padding: 15px 12px;
+        width: 100%;
+    }
+
+    /* ── VITRINE: 2 colunas no mobile ── */
+    .lista-produtos {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+        padding: 10px 0;
+    }
+
+    .card-produto {
+        min-height: 300px;
+    }
+
+    .container-foto {
+        height: 150px;
+    }
+
+    .nome-prod { font-size: 13px; }
+    .preco-prod { font-size: 15px; }
+
+    .container-botoes-card {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .btn-detalhes, .btn-add {
+        padding: 9px 0;
+        font-size: 12px;
+    }
+
+    /* ── CHECKOUT ── */
+    .checkout-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .carrinho-esquerda,
+    .carrinho-direita {
+        min-width: 100%;
+        padding: 15px;
+    }
+
+    /* Tabela com scroll horizontal */
+    .carrinho-esquerda {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabela-carrinho {
+        min-width: 480px;
+        font-size: 12px;
+    }
+
+    .tabela-carrinho th,
+    .tabela-carrinho td {
+        padding: 10px 8px;
+    }
+
+    /* Wizard steps compacto */
+    #barra-progresso-wizard {
+        font-size: 11px !important;
+        padding: 8px !important;
+    }
+
+    /* ── MODAIS ── */
+    .modal-background {
+        padding: 10px;
+        align-items: flex-end;
+    }
+
+    .modal-container {
+        max-width: 100%;
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+        padding: 20px 18px;
+    }
+
+    .modal-container-detalhes {
+        border-radius: 16px 16px 0 0;
+        max-height: 92vh;
+    }
+
+    .carrossel-container {
+        height: 200px;
+    }
+
+    /* Login modal centralizado no mobile */
+    #modalAuth .modal-container {
+        border-radius: 16px 16px 0 0;
+        padding: 24px 18px;
+    }
+
+    .container-sociais {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* ── ADMIN ── */
+    #painel-admin-liberado > div[style*="grid"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Tabelas admin com scroll */
+    #aba-admin .tabela-carrinho {
+        min-width: 500px;
+    }
+
+    #aba-admin > div,
+    #aba-historico > div {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── TÍTULOS ── */
+    h2 { font-size: 18px; }
+    h3 { font-size: 15px; }
+}
+
+/* MOBILE PEQUENO: até 400px (iPhone SE, Galaxy A) */
+@media (max-width: 400px) {
+    .lista-produtos {
+        grid-template-columns: 1fr !important;
+    }
+
+    .conteudo-principal {
+        padding: 12px 8px;
+    }
+
+    .modal-container {
+        padding: 16px 14px;
+    }
+
+    .btn-social {
+        font-size: 12px;
+        padding: 10px 8px;
+    }
+}
+
+/* Hover frete modal */
+.container-frete-modal button:hover {
+    background: #3b82f6 !important;
+    transform: translateY(-1px);
 }
