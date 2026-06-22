@@ -3,8 +3,7 @@ const API_BASE_URL = 'https://controlstock-backend-production.up.railway.app';
 // =======================================================================
 // BLOCO 1: 🌌 ESTADO GLOBAL DO MARKETPLACE (VARIÁVEIS DE MEMÓRIA)
 // =======================================================================
-let carrinho = {};
-let listaProdutosGlobal = [];
+let carrinho = JSON.parse(localStorage.getItem('controlstock_carrinho')) || {};let listaProdutosGlobal = [];
 let usuarioLogado = JSON.parse(localStorage.getItem('controlstock_sessao')) || null;
 let cpfCadastroValido = false;
 let fotoCarrosselAtual = 0;
@@ -554,6 +553,7 @@ function atualizarInterface() {
         if (alertaLogin) alertaLogin.style.display = "block";
         if (btnFinalizar) btnFinalizar.disabled = true;
     }
+    localStorage.setItem('controlstock_carrinho', JSON.stringify(carrinho));
 }
 
 
@@ -1161,6 +1161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Limpa de forma segura o estado global do carrinho após a transação bem-sucedida
                 carrinho = {}; 
+                localStorage.removeItem('controlstock_carrinho');
                 descontoCupomAtivo = 0;
                 
                 const inputCupom = document.getElementById('input-cupom');
