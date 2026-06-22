@@ -16,6 +16,38 @@ let descontoCupomAtivo = 0; // Armazena o valor bruto deduzido pelo cupom
 
 console.log("O motor lógico do script.js foi carregado com sucesso!");
 
+// ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
+let produtoAtualIndex = 0;
+let intervaloCarrossel;
+
+function iniciarCarrosselAutomatico() {
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+
+    intervaloCarrossel = setInterval(() => {
+        // Busca os cards de produtos na tela
+        const cards = document.querySelectorAll('#container-produtos .card-produto') || document.querySelectorAll('#produtos-container .card-produto');
+        if (cards.length <= 1) return; 
+
+        produtoAtualIndex++;
+        if (produtoAtualIndex >= cards.length) {
+            produtoAtualIndex = 0; 
+        }
+
+        // Faz o scroll suave até o próximo produto
+        cards[produtoAtualIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }, 4000); // Rola a cada 4 segundos
+}
+
+// Dispara o carrossel de forma segura após a página carregar
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(iniciarCarrosselAutomatico, 1500));
+} else {
+    setTimeout(iniciarCarrosselAutomatico, 1500);
+}
 
 // =======================================================================
 // BLOCO 2: 🧭 CONTROLE DE NAVEGAÇÃO (ABAS E ABRE/FECHA MODAIS)
@@ -1172,3 +1204,34 @@ setInterval(() => {
         carregarDadosEPrevisoesAdmin(); 
     }
 }, 3000);
+
+// ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
+let produtoAtualIndex = 0;
+let intervaloCarrossel;
+
+function iniciarCarrosselAutomatico() {
+    // Limpa qualquer intervalo ativo para não duplicar o timer
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+
+    // Define que a cada 4000 milissegundos (4 segundos) o carrossel avança
+    intervaloCarrossel = setInterval(() => {
+        const cards = document.querySelectorAll('#container-produtos .card-produto');
+        if (cards.length <= 1) return; // Se tiver só 1 produto ou nenhum, não precisa rodar
+
+        produtoAtualIndex++;
+        if (produtoAtualIndex >= cards.length) {
+            produtoAtualIndex = 0; // Volta para o primeiro produto
+        }
+
+        // Faz o scroll suave até o produto atual da vez
+        cards[produtoAtualIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }, 4000);
+}
+
+// Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
+// Procure onde os produtos são desenhados na tela e adicione a chamada abaixo após o loop:
+// iniciarCarrosselAutomatico();
