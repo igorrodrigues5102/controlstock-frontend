@@ -503,9 +503,17 @@ function carregarProdutosDaAPI() {
 // =======================================================================
 function adicionarAoCarrinho(id, nome, preco, estoqueMaximo) {
     if (carrinho[id]) {
-        if (carrinho[id].qtd >= estoqueMaximo) { alert(`Estoque limite atingido. Máximo disponível: ${estoqueMaximo} un.`); return; }
+        if (carrinho[id].qtd >= estoqueMaximo) { 
+            mostrarToast(`Estoque limite atingido. Máximo disponível: ${estoqueMaximo} un.`, 'aviso'); 
+            return; 
+        }
         carrinho[id].qtd += 1;
-    } else { carrinho[id] = { id: id, nome: nome, precoOriginal: preco, qtd: 1 }; }
+    } else { 
+        carrinho[id] = { id: id, nome: nome, precoOriginal: preco, qtd: 1 }; 
+    }
+    
+    // Dispara o Toast de sucesso na tela!
+    mostrarToast(`✓ ${nome} adicionado ao carrinho!`, 'sucesso');
     atualizarInterface();
 }
 
@@ -1258,3 +1266,48 @@ function iniciarCarrosselAutomatico() {
 // Modificar a função que renderiza os produtos para dar o pontapé inicial no carrossel
 // Procure onde os produtos são desenhados na tela e adicione a chamada abaixo após o loop:
 // iniciarCarrosselAutomatico();
+// Sistema Centralizado de Notificações Toast para o Portfólio
+function mostrarToast(mensagem, tipo = 'sucesso') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    // Cria o bloco do toast
+    const toast = document.createElement('div');
+    toast.style.padding = '12px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.color = '#ffffff';
+    toast.style.fontSize = '14px';
+    toast.style.fontWeight = '600';
+    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+    toast.style.transition = 'all 0.4s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(50px)';
+    toast.innerText = mensagem;
+
+    // Define a cor de fundo com base no tipo de alerta
+    if (tipo === 'sucesso') {
+        toast.style.backgroundColor = '#22c55e'; // Verde sucesso
+        toast.style.borderLeft = '5px solid #15803d';
+    } else if (tipo === 'erro') {
+        toast.style.backgroundColor = '#ef4444'; // Vermelho erro
+        toast.style.borderLeft = '5px solid #b91c1c';
+    } else {
+        toast.style.backgroundColor = '#f59e0b'; // Amarelo aviso
+        toast.style.borderLeft = '5px solid #b45309';
+    }
+
+    container.appendChild(toast);
+
+    // Efeito de entrada suave
+    setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 50);
+
+    // Remove o toast automaticamente após 3 segundos
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(50px)';
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
+}
