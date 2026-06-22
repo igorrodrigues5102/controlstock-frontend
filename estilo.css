@@ -203,9 +203,10 @@ h2, h3, .logo {
     border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s;
-    display: flex;             /* Ativa o flexbox no card */
-    flex-direction: column;    /* Alinha o conteúdo em pé (vertical) */
-    height: 100%;              /* Força todos os cards a terem a mesma altura */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 380px;    /* Garante espaço suficiente para foto + textos + botões */
 }
 
 .card-produto:hover {
@@ -216,16 +217,16 @@ h2, h3, .logo {
 
 .container-foto {
     width: 100%;
-    height: 240px;             /* Aumentamos de 180px para 240px para destacar mais o agasalho */
+    height: 200px;        /* Deixe com a mesma altura da foto */
     background-color: #050507;
     position: relative;
-}
+    overflow: hidden;     /* Garante que nada saia para fora do bloco */
 }
 
 .foto-prod {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 100%;         /* Corrigido para 100% para obedecer o container */
+    object-fit: cover;    /* Corta a imagem perfeitamente sem amassar */
 }
 
 .info-corpo-card {
