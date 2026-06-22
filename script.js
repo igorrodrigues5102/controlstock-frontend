@@ -785,10 +785,10 @@ function registrarEntradaLote() {
     if (!id || !qtd) { alert("⚠️ Preencha o ID e a Quantidade do lote."); return; }
 
     fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ produtoId: id, quantity: qtd, observacao: obs })
-    })
+     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ produtoId: id, quantity: qtd, observacao: obs })
+})
     .then(res => {
         if (!res.ok) throw new Error("Erro ao registrar entrada.");
         return res.json();
