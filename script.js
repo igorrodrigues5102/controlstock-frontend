@@ -1203,7 +1203,7 @@ setInterval(() => {
 }, 3000);
 
 // ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
-let produtoAtualIndex = 0;
+ produtoAtualIndex = 0;
 let intervaloCarrossel;
 
 function iniciarCarrosselAutomatico() {
