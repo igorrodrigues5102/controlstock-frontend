@@ -481,7 +481,8 @@ function carregarProdutosDaAPI() {
                             <div class="nome-prod">${prod.nome}</div>
                             <div class="preco-prod">R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
                             ${staticLineEstoqueHtml}
-                            <div class="grupo-botoes-card">
+                            
+                            <div class="container-botoes-card">
                                 <button class="btn-detalhes" onclick="abrirModal(${prod.id})">🔍 Detalhes</button>
                                 <button class="btn-add" ${esgotado ? "disabled" : ""} onclick="adicionarAoCarrinho(${prod.id}, '${prod.nome}', ${prod.preco}, ${prod.quantidadeAtual})">${esgotado ? 'Esgotado' : 'Adicionar'}</button>
                             </div>
@@ -496,7 +497,6 @@ function carregarProdutosDaAPI() {
             vitrine.innerHTML = "<p style='color:var(--cor-erro);font-weight:bold;'>Servidor Backend Desconectado.</p>"; 
         });
 }
-
 
 // =======================================================================
 // BLOCO 7: 🧮 LOGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
