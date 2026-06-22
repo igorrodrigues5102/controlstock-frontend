@@ -191,10 +191,11 @@ h2, h3, .logo {
 }
 
 .lista-produtos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
+    display: flex;             /* Alinha os produtos lado a lado */
+    overflow-x: auto;          /* Permite deslizar para o lado */
+    scroll-behavior: smooth;   /* Deixa o movimento do carrossel suave */
+    gap: 20px;                 /* Dá espaço entre os cards */
+    padding: 15px 5px;
 }
 
 .card-produto {
