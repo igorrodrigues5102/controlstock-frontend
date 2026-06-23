@@ -928,23 +928,43 @@ function alternarCamposPagamento(tipo) {
         }
     }
 
-    // Captura o total real do carrinho e o container do simulador
     const elementoTotal = document.getElementById('txtTotal');
     const displaySimulador = document.getElementById('simulador-parcelas-checkout');
     if (!elementoTotal || !displaySimulador) return;
 
-    // 🔥 TRATAMENTO DO SISTEMA MONETÁRIO BRASILEIRO (PT-BR)
-    // Remove R$, espaços e pontos de milhar. Depois troca a vírgula decimal por ponto para o JavaScript entender.
-    let textoMoeda = elementoTotal.innerText.replace("R$", "").replace(/\s/g, "").replace(/\./g, "");
-    textoMoeda = textoMoeda.replace(",", ".");
+    // 🔥 PARSER BRUTO INTEGRADO: Extrai apenas o que importa do padrão brasileiro
+    let textoObtido = elementoTotal.innerText;
     
-    const valorTotalReal = parseFloat(textoMoeda) || 0;
+    // Remove R$, espaços e tudo que não for dígito, ponto ou vírgula
+    let apenasNumeros = textoObtido.replace(/[^\d,. ]/g, "").trim();
+    
+    let valorTotalReal = 0;
+
+    // Se o texto tiver ponto e vírgula (Ex: 1.250,50)
+    if (apenasNumeros.includes(".") && apenasNumeros.includes(",")) {
+        apenasNumeros = apenasNumeros.replace(/\./g, "").replace(",", ".");
+        valorTotalReal = parseFloat(apenasNumeros);
+    } 
+    // Se tiver apenas a vírgula dos centavos (Ex: 959,70)
+    else if (apenasNumeros.includes(",")) {
+        apenasNumeros = apenasNumeros.replace(",", ".");
+        valorTotalReal = parseFloat(apenasNumeros);
+    } 
+    // Se já for um número puro com ponto decimal
+    else {
+        valorTotalReal = parseFloat(apenasNumeros);
+    }
+
+    // Validação de segurança caso o parse falhe feio
+    if (isNaN(valorTotalReal) || valorTotalReal <= 0) {
+        valorTotalReal = 0;
+    }
 
     if (tipo === 'PIX') {
         const descontoPix = valorTotalReal * 0.05;
         const totalComDesconto = valorTotalReal - descontoPix;
         displaySimulador.style.color = "var(--cor-sucesso)";
-        displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5% de taxa bancária)</span>`;
+        displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5%)</span>`;
     
     } else if (tipo === 'Crédito' || tipo === 'CARTAO') {
         displaySimulador.style.color = "var(--cor-primaria)";
@@ -954,7 +974,6 @@ function alternarCamposPagamento(tipo) {
             <select id="select-parcelas-checkout" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:4px; font-size:14px; cursor:pointer;">
         `;
 
-        // Gera as 12 parcelas dividindo o valor real corretamente
         for (let i = 1; i <= 12; i++) {
             const valorDaParcela = valorTotalReal / i;
             const parcelaFormatada = valorDaParcela.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -972,7 +991,7 @@ function alternarCamposPagamento(tipo) {
         displaySimulador.style.color = "var(--cor-destaque)";
         displaySimulador.innerHTML = `📄 <b>Boleto Bancário:</b> R$ ${valorTotalReal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} à vista <span style="font-size:11px; color:var(--cor-subtexto);">(Compensação em até 48h úteis)</span>`;
     }
-}
+} 
 
 function validarDadosCheckout(formaPgto) {
     const campoNome = document.getElementById('ent-nome');
