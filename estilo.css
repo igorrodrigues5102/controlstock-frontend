@@ -1019,7 +1019,7 @@ button {
    🌗 VISUAL PREMIUM FOSCO AZULADO PARA O MODO CLARO (LIGHT MODE)
    ======================================================================= */
 html[data-tema="light"] body {
-    background-color: #334155 !important; /* Um tom cinza-azulado suave para o fundo geral */
+    background-color:#0f172a !important; /* Um tom cinza-azulado suave para o fundo geral */
     color: #0f172a !important;
 }
 
