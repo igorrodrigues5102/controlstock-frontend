@@ -19,8 +19,11 @@ function abrirModal(id) {
     const prod = listaProdutosGlobal.find(p => p.id === id);
     if (!prod) return;
 
-    document.getElementById('modalTitulo').innerText = prod.nome;
-document.getElementById('modalParcelas').innerText = `ou até 3x de R$ ${(parseFloat(prod.preco) / 3).toFixed(2)} sem juros`;document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
+    // 1. Força o preço principal a renderizar o valor correto vindo do banco
+    document.getElementById('modalPreco').innerText = `R$ ${parseFloat(prod.preco).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+    // 2. Atualiza o simulador de parcelas com o cálculo exato dividido por 3
+    document.getElementById('modalParcelas').innerText = `ou até 3x de R$ ${(parseFloat(prod.preco) / 3).toFixed(2)} sem juros`;
 
 // 🔥 TRECHO NOVO PARA ADICIONAR DAQUI:
 const containerAvaliacoesExistente = document.getElementById('bloco-dinamico-avaliacoes');
