@@ -1487,3 +1487,25 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
         setTimeout(() => toast.remove(), 400);
     }, 3000);
 }
+// =======================================================================
+// 🛍️ MOTOR DE FILTRO EM TEMPO REAL DA VITRINE
+// =======================================================================
+function filtrarProdutosVitrine() {
+    // 1. Pega o termo digitado e joga para minúsculo para ignorar letras maiúsculas
+    const termoBusca = document.getElementById('busca-vitrine').value.toLowerCase().trim();
+    
+    // 2. Captura todos os cards de produtos que estão renderizados na tela
+    const cards = document.querySelectorAll('.lista-produtos .card-produto');
+
+    cards.forEach(card => {
+        // 3. Pega o nome do produto dentro deste card específico
+        const nomeProduto = card.querySelector('.nome-prod').innerText.toLowerCase();
+
+        // 4. Se o nome do produto contiver o termo buscado, mostra o card, senão esconde
+        if (nomeProduto.includes(termoBusca)) {
+            card.style.display = "flex"; // Volta ao padrão do grid
+        } else {
+            card.style.display = "none"; // Faz sumir da tela
+        }
+    });
+}

@@ -41,9 +41,13 @@
         </div>
     </div>
 
-    <div class="conteudo-principal">
+    <<div class="conteudo-principal">
         
         <div id="aba-vitrine" class="aba-painel ativa">
+            <div style="margin-bottom: 25px; max-width: 400px;">
+                <input type="text" id="busca-vitrine" placeholder="🔍 Buscar produtos por nome..." oninput="filtrarProdutosVitrine()" style="width: 100%; padding: 12px 15px; background: #0d0d11; border: 1px solid #2a253b; color: #fff; border-radius: 8px; font-size: 14px;">
+            </div>
+
             <h2>Produtos em Destaque</h2>
             <div class="lista-produtos" id="vitrine-produtos"></div>
         </div>
