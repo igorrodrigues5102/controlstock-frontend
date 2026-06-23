@@ -694,7 +694,38 @@ function calcularFreteCheckout() {
         display.innerHTML = '<span style="color:var(--cor-primaria);">📦 Envio Padrão Nacional: R$ 24,90 (4 a 7 dias úteis)</span>';
     }
 }
+// =======================================================================
+// 🚚 CONSUMO DE API EXTERNA (VIACEP AUTOMÁTICO)
+// =======================================================================
+async function buscarCepAuto() {
+    const cepInput = document.getElementById('cep-checkout').value.trim();
+    const cep = cepInput.replace(/\D/g, ""); // Remove hífens ou pontos
 
+    // Valida se o CEP tem os 8 dígitos obrigatórios antes de gastar internet
+    if (cep.length !== 8) return;
+
+    try {
+        // Faz a requisição assíncrona para a API pública do ViaCEP
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const dados = await resposta.json();
+
+        // Se a API retornar que o CEP não existe
+        if (dados.erro) {
+            mostrarToast("❌ CEP não encontrado na base dos Correios.", "erro");
+            return;
+        }
+
+        // Preenche os inputs do HTML automaticamente com os dados retornados
+        document.getElementById('ent-rua').value = dados.logradouro;
+        document.getElementById('ent-bairro').value = dados.bairro;
+        
+        mostrarToast("✓ Endereço localizado e preenchido!", "sucesso");
+
+    } catch (erro) {
+        console.error("Erro ao buscar CEP:", erro);
+        mostrarToast("⚠️ Falha ao conectar com o serviço de CEP.", "aviso");
+    }
+}
 
 // =======================================================================
 // BLOCO 9: 💳 CHECKOUT, GATEWAY E SISTEMA IMPRESSOR DE ROMANEIO (PDF)
