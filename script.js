@@ -449,19 +449,30 @@ function carregarHistoricoPedidos() {
     const corpo = document.getElementById('lista-pedidos-corpo');
     if (!corpo) return;
     corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando...</td></tr>";
+    
     fetch(API_BASE_URL + '/api/pedidos/historico/' + usuarioLogado.email)
-        .then(res => res.json())
+        .then(res => {
+            // 🔥 VERIFICA SE O BACKEND C# DEVOLVEU ERRO (EX: 404 POR NÃO TER PEDIDOS NESSA CONTA)
+            if (!res.ok) {
+                throw new Error(`Erro HTTP! Status: ${res.status}`);
+            }
+            return res.json();
+        })
         .then(pedidos => {
             corpo.innerHTML = '';
             if (!pedidos || pedidos.length === 0) {
-                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Nenhum romaneio encontrado.</td></tr>";
+                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Nenhum romaneio encontrado para este perfil.</td></tr>";
                 return;
             }
             pedidos.forEach(p => {
                 corpo.innerHTML += '<tr><td><b>' + (p.codigo || p.id) + '</b></td><td>' + (p.dataEmissao || p.data || '-') + '</td><td style="color:var(--cor-sucesso); font-weight:bold;">' + (p.status || 'Faturado') + '</td><td style="text-align:right; font-weight:bold;">R$ ' + parseFloat(p.total || 0).toFixed(2) + '</td><td style="text-align:center;"><button class="btn-detalhes" onclick="verDetalhesRomaneio(' + p.id + ')">Ver</button></td></tr>';
             });
         })
-        .catch(() => { corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico.</td></tr>"; });
+        .catch(err => {
+            // 🔥 EXIBE O DIAGNÓSTICO EXATO NO CONSOLE (F12) PARA VOCÊ SABER SE O BACKEND CAIU OU REJEITOU
+            console.error("Falha na requisição do histórico:", err);
+            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico. Verifique o console.</td></tr>"; 
+        });
 }
 
 function verDetalhesRomaneio(id) {
