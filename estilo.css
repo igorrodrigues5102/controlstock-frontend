@@ -18,268 +18,79 @@
 /* =======================================================================
    CSS BLOCO 2: 📐 RESET GLOBAL E CONFIGURAÇÕES DE CORPO (BODY)
    ======================================================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-body {
-    background-color: var(--bg-principal);
-    color: var(--cor-texto);
-    display: flex;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+body { background-color: var(--bg-principal); color: var(--cor-texto); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-h2, h3, .logo {
-    color: #ffffff !important;
-    text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.4);
-    margin-bottom: 15px;
-}
+h2, h3, .logo { color: #ffffff !important; text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.4); margin-bottom: 15px; }
 
 /* =======================================================================
    CSS BLOCO 3: 🧭 SIDEBAR CORPORATIVA (PAINEL DE NAVEGAÇÃO LATERAL)
    ======================================================================= */
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: #050507;
-    border-right: 1px solid #1e1b29;
-    padding: 25px 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    z-index: 50;
-    overflow-y: auto;
-}
+.sidebar { width: var(--sidebar-width); background-color: #050507; border-right: 1px solid #1e1b29; padding: 25px 15px; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 50; overflow-y: auto; }
 
-.logo {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 5px;
-}
+.logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 5px; }
 
 .logo span { color: var(--cor-destaque); }
 
-.sub {
-    font-size: 11px;
-    color: var(--cor-subtexto);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 35px;
-}
+.sub { font-size: 11px; color: var(--cor-subtexto); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 35px; }
 
-.menu-btn {
-    width: 100%;
-    background: transparent;
-    border: 1px solid transparent;
-    color: #cbd5e1;
-    padding: 12px 15px;
-    border-radius: 8px;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-bottom: 8px;
-    transition: all 0.3s;
-}
+.menu-btn { width: 100%; background: transparent; border: 1px solid transparent; color: #cbd5e1; padding: 12px 15px; border-radius: 8px; text-align: left; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 8px; transition: all 0.3s; }
 
-.menu-btn:hover {
-    background-color: rgba(168, 85, 247, 0.1);
-    color: #fff;
-    border-color: rgba(168, 85, 247, 0.2);
-}
+.menu-btn:hover { background-color: rgba(168, 85, 247, 0.1); color: #fff; border-color: rgba(168, 85, 247, 0.2); }
 
-.menu-btn.ativo {
-    background-color: var(--cor-primaria);
-    color: #fff;
-    font-weight: 600;
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-}
+.menu-btn.ativo { background-color: var(--cor-primaria); color: #fff; font-weight: 600; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
 
-/* Badge do carrinho */
-.badge-carrinho {
-    background: var(--cor-destaque);
-    color: #fff;
-    border-radius: 50%;
-    padding: 2px 7px;
-    font-size: 11px;
-    font-weight: 700;
-    margin-left: 6px;
-}
+.badge-carrinho { background: var(--cor-destaque); color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 11px; font-weight: 700; margin-left: 6px; }
 
 /* =======================================================================
    CSS BLOCO 4: 🏢 HEADER SUPERIOR FIXO (SESSÃO E LOGIN)
    ======================================================================= */
-.header-superior {
-    position: fixed;
-    top: 0;
-    left: var(--sidebar-width);
-    right: 0;
-    height: var(--header-height);
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid #1e1b29;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 30px;
-    z-index: 40;
-}
+.header-superior { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: var(--header-height); background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); border-bottom: 1px solid #1e1b29; display: flex; align-items: center; justify-content: flex-end; padding: 0 30px; z-index: 40; }
 
-.btn-login-topo {
-    background: transparent;
-    border: 1px solid var(--cor-primaria);
-    color: var(--cor-primaria);
-    padding: 8px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.3s;
-    white-space: nowrap;
-}
+.btn-login-topo { background: transparent; border: 1px solid var(--cor-primaria); color: var(--cor-primaria); padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; white-space: nowrap; }
 
-.btn-login-topo:hover {
-    background-color: var(--cor-primaria);
-    color: #fff;
-    box-shadow: 0 0 15px var(--cor-primaria);
-}
+.btn-login-topo:hover { background-color: var(--cor-primaria); color: #fff; box-shadow: 0 0 15px var(--cor-primaria); }
 
-.usuario-logado-topo {
-    display: none;
-    align-items: center;
-    gap: 12px;
-}
+.usuario-logado-topo { display: none; align-items: center; gap: 12px; }
 
-.avatar-topo {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    background-color: var(--cor-primaria);
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    box-shadow: 0 0 10px var(--cor-primaria);
-}
+.avatar-topo { width: 36px; height: 36px; min-width: 36px; background-color: var(--cor-primaria); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 0 10px var(--cor-primaria); }
 
-.btn-sair {
-    background: transparent;
-    border: none;
-    color: var(--cor-erro);
-    font-size: 11px;
-    cursor: pointer;
-    text-align: left;
-    padding: 0;
-    margin-top: 2px;
-}
+.btn-sair { background: transparent; border: none; color: var(--cor-erro); font-size: 11px; cursor: pointer; text-align: left; padding: 0; margin-top: 2px; }
 
 /* =======================================================================
    CSS BLOCO 5: 📦 VITRINE DIGITAL (GRID E COMPORTAMENTO DOS CARDS)
    ======================================================================= */
-.conteudo-principal {
-    margin-left: var(--sidebar-width);
-    margin-top: var(--header-height);
-    padding: 35px;
-    width: calc(100% - var(--sidebar-width));
-    min-width: 0;
-}
+.conteudo-principal { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 35px; width: calc(100% - var(--sidebar-width)); min-width: 0; }
 
 .aba-painel { display: none; }
 
-.aba-painel.ativa {
-    display: block;
-    animation: fadeIn 0.4s ease;
-}
+.aba-painel.ativa { display: block; animation: fadeIn 0.4s ease; }
 
-.lista-produtos {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 15px 5px;
-}
+.lista-produtos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 15px 5px; }
 
-.card-produto {
-    background-color: var(--bg-card);
-    border: 1px solid #1e1b29;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 380px;
-}
+.card-produto { background-color: var(--bg-card); border: 1px solid #1e1b29; border-radius: 12px; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; height: 100%; min-height: 380px; }
 
-.card-produto:hover {
-    transform: translateY(-5px);
-    border-color: var(--cor-primaria);
-    box-shadow: 0 5px 20px rgba(168, 85, 247, 0.2);
-}
+.card-produto:hover { transform: translateY(-5px); border-color: var(--cor-primaria); box-shadow: 0 5px 20px rgba(168, 85, 247, 0.2); }
 
-.container-foto {
-    width: 100%;
-    height: 200px;
-    background-color: #050507;
-    position: relative;
-    overflow: hidden;
-}
+.container-foto { width: 100%; height: 200px; background-color: #050507; position: relative; overflow: hidden; }
 
-.foto-prod {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.foto-prod { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.info-corpo-card {
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+.info-corpo-card { padding: 18px; display: flex; flex-direction: column; flex: 1; }
 
-.container-botoes-card {
-    margin-top: auto;
-    display: flex;
-    gap: 10px;
-}
+.container-botoes-card { margin-top: auto; display: flex; gap: 10px; }
 
-.nome-prod {
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 6px;
-}
+.nome-prod { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; }
 
-.preco-prod {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--cor-destaque);
-    margin-bottom: 4px;
-}
+.preco-prod { font-size: 18px; font-weight: 700; color: var(--cor-destaque); margin-bottom: 4px; }
 
-.estoque-prod {
-    font-size: 12px;
-    color: var(--cor-subtexto);
-    margin-bottom: 15px;
-}
+.estoque-prod { font-size: 12px; color: var(--cor-subtexto); margin-bottom: 15px; }
 
 /* =======================================================================
    CSS BLOCO 6: 🚨 ANIMAÇÕES LIVE (ALERTA CRÍTICO PULSANTE DE ESTOQUE)
    ======================================================================= */
-.card-produto.alerta-critico {
-    border-color: var(--cor-erro) !important;
-    animation: pulsarAlerta 2s infinite alternate;
-}
+.card-produto.alerta-critico { border-color: var(--cor-erro) !important; animation: pulsarAlerta 2s infinite alternate; }
 
 @keyframes pulsarAlerta {
     0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
@@ -289,365 +100,117 @@ h2, h3, .logo {
 /* =======================================================================
    CSS BLOCO 7: 🧮 BOTÕES GERAIS E ESTILIZAÇÃO INTERNA DE AÇÕES
    ======================================================================= */
-button {
-    border: none;
-    outline: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
-}
+button { border: none; outline: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
 
-.btn-detalhes {
-    flex: 1;
-    background-color: #27273a;
-    color: #fff;
-    padding: 8px 0;
-    font-size: 13px;
-}
+.btn-detalhes { flex: 1; background-color: #27273a; color: #fff; padding: 8px 0; font-size: 13px; }
 
 .btn-detalhes:hover { background-color: #3f3f5a; }
 
-.btn-add {
-    flex: 1;
-    background-color: var(--cor-primaria);
-    color: #fff;
-    padding: 8px 0;
-    font-size: 13px;
-}
+.btn-add { flex: 1; background-color: var(--cor-primaria); color: #fff; padding: 8px 0; font-size: 13px; }
 
-.btn-add:hover:not(:disabled) {
-    background-color: #b55fe6;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
-}
+.btn-add:hover:not(:disabled) { background-color: #b55fe6; box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
 
-.btn-add:disabled {
-    background-color: #1a1a24;
-    color: #4b5563;
-    cursor: not-allowed;
-}
+.btn-add:disabled { background-color: #1a1a24; color: #4b5563; cursor: not-allowed; }
 
 /* =======================================================================
    CSS BLOCO 8: 📊 CARDS DE INDICADORES DO ADMIN
    ======================================================================= */
-.grid-metricas {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-}
+.grid-metricas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
 
-.card-metrica {
-    background-color: var(--bg-card);
-    padding: 25px;
-    border-radius: 12px;
-    border-left: 5px solid var(--cor-primaria);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
+.card-metrica { background-color: var(--bg-card); padding: 25px; border-radius: 12px; border-left: 5px solid var(--cor-primaria); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
 
 .card-metrica.verde { border-left-color: var(--cor-sucesso); }
 .card-metrica.rosa { border-left-color: var(--cor-destaque); }
 
-.card-metrica h3 {
-    margin: 0 0 10px 0;
-    font-size: 12px;
-    color: var(--cor-subtexto);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-shadow: none !important;
-}
+.card-metrica h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--cor-subtexto); text-transform: uppercase; letter-spacing: 0.5px; text-shadow: none !important; }
 
-.card-metrica .valor {
-    font-size: 26px;
-    font-weight: 700;
-    color: #ffffff;
-}
+.card-metrica .valor { font-size: 26px; font-weight: 700; color: #ffffff; }
 
 /* =======================================================================
    CSS BLOCO 9: 📋 FORMULÁRIOS OPERACIONAIS E TABELAS
    ======================================================================= */
-.secao-admin-flex {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
+.secao-admin-flex { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
 
-.bloco-form {
-    background-color: var(--bg-card);
-    padding: 22px;
-    border-radius: 12px;
-    border: 1px solid #1e1b29;
-}
+.bloco-form { background-color: var(--bg-card); padding: 22px; border-radius: 12px; border: 1px solid #1e1b29; }
 
 .bloco-form h3 { font-size: 16px; margin-bottom: 15px; color: #fff; }
 
 .campo { margin-bottom: 15px; }
 
-.campo label {
-    display: block;
-    font-size: 12px;
-    color: var(--cor-subtexto);
-    margin-bottom: 6px;
-}
+.campo label { display: block; font-size: 12px; color: var(--cor-subtexto); margin-bottom: 6px; }
 
-.campo input, .campo textarea {
-    width: 100%;
-    background-color: #050507;
-    border: 1px solid #2a253b;
-    border-radius: 6px;
-    padding: 10px;
-    color: #fff;
-    box-sizing: border-box;
-}
+.campo input, .campo textarea { width: 100%; background-color: #050507; border: 1px solid #2a253b; border-radius: 6px; padding: 10px; color: #fff; box-sizing: border-box; }
 
-.campo input:focus, .campo textarea:focus {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
-    outline: none;
-}
+.campo input:focus, .campo textarea:focus { border-color: var(--cor-primaria); box-shadow: 0 0 8px rgba(168, 85, 247, 0.3); outline: none; }
 
-.btn-finalizar {
-    width: 100%;
-    background-color: var(--cor-primaria);
-    color: #fff;
-    padding: 12px;
-    font-size: 14px;
-    border-radius: 6px;
-    font-weight: 600;
-}
+.btn-finalizar { width: 100%; background-color: var(--cor-primaria); color: #fff; padding: 12px; font-size: 14px; border-radius: 6px; font-weight: 600; }
 
-.btn-finalizar:hover {
-    background-color: #b55fe6;
-    box-shadow: 0 0 12px var(--cor-primaria);
-}
+.btn-finalizar:hover { background-color: #b55fe6; box-shadow: 0 0 12px var(--cor-primaria); }
 
-.btn-finalizar:disabled {
-    background-color: #1a1a24;
-    color: #4b5563;
-    cursor: not-allowed;
-}
+.btn-finalizar:disabled { background-color: #1a1a24; color: #4b5563; cursor: not-allowed; }
 
-.tabela-carrinho {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
+.tabela-carrinho { width: 100%; border-collapse: collapse; margin-top: 15px; }
 
-.tabela-carrinho th {
-    text-align: left;
-    padding: 12px;
-    color: var(--cor-subtexto);
-    font-size: 12px;
-    text-transform: uppercase;
-    border-bottom: 1px solid #1e1b29;
-}
+.tabela-carrinho th { text-align: left; padding: 12px; color: var(--cor-subtexto); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #1e1b29; }
 
-.tabela-carrinho td {
-    padding: 14px 12px;
-    border-bottom: 1px solid #0d0d11;
-    font-size: 14px;
-    color: #e2e8f0;
-}
+.tabela-carrinho td { padding: 14px 12px; border-bottom: 1px solid #0d0d11; font-size: 14px; color: #e2e8f0; }
 
-.checkout-container {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-    align-items: flex-start;
-}
+.checkout-container { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px; align-items: flex-start; }
 
-.carrinho-esquerda {
-    flex: 1.7;
-    min-width: 300px;
-    background: var(--bg-card);
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #1e1b29;
-}
+.carrinho-esquerda { flex: 1.7; min-width: 300px; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid #1e1b29; }
 
-.carrinho-direita {
-    flex: 1;
-    min-width: 280px;
-    background: var(--bg-card);
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #1e1b29;
-}
+.carrinho-direita { flex: 1; min-width: 280px; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid #1e1b29; }
 
 /* =======================================================================
    CSS BLOCO 10: 🪟 ESTRUTURA DOS MODAIS FLUTUANTES
    ======================================================================= */
-.modal-background {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.85);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    padding: 15px;
-}
+.modal-background { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 15px; }
 
-.modal-background.aberto {
-    opacity: 1;
-    pointer-events: auto;
-}
+.modal-background.aberto { opacity: 1; pointer-events: auto; }
 
-.modal-container {
-    background-color: #0b0b0f;
-    border: 1px solid #2a253b;
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    max-width: 480px;
-    position: relative;
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
-    max-height: 90vh;
-    overflow-y: auto;
-}
+.modal-container { background-color: #0b0b0f; border: 1px solid #2a253b; border-radius: 12px; padding: 30px; width: 100%; max-width: 480px; position: relative; box-shadow: 0 0 30px rgba(168, 85, 247, 0.25); max-height: 90vh; overflow-y: auto; }
 
-.modal-container-detalhes {
-    max-width: 520px;
-    display: flex;
-    flex-direction: column;
-}
+.modal-container-detalhes { max-width: 520px; display: flex; flex-direction: column; }
 
-.modal-fechar {
-    position: absolute;
-    top: 15px; right: 15px;
-    background: transparent;
-    color: var(--cor-subtexto);
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    z-index: 2;
-}
+.modal-fechar { position: absolute; top: 15px; right: 15px; background: transparent; color: var(--cor-subtexto); font-size: 16px; cursor: pointer; border: none; z-index: 2; }
 
 .modal-fechar:hover { color: #fff; }
 
-.modal-titulo {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 8px;
-}
+.modal-titulo { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 
-.modal-preco {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--cor-destaque);
-    margin-bottom: 8px;
-}
+.modal-preco { font-size: 22px; font-weight: 800; color: var(--cor-destaque); margin-bottom: 8px; }
 
-.modal-descricao {
-    font-size: 13px;
-    color: var(--cor-subtexto);
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
+.modal-descricao { font-size: 13px; color: var(--cor-subtexto); line-height: 1.6; margin-bottom: 10px; }
 
-.carrossel-container {
-    position: relative;
-    width: 100%;
-    height: 240px;
-    background-color: #000;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    flex-shrink: 0;
-}
+.carrossel-container { position: relative; width: 100%; height: 240px; background-color: #000; border-radius: 8px; overflow: hidden; margin-bottom: 20px; flex-shrink: 0; }
 
-.modal-foto {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.modal-foto { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.carrossel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 2;
-}
+.carrossel-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.6); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; }
 
 .carrossel-nav:hover { background: var(--cor-primaria); }
 .carrossel-nav.prev { left: 10px; }
 .carrossel-nav.next { right: 10px; }
 
-.carrossel-indicadores {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 6px;
-    z-index: 2;
-}
+.carrossel-indicadores { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 2; }
 
-.carrossel-indicadores .ponto {
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    cursor: pointer;
-}
+.carrossel-indicadores .ponto { width: 8px; height: 8px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; cursor: pointer; }
 
-.carrossel-indicadores .ponto.ativo {
-    background: var(--cor-primaria);
-    box-shadow: 0 0 8px var(--cor-primaria);
-}
+.carrossel-indicadores .ponto.ativo { background: var(--cor-primaria); box-shadow: 0 0 8px var(--cor-primaria); }
 
 /* =======================================================================
    CSS BLOCO 11: 🛍️ MODAL DE LOGIN/CADASTRO
    ======================================================================= */
-.alternar-autenticacao {
-    display: flex;
-    width: 100%;
-    border-bottom: 2px solid #1e1b29;
-    margin-bottom: 20px;
-    gap: 5px;
-}
+.alternar-autenticacao { display: flex; width: 100%; border-bottom: 2px solid #1e1b29; margin-bottom: 20px; gap: 5px; }
 
-.aba-auth {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--cor-subtexto);
-    padding: 12px 0;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.3s;
-}
+.aba-auth { flex: 1; background: transparent; border: none; color: var(--cor-subtexto); padding: 12px 0; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; }
 
 .aba-auth:hover { color: #fff; }
-.aba-auth.ativa {
-    color: var(--cor-primaria);
-    border-bottom: 2px solid var(--cor-primaria);
-    text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
-}
+
+.aba-auth.ativa { color: var(--cor-primaria); border-bottom: 2px solid var(--cor-primaria); text-shadow: 0 0 8px rgba(168, 85, 247, 0.5); }
 
 .secao-auth { display: none; }
+
 .secao-auth.ativa { display: block; animation: fadeIn 0.3s ease; }
 
 .status-validacao { font-size: 11px; margin-top: 4px; font-weight: 600; }
@@ -659,79 +222,25 @@ button {
 
 #modalAuth .modal-container { max-width: 420px; padding: 34px 30px; }
 
-.container-sociais {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 6px;
-}
+.container-sociais { display: flex; gap: 12px; margin-bottom: 6px; }
 
-.btn-social {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background-color: #ffffff;
-    color: #1a1a1a;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 12px 10px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
+.btn-social { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #ffffff; color: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 12px 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
 
-.btn-social:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
-    background-color: #f4f4f5;
-}
+.btn-social:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4); background-color: #f4f4f5; }
 
 .btn-social.apple { background-color: #f1f1f3; }
 .btn-social.apple:hover { background-color: #e4e4e7; }
 
-.divisor-ou {
-    display: flex;
-    align-items: center;
-    color: var(--cor-subtexto);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin: 24px 0 18px 0;
-}
+.divisor-ou { display: flex; align-items: center; color: var(--cor-subtexto); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; margin: 24px 0 18px 0; }
 
-.divisor-ou::before, .divisor-ou::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #2a253b, transparent);
-}
+.divisor-ou::before, .divisor-ou::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #2a253b, transparent); }
 
 .divisor-ou::before { margin-right: 14px; }
 .divisor-ou::after { margin-left: 14px; }
 
-.btn-acao-auth {
-    width: 100%;
-    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-destaque));
-    color: #fff;
-    border: none;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
-}
+.btn-acao-auth { width: 100%; background: linear-gradient(135deg, var(--cor-primaria), var(--cor-destaque)); color: #fff; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35); }
 
-.btn-acao-auth:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.08);
-    box-shadow: 0 10px 26px rgba(217, 70, 239, 0.45);
-}
+.btn-acao-auth:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 10px 26px rgba(217, 70, 239, 0.45); }
 
 #modalAuth .campo input { padding: 13px 14px; border-radius: 10px; font-size: 14px; }
 #modalAuth .campo label { font-size: 12.5px; font-weight: 600; margin-bottom: 7px; }
@@ -741,64 +250,22 @@ button {
    ======================================================================= */
 .opcoes-pagamento-neon input[type="radio"] { display: none; }
 
-.opcoes-pagamento-neon {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 10px;
-}
+.opcoes-pagamento-neon { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
 
-.card-pagamento-neon {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #0f172a;
-    border: 2px solid #334155;
-    padding: 10px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.card-pagamento-neon { display: flex; justify-content: space-between; align-items: center; background: #0f172a; border: 2px solid #334155; padding: 10px 14px; border-radius: 10px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-.card-pagamento-neon:hover {
-    border-color: var(--cor-sucesso);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
+.card-pagamento-neon:hover { border-color: var(--cor-sucesso); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
 
-.opcoes-pagamento-neon input[type="radio"]:checked + .card-pagamento-neon {
-    background: rgba(16, 185, 129, 0.04);
-    border-color: var(--cor-sucesso);
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 8px rgba(16, 185, 129, 0.2);
-}
+.opcoes-pagamento-neon input[type="radio"]:checked + .card-pagamento-neon { background: rgba(16, 185, 129, 0.04); border-color: var(--cor-sucesso); box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 8px rgba(16, 185, 129, 0.2); }
 
 /* =======================================================================
    🔮 BOTÕES DE TAMANHO (P, M, G, GG)
    ======================================================================= */
-.btn-tamanho-opcao {
-    background: #050507;
-    color: #fff;
-    border: 2px solid #2a253b;
-    padding: 10px 0;
-    font-size: 14px;
-    font-weight: 700;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 1;
-    text-align: center;
-}
+.btn-tamanho-opcao { background: #050507; color: #fff; border: 2px solid #2a253b; padding: 10px 0; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; flex: 1; text-align: center; }
 
-.btn-tamanho-opcao:hover {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-}
+.btn-tamanho-opcao:hover { border-color: var(--cor-primaria); box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
 
-.btn-tamanho-opcao.selecionado {
-    background: rgba(217, 70, 239, 0.1) !important;
-    border-color: var(--cor-destaque) !important;
-    color: #fff !important;
-    box-shadow: 0 0 15px var(--cor-destaque);
-}
+.btn-tamanho-opcao.selecionado { background: rgba(217, 70, 239, 0.1) !important; border-color: var(--cor-destaque) !important; color: #fff !important; box-shadow: 0 0 15px var(--cor-destaque); }
 
 /* =======================================================================
    📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE DEFINITIVA
@@ -806,320 +273,123 @@ button {
 
 /* TABLET: 769px - 1024px */
 @media (max-width: 1024px) and (min-width: 769px) {
-    :root {
-        --sidebar-width: 220px;
-    }
-
-    .lista-produtos {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    :root { --sidebar-width: 220px; }
+    .lista-produtos { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* MOBILE: até 768px */
 @media (max-width: 768px) {
-    :root {
-        --sidebar-width: 0px;
-        --header-height: 60px;
-    }
+    :root { --sidebar-width: 0px; --header-height: 60px; }
 
-    /* ── BODY ── */
-    body {
-        flex-direction: column;
-    }
+    body { flex-direction: column; }
 
-    /* ── SIDEBAR (NAVBAR SUPERIOR NO MOBILE) ── */
-    .sidebar {
-        width: 100% !important;
-        height: auto !important;
-        position: relative !important;
-        padding: 15px 12px !important;
-        
-        /* Ativa o flexbox vertical para reordenar o topo pelo CSS */
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        
-        border-right: none !important;
-        border-bottom: 1px solid #1e1b29 !important;
-        overflow-y: visible !important;
-        box-sizing: border-box !important;
-    }
+    .sidebar { width: 100% !important; height: auto !important; position: relative !important; padding: 15px 12px !important; display: flex !important; flex-direction: column !important; align-items: stretch !important; border-right: none !important; border-bottom: 1px solid #1e1b29 !important; overflow-y: visible !important; box-sizing: border-box !important; }
 
-    /* Mantém os títulos fixos no topo */
     .logo { font-size: 22px !important; text-align: center !important; order: 1 !important; }
     .sub { text-align: center !important; margin-bottom: 15px !important; order: 2 !important; }
 
-    /* 🔥 CORREÇÃO 1: PEGA A BARRA DA LUA/CARRINHO/LOGIN E JOGA PARA CIMA */
-    /* Este seletor mira em qualquer div flex interna ou nos painéis de usuário */
     .sidebar > div[style*="display: flex"],
     .sidebar #painel-user-topo,
-    .sidebar .barra-usuario-topo {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding: 10px 12px !important;
-        margin-top: 0 !important;
-        margin-bottom: 15px !important; /* Afasta da linha de botões de baixo */
-        background: rgba(255, 255, 255, 0.02) !important;
-        border-radius: 8px !important;
-        border: 1px solid #1e1b29 !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        
-        order: 3 !important; /* Sobe para ficar logo abaixo do título */
-    }
+    .sidebar .barra-usuario-topo { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; padding: 10px 12px !important; margin-top: 0 !important; margin-bottom: 15px !important; background: rgba(255, 255, 255, 0.02) !important; border-radius: 8px !important; border: 1px solid #1e1b29 !important; width: 100% !important; box-sizing: border-box !important; order: 3 !important; }
 
-    /* 🔥 CORREÇÃO 2: COLOCA TODOS OS BOTÕES DE NAVEGAÇÃO EMBAIXO (ORDER 4) */
-    .sidebar .menu-btn {
-        width: 100% !important;
-        padding: 12px 8px !important;
-        font-size: 13px !important;
-        margin: 0 !important;
-        text-align: center !important;
-        box-sizing: border-box !important;
-        
-        /* inline-flex alinha os emojis internamente sem forçar bloco vertical */
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 6px !important;
-        
-        order: 4 !important; /* Joga os botões para baixo da barra de login */
-    }
+    .sidebar .menu-btn { width: 100% !important; padding: 12px 8px !important; font-size: 13px !important; margin: 0 !important; text-align: center !important; box-sizing: border-box !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; order: 4 !important; }
 
-    /* 🔥 CORREÇÃO 3: ADICIONA ESPAÇAMENTO ENTRE OS BOTÕES VISÍVEIS */
-    .sidebar .menu-btn + .menu-btn {
-        margin-top: 8px !important;
-    }
+    .sidebar .menu-btn + .menu-btn { margin-top: 8px !important; }
 
-    /* 🔥 CORREÇÃO 4: CONCILIAÇÃO COM O JAVASCRIPT */
-    /* Se o JS aplicar style="display: none", o CSS respeita e some com o botão da tela */
     .sidebar .menu-btn[style*="display: none"],
     .sidebar .menu-btn.admin-only[style*="display: none"],
-    .sidebar .admin-only[style*="display: none"] {
-        display: none !important;
-    }
+    .sidebar .admin-only[style*="display: none"] { display: none !important; }
 
-    /* ── HEADER DE CONTEÚDO ── */
-    .header-superior {
-        position: relative;
-        left: 0;
-        width: 100%;
-        height: auto;
-        min-height: var(--header-height);
-        padding: 10px 15px;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
+    .header-superior { position: relative; left: 0; width: 100%; height: auto; min-height: var(--header-height); padding: 10px 15px; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 
-    /* ── CONTEÚDO PRINCIPAL ── */
-    .conteudo-principal {
-        margin-left: 0;
-        margin-top: 0;
-        padding: 15px 12px;
-        width: 100%;
-    }
+    .conteudo-principal { margin-left: 0; margin-top: 0; padding: 15px 12px; width: 100%; }
 
-    /* ── VITRINE: 2 colunas no mobile ── */
-    .lista-produtos {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px;
-        padding: 10px 0;
-    }
+    .lista-produtos { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; padding: 10px 0; }
 
-    .card-produto {
-        min-height: 300px;
-    }
+    .card-produto { min-height: 300px; }
 
-    .container-foto {
-        height: 150px;
-    }
+    .container-foto { height: 150px; }
 
     .nome-prod { font-size: 13px; }
     .preco-prod { font-size: 15px; }
 
-    .container-botoes-card {
-        flex-direction: column;
-        gap: 6px;
-    }
+    .container-botoes-card { flex-direction: column; gap: 6px; }
 
-    .btn-detalhes, .btn-add {
-        padding: 9px 0;
-        font-size: 12px;
-    }
+    .btn-detalhes, .btn-add { padding: 9px 0; font-size: 12px; }
 
-    /* ── CHECKOUT ── */
-    .checkout-container {
-        flex-direction: column;
-        gap: 15px;
-    }
+    .checkout-container { flex-direction: column; gap: 15px; }
 
-    .carrinho-esquerda,
-    .carrinho-direita {
-        min-width: 100%;
-        padding: 15px;
-    }
+    .carrinho-esquerda, .carrinho-direita { min-width: 100%; padding: 15px; }
 
-    /* Tabela com scroll horizontal */
-    .carrinho-esquerda {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+    .carrinho-esquerda { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-    .tabela-carrinho {
-        min-width: 480px;
-        font-size: 12px;
-    }
+    .tabela-carrinho { min-width: 480px; font-size: 12px; }
 
-    .tabela-carrinho th,
-    .tabela-carrinho td {
-        padding: 10px 8px;
-    }
+    .tabela-carrinho th, .tabela-carrinho td { padding: 10px 8px; }
 
-    /* Wizard steps compacto */
-    #barra-progresso-wizard {
-        font-size: 11px !important;
-        padding: 8px !important;
-    }
+    #barra-progresso-wizard { font-size: 11px !important; padding: 8px !important; }
 
-    /* ── MODAIS ── */
-    .modal-background {
-        padding: 10px;
-        align-items: flex-end;
-    }
+    .modal-background { padding: 10px; align-items: flex-end; }
 
-    .modal-container {
-        max-width: 100%;
-        width: 100%;
-        max-height: 92vh;
-        border-radius: 16px 16px 0 0;
-        padding: 20px 18px;
-    }
+    .modal-container { max-width: 100%; width: 100%; max-height: 92vh; border-radius: 16px 16px 0 0; padding: 20px 18px; }
 
-    .modal-container-detalhes {
-        border-radius: 16px 16px 0 0;
-        max-height: 92vh;
-    }
+    .modal-container-detalhes { border-radius: 16px 16px 0 0; max-height: 92vh; }
 
-    .carrossel-container {
-        height: 200px;
-    }
+    .carrossel-container { height: 200px; }
 
-    /* Login modal centralizado no mobile */
-    #modalAuth .modal-container {
-        border-radius: 16px 16px 0 0;
-        padding: 24px 18px;
-    }
+    #modalAuth .modal-container { border-radius: 16px 16px 0 0; padding: 24px 18px; }
 
-    .container-sociais {
-        flex-direction: column;
-        gap: 8px;
-    }
+    .container-sociais { flex-direction: column; gap: 8px; }
 
-    /* ── ADMIN ── */
-    #painel-admin-liberado > div[style*="grid"] {
-        grid-template-columns: 1fr !important;
-    }
+    #painel-admin-liberado > div[style*="grid"] { grid-template-columns: 1fr !important; }
 
-    /* Tabelas admin com scroll */
-    #aba-admin .tabela-carrinho {
-        min-width: 500px;
-    }
+    #aba-admin .tabela-carrinho { min-width: 500px; }
 
-    #aba-admin > div,
-    #aba-historico > div {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+    #aba-admin > div, #aba-historico > div { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-    /* ── TÍTULOS ── */
     h2 { font-size: 18px; }
     h3 { font-size: 15px; }
 }
 
 /* MOBILE PEQUENO: até 400px (iPhone SE, Galaxy A) */
 @media (max-width: 400px) {
-    .lista-produtos {
-        grid-template-columns: 1fr !important;
-    }
-
-    .conteudo-principal {
-        padding: 12px 8px;
-    }
-
-    .modal-container {
-        padding: 16px 14px;
-    }
-
-    .btn-social {
-        font-size: 12px;
-        padding: 10px 8px;
-    }
+    .lista-produtos { grid-template-columns: 1fr !important; }
+    .conteudo-principal { padding: 12px 8px; }
+    .modal-container { padding: 16px 14px; }
+    .btn-social { font-size: 12px; padding: 10px 8px; }
 }
 
-/* Hover frete modal */
-.container-frete-modal button:hover {
-    background: #3b82f6 !important;
-    transform: translateY(-1px);
-}
+.container-frete-modal button:hover { background: #3b82f6 !important; transform: translateY(-1px); }
+
 /* =======================================================================
    🌗 VISUAL TOTAL SLATE #0f172a PARA O MODO CLARO (LIGHT MODE)
    ======================================================================= */
-html[data-tema="light"] body {
-    background-color: #0f172a !important; /* Todo o fundo do site */
-    color: #ffffff !important;
-}
+html[data-tema="light"] body { background-color: #0f172a !important; color: #ffffff !important; }
 
-/* Força os cabeçalhos, títulos e textos de destaque a ficarem brancos */
-html[data-tema="light"] h2, 
-html[data-tema="light"] h3, 
+html[data-tema="light"] h2,
+html[data-tema="light"] h3,
 html[data-tema="light"] .modal-titulo,
 html[data-tema="light"] .nome-prod,
-html[data-tema="light"] .modal-descricao {
-    color: #ffffff !important;
-    text-shadow: none !important;
-}
+html[data-tema="light"] .modal-descricao { color: #ffffff !important; text-shadow: none !important; }
 
-/* Pinta a Barra Lateral Esquerda (Sidebar) */
-html[data-tema="light"] .sidebar {
-    background-color: #0f172a !important; 
-    border-right: 1px solid #1e293b !important;
-}
+html[data-tema="light"] .sidebar { background-color: #0f172a !important; border-right: 1px solid #1e293b !important; }
 
-/* Ajusta o texto da logo e botões da barra lateral */
 html[data-tema="light"] .logo { color: #ffffff !important; text-shadow: none !important; }
 html[data-tema="light"] .sub { color: #94a3b8 !important; }
 html[data-tema="light"] .menu-btn { color: #cbd5e1 !important; }
 html[data-tema="light"] .menu-btn:hover { background-color: #1e293b !important; color: #fff; }
 
-/* Pinta o cabeçalho superior */
-html[data-tema="light"] .header-superior {
-    background-color: #0f172a !important;
-    border-bottom: 1px solid #1e293b !important;
-}
+html[data-tema="light"] .header-superior { background-color: #0f172a !important; border-bottom: 1px solid #1e293b !important; }
 html[data-tema="light"] .header-superior button { color: #ffffff !important; }
 
-/* Pinta os cards, blocos e barra de pesquisa */
 html[data-tema="light"] .card-produto,
 html[data-tema="light"] .bloco-form,
 html[data-tema="light"] .carrinho-esquerda,
 html[data-tema="light"] .carrinho-direita,
-html[data-tema="light"] #busca-vitrine {
-    background-color: #0f172a !important;
-    border: 1px solid #1e293b !important;
-    color: #ffffff !important;
-}
+html[data-tema="light"] #busca-vitrine { background-color: #0f172a !important; border: 1px solid #1e293b !important; color: #ffffff !important; }
 
-/* Ajusta as cores secundárias e placeholders */
 html[data-tema="light"] .estoque-prod { color: #94a3b8 !important; }
 html[data-tema="light"] #busca-vitrine::placeholder { color: #64748b !important; }
 
-/* Ajusta os campos de input de formulários */
-html[data-tema="light"] input, 
-html[data-tema="light"] textarea {
-    background-color: #1e293b !important; /* Um tom levemente diferente para dar profundidade ao input */
-    border: 1px solid #334155 !important;
-    color: #ffffff !important;
-}
+html[data-tema="light"] input,
+html[data-tema="light"] textarea { background-color: #1e293b !important; border: 1px solid #334155 !important; color: #ffffff !important; }
