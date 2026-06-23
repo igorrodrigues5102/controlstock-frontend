@@ -1261,6 +1261,200 @@ function excluirProdutoDoSistema() {
     });
 }
 
+🔥 MOTOR DE INTEGRAÇÃO COM IA (Cole exatamente aqui, antes de cadastrarProdutoPeloSite)
+async function gerarProdutoComIA() {
+    const inputPrompt = document.getElementById('prod-prompt-ia');
+    const inputNome = document.getElementById('prod-nome');
+    
+    // Se existir o input de prompt, usa ele. Se não, tenta usar o próprio campo de nome
+    const termoBusca = (inputPrompt && inputPrompt.value.trim() !== "") 
+        ? inputPrompt.value.trim() 
+        : (inputNome ? inputNome.value.trim() : "");
+
+    if (!termoBusca) {
+        mostrarToast("⚠️ Insira o nome do produto ou use o campo de IA para pesquisar!", "aviso");
+        return;
+    }
+
+    const btnGerar = document.getElementById('btn-gerar-ia');
+    let textoOriginal = "";
+    if (btnGerar) {
+        textoOriginal = btnGerar.innerHTML;
+        btnGerar.innerHTML = "⏳ A pesquisar...";
+        btnGerar.disabled = true;
+    }
+
+    try {
+        mostrarToast("🤖 Buscando dados e fotos oficiais...", "aviso");
+        
+        const resposta = await fetch(`${API_BASE_URL}/api/ia/gerar-produto?termo=${encodeURIComponent(termoBusca)}`);
+        if (!resposta.ok) throw new Error("Erro na resposta do backend.");
+
+        const dados = await resposta.json();
+
+        // Autocompila os inputs reais do formulário
+        if (inputNome && dados.nome) inputNome.value = dados.nome;
+        
+        const inputPreco = document.getElementById('prod-preco');
+        if (inputPreco && dados.preco) inputPreco.value = dados.preco;
+
+        // Distribui as 3 fotos oficiais nos campos do seu painel
+        if (dados.imagens && dados.imagens.length > 0) {
+            const inputUrl1 = document.getElementById('prod-url-1');
+            const inputUrl2 = document.getElementById('prod-url-2');
+            const inputUrl3 = document.getElementById('prod-url-3');
+
+            if (inputUrl1) inputUrl1.value = dados.imagens[0] || "";
+            if (inputUrl2) inputUrl2.value = dados.imagens[1] || "";
+            if (inputUrl3) inputUrl3.value = dados.imagens[2] || "";
+        }
+
+        mostrarToast("✨ Preenchido com sucesso!", "sucesso");
+
+    } catch (erro) {
+        console.error(erro);
+        mostrarToast("❌ Erro ao falar com o backend de IA.", "erro");
+    } finally {
+        if (btnGerar) {
+            btnGerar.innerHTML = textoOriginal;
+            btnGerar.disabled = false;
+        }
+    }
+}
+
+function registrarEntradaLote() {
+    // Captura os elementos do HTML de forma segura
+    const inputId = document.getElementById('lote-id');
+    const inputQtd = document.getElementById('lote-qtd');
+    const inputObs = document.getElementById('lote-obs');
+
+    // Valida se os elementos existem na tela antes de ler o valor
+    if (!inputId || !inputQtd) {
+        console.error("Erro de portfólio: Os inputs 'lote-id' ou 'lote-qtd' não foram encontrados no HTML.");
+        return;
+    }
+
+    // Pega os valores e converte garantindo que não fiquem vazios
+    const id = parseInt(inputId.value, 10);
+    const qtd = parseInt(inputQtd.value, 10);
+    const obs = inputObs ? inputObs.value.trim() : "Carga de reabastecimento.";
+
+    // Validação robusta de Portfólio (Impede o envio de dados zerados ou inválidos)
+    if (isNaN(id) || isNaN(qtd) || qtd <= 0) {
+        alert("⚠️ Por favor, informe um ID válido e uma Quantidade maior que zero!");
+        return;
+    }
+
+    if (!id || !qtd) { alert("⚠️ Preencha o ID e a Quantidade do lote."); return; }
+
+    fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ produtoId: id, quantidade: qtd, observacao: obs })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Erro ao registrar entrada.");
+        return res.json();
+    })
+    .then(dados => {
+        alert(dados.mensagem);
+        inputId.value = "";
+        inputQtd.value = "";
+        if (inputObs) inputObs.value = "";
+        
+        carregarProdutosDaAPI();
+        atualizarDashboardAdmin();
+        carregarTabelasInventarioEAuditoria();
+    })
+    .catch(() => alert("❌ Erro ao salvar lote no banco SQLite."));
+}
+
+function salvarAlteracoesProduto() {
+    const id = document.getElementById('gerenciar-id').value;
+    const nome = document.getElementById('gerenciar-nome').value.trim();
+    const precoBase = parseFloat(document.getElementById('gerenciar-preco').value) || 0;
+    const desconto = parseInt(document.getElementById('gerenciar-desconto').value) || 0;
+    const url1 = document.getElementById('gerenciar-url1').value.trim();
+    const url2 = document.getElementById('gerenciar-url2').value.trim();
+    const url3 = document.getElementById('gerenciar-url3').value.trim();
+
+    if (!id) {
+        alert("⚠️ Você precisa informar o ID do produto para editá-lo!");
+        return;
+    }
+
+    const payload = {
+        produtoId: parseInt(id),
+        novoNome: nome || null,
+        novoPrecoBase: precoBase,
+        porcentagemDesconto: desconto,
+        url1: url1 || null,
+        url2: url2 || null,
+        url3: url3 || null
+    };
+
+    fetch(`${API_BASE_URL}/api/admin/produtos/precos`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Não foi possível atualizar o produto. Status: " + res.status);
+        return res.json();
+    })
+    .then(dados => {
+        alert(dados.mensagem);
+        document.getElementById('gerenciar-id').value = "";
+        document.getElementById('gerenciar-nome').value = "";
+        document.getElementById('gerenciar-preco').value = "";
+        document.getElementById('gerenciar-desconto').value = "";
+        document.getElementById('gerenciar-url1').value = "";
+        document.getElementById('gerenciar-url2').value = "";
+        document.getElementById('gerenciar-url3').value = "";
+        
+        carregarProdutosDaAPI();
+        atualizarDashboardAdmin();
+        carregarTabelasInventarioEAuditoria();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("❌ Erro ao atualizar o produto. Verifique se o ID existe e se o C# está rodando.");
+    });
+}
+
+function excluirProdutoDoSistema() {
+    const id = document.getElementById('gerenciar-id').value;
+
+    if (!id) {
+        alert("⚠️ Digite o ID do produto para poder excluí-lo!");
+        return;
+    }
+
+    if (!confirm(`🚨 ATENÇÃO: Tem certeza absoluta que deseja excluir o produto ID ${id} permanentemente do banco de dados?`)) {
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/api/admin/produtos/excluir/${id}`, {
+        method: 'DELETE'
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Erro ao deletar registro.");
+        return res.json();
+    })
+    .then(dados => {
+        alert(dados.mensagem);
+        document.getElementById('gerenciar-id').value = "";
+        
+        carregarProdutosDaAPI();
+        atualizarDashboardAdmin();
+        carregarTabelasInventarioEAuditoria();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("❌ Falha ao tentar excluir. O produto pode não existir.");
+    });
+}
+
 function cadastrarProdutoPeloSite() {
     const nome = document.getElementById('prod-nome').value.trim();
     const preco = parseFloat(document.getElementById('prod-preco').value);
@@ -1297,7 +1491,6 @@ function cadastrarProdutoPeloSite() {
         carregarTabelasInventarioEAuditoria();
     }).catch(() => alert("❌ Falha crítica ao salvar produto no banco de dados."));
 }
-
 
 // =======================================================================
 // BLOCO 11: 📊 SINCRONIZADORES FINANCEIROS E REPASSE DE TABELAS LIVE (IA)
