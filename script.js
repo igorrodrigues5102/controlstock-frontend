@@ -921,12 +921,44 @@ async function buscarCepAuto() {
 function alternarCamposPagamento(tipo) {
     const card = document.getElementById('dados-cartao');
     if (card) {
-        // Verifica exatamente os valores enviados pelos inputs de rádio ('Crédito' ou 'Débito')
         if (tipo === 'Crédito' || tipo === 'Débito' || tipo === 'CARTAO' || tipo === 'DEBITO') {
             card.style.display = 'flex';
         } else {
             card.style.display = 'none';
         }
+    }
+
+    // 🔥 CAPTURA O TOTAL REAL DO CARRINHO E POPULA O SIMULADOR DE CHECKOUT
+    const elementoTotal = document.getElementById('txtTotal');
+    const displaySimulador = document.getElementById('simulador-parcelas-checkout');
+    if (!elementoTotal || !displaySimulador) return;
+
+    // Limpa a string de moeda (R$) para realizar os cálculos aritméticos limpos
+    const valorTotalReal = parseFloat(elementoTotal.innerText.replace("R$", "").replace(/\./g, "").replace(",", ".").trim()) || 0;
+
+    if (tipo === 'PIX') {
+        const descontoPix = valorTotalReal * 0.05;
+        const totalComDesconto = valorTotalReal - descontoPix;
+        displaySimulador.style.color = "var(--cor-sucesso)";
+        displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toFixed(2).replace(".", ",")} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5% de taxa bancária)</span>`;
+    
+    } else if (tipo === 'Crédito' || tipo === 'CARTAO') {
+        const parcelas3x = valorTotalReal / 3;
+        const parcelas5x = (valorTotalReal * 1.05) / 5; // 5% de juros simulado
+        displaySimulador.style.color = "var(--cor-primaria)";
+        displaySimulador.innerHTML = `
+            CNH-Financeiro | Crédito:<br>
+            • Em até <b>3x de R$ ${parcelas3x.toFixed(2).replace(".", ",")}</b> sem juros<br>
+            • Ou em até <b>5x de R$ ${parcelas5x.toFixed(2).replace(".", ",")}</b> com juro do gateway
+        `;
+    
+    } else if (tipo === 'Débito' || tipo === 'DEBITO') {
+        displaySimulador.style.color = "#fff";
+        displaySimulador.innerHTML = `💳 <b>À vista no Débito:</b> 1x de R$ ${valorTotalReal.toFixed(2).replace(".", ",")} sem tarifas.`;
+    
+    } else if (tipo === 'Boleto') {
+        displaySimulador.style.color = "var(--cor-destaque)";
+        displaySimulador.innerHTML = `📄 <b>Boleto Bancário:</b> R$ ${valorTotalReal.toFixed(2).replace(".", ",")} à vista <span style="font-size:11px; color:var(--cor-subtexto);">(Compensação em até 48h úteis)</span>`;
     }
 }
 
@@ -987,36 +1019,23 @@ function baixarRomaneioPDF() {
             <title>Romaneio ${codRomaneio}</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; }
-                
-                /* Força o background escuro no HTML e Body */
                 html, body { background-color: #0b0a12 !important; color: #e2e8f0 !important; font-family: 'Segoe UI', system-ui, sans-serif; padding: 20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                
                 .comprovante-wrapper { max-width: 740px; margin: 0 auto; background-color: #13111c !important; border: 1px solid #2a2440; padding: 35px; border-radius: 14px; }
-                
                 .topo-faturamento { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #221f33; padding-bottom: 20px; margin-bottom: 25px; }
                 .marca-sistema { font-size: 26px; font-weight: 800; color: #ffffff !important; }
                 .marca-sistema span { color: #a855f7 !important; }
-                
                 .token-autenticacao { background-color: #1a1827 !important; border: 1px solid #a855f7; color: #c084fc !important; padding: 8px 14px; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: 700; }
-                
                 .sub-titulo-secao { font-size: 14px; text-transform: uppercase; color: #a855f7 !important; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; margin-top: 25px; }
-                
                 .painel-dados { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background-color: #1a1827 !important; padding: 20px; border-radius: 8px; border: 1px solid #221f33; }
                 .item-dado p { font-size: 11px; text-transform: uppercase; color: #64748b !important; font-weight: 600; margin-bottom: 4px; }
                 .item-dado span { font-size: 14px; font-weight: 600; color: #f1f5f9 !important; }
-                
                 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
                 th { background-color: #1a1827 !important; color: #94a3b8 !important; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 12px 16px; border-bottom: 2px solid #221f33; text-align: left; }
                 td { padding: 16px; border-bottom: 1px solid #221f33; color: #e2e8f0 !important; font-size: 13px; }
-                
-                /* Ajusta as tags span de atacado que vem do carrinho do sistema */
                 td span { background: rgba(245, 158, 11, 0.1) !important; color: #fbbf24 !important; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-                
                 .bloco-fechamento { display: flex; justify-content: flex-end; align-items: center; gap: 15px; background-color: #1a1827 !important; padding: 20px; border-radius: 8px; border: 1px solid #221f33; margin-top: 25px; }
                 .total-txt { font-size: 13px; color: #94a3b8 !important; font-weight: 700; text-transform: uppercase; }
                 .total-num { font-size: 24px; font-weight: 900; color: #22c55e !important; }
-                
-                /* Força a renderização escura total na janela do driver de PDF */
                 @media print {
                     html, body { background-color: #0b0a12 !important; color: #e2e8f0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     .comprovante-wrapper { background-color: #13111c !important; border: 1px solid #2a2440 !important; }
@@ -1030,7 +1049,6 @@ function baixarRomaneioPDF() {
                     <div class="marca-sistema">ControlStock<span>+</span></div>
                     <div class="token-autenticacao">ROMANEIO: ${codRomaneio}</div>
                 </div>
-                
                 <div class="sub-titulo-secao">📦 Informações de Distribuição</div>
                 <div class="painel-dados">
                     <div class="item-dado">
@@ -1050,7 +1068,6 @@ function baixarRomaneioPDF() {
                         <span style="color: #22c55e !important; font-weight: bold;">✓ Sincronizado e Armazenado no SQLite</span>
                     </div>
                 </div>
-                
                 <div class="sub-titulo-secao">📋 Itens do Faturamento</div>
                 <table>
                     <thead>
@@ -1065,7 +1082,6 @@ function baixarRomaneioPDF() {
                         ${itensCorpoHtml}
                     </tbody>
                 </table>
-                
                 <div class="bloco-fechamento">
                     <div class="total-txt">Total Geral Faturado:</div>
                     <div class="total-num">${totalGeral}</div>
