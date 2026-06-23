@@ -801,7 +801,7 @@ button {
 }
 
 /* =======================================================================
-   📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE COMPLETA (ATUALIZADO)
+   📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE COMPLETA COMPLETA
    ======================================================================= */
 
 /* TABLET: 769px - 1024px */
@@ -827,34 +827,60 @@ button {
         flex-direction: column;
     }
 
-    /* ── SIDEBAR ADAPTADA PARA GRID NO MOBILE ── */
+    /* ── SIDEBAR ADAPTADA PARA ORDEM DINÂMICA NO MOBILE ── */
     .sidebar {
         width: 100%;
         height: auto;
         position: relative;
         padding: 15px 12px;
-        display: flex;
-        flex-direction: column;
+        
+        /* Força o comportamento flexbox vertical para controlar a ordem dos blocos */
+        display: flex !important;
+        flex-direction: column !important;
         align-items: stretch;
+        
         border-right: none;
         border-bottom: 1px solid #1e1b29;
         overflow-y: visible;
         box-sizing: border-box;
     }
 
-    .logo { font-size: 22px; text-align: center; }
-    .sub { text-align: center; margin-bottom: 15px; }
+    /* Garante a marca do sistema no começo de tudo */
+    .logo { font-size: 22px; text-align: center; order: 1 !important; }
+    .sub { text-align: center; margin-bottom: 15px; order: 2 !important; }
 
-/* 🔥 CONTAINER DO GRID EM 2 COLUNAS */
+    /* 🔥 CORREÇÃO: JOGA A ÁREA DE LOGIN / PERFIL PARA CIMA DO MENU */
+    .sidebar #painel-user-topo,
+    .sidebar div[style*="display: flex"]:has(#btn-login),
+    .sidebar .barra-usuario-topo {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 10px 12px !important;
+        margin-top: 0 !important;
+        margin-bottom: 15px !important; /* Espaço confortável antes dos botões começarem */
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 8px;
+        border: 1px solid #1e1b29;
+        width: 100%;
+        box-sizing: border-box;
+        
+        order: 3 !important; /* Terceiro elemento na ordem de leitura */
+    }
+
+    /* 🔥 CONTAINER DO GRID EM 2 COLUNAS ABAIXO DA LUA */
     .sidebar .menu-principal-navegacao {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 8px !important;
         width: 100%;
         box-sizing: border-box;
+        
+        order: 4 !important; /* Quarto elemento na ordem de leitura (vai para baixo) */
     }
 
-    /* 🔥 BOTÕES DO MENU (SEM DISPLAY FLEX IMPRONTADO) */
+    /* 🔥 BOTÕES DO MENU AJUSTADOS */
     .sidebar .menu-btn {
         width: 100% !important;
         padding: 12px 8px !important;
@@ -863,27 +889,17 @@ button {
         text-align: center !important;
         box-sizing: border-box;
         
-        /* O grid já gerencia o espaço. Deixamos inline-flex para o alinhamento interno dos ícones, 
-           permitindo que o display: none do JS funcione livremente */
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
     }
 
-    /* 🔥 ÁREA DO USUÁRIO LOGADO NO TOPO MANTIDA HORIZONTAL */
-    .sidebar #painel-user-topo {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding: 10px 12px !important;
-        margin-top: 15px !important;
-        background: rgba(255, 255, 255, 0.02) !important;
-        border-radius: 8px;
-        border: 1px solid #1e1b29;
-        width: 100%;
-        box-sizing: border-box;
+    /* 🔥 RECONCILIANDO OCULTAÇÃO DO JAVASCRIPT: 
+       Evita que o grid force a exibição de botões com display:none ativo no script */
+    .sidebar .menu-btn[style*="display: none"],
+    .sidebar .menu-btn.admin-only[style*="display: none"] {
+        display: none !important;
     }
 
     /* ── HEADER ── */
