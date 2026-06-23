@@ -648,39 +648,35 @@ function atualizarInterface() {
     corpo.innerHTML = ""; 
     let totalGeral = 0, descontoAtacadoGeral = 0, itensTotais = 0;
     const chaves = Object.keys(carrinho);
-    // COMO DEVE FICAR O SEU TRECHO CONECTADO:
-function atualizarInterface() {
-    const corpo = document.getElementById('corpo-carrinho');
-    if (!corpo) return;
-    corpo.innerHTML = ""; 
-    let totalGeral = 0, descontoAtacadoGeral = 0, itensTotais = 0;
 
-    // 🔥 INSERÇÃO DA BARRA DE PROGRESSO DO ATACADO PROGRESSIVO
-    // Descobre a maior quantidade de um mesmo produto no carrinho
-    let maiorQtdDeUmItem = 0;
-    Object.keys(carrinho).forEach(chave => {
-        if (carrinho[chave].qtd > maiorQtdDeUmItem) {
-            maiorQtdDeUmItem = carrinho[chave].qtd;
+    // 1. CÁLCULO PRÉVIO DO TOTAL BRUTO JÁ COM O DESCONTO DE 12.5% APLICADO (PARA A BARRA DE FRETE)
+    let totalBrutoParaFrete = 0;
+    chaves.forEach(chave => {
+        let item = carrinho[chave];
+        let precoFinal = item.precoOriginal;
+        if (item.qtd >= 5) {
+            precoFinal = item.precoOriginal * 0.875; // Aplica 12.5% de desconto (1 - 0.125)
         }
+        totalBrutoParaFrete += (precoFinal * item.qtd);
     });
 
-    // Se o carrinho tiver itens, calcula a porcentagem até chegar a 5 unidades
-    let porcentagemMeta = Math.min((maiorQtdDeUmItem / 5) * 100, 100);
+    // 2. LÓGICA E CRIAÇÃO DA BARRA DE PROGRESSO DO FRETE GRÁTIS (ALVO: R$ 500,00)
+    let porridgeMeta = Math.min((totalBrutoParaFrete / 500) * 100, 100);
     let textoProgresso = "";
     let corBarra = "var(--cor-primaria)";
 
-    if (Object.keys(carrinho).length === 0) {
-        textoProgresso = "🛒 Adicione itens para liberar o desconto de Atacado (10% OFF em 5 un.)";
-        porcentagemMeta = 0;
-    } else if (maiorQtdDeUmItem >= 5) {
-        textoProgresso = "🔥 PARABÉNS! Você liberou o desconto de Atacado de 10% no seu carrinho!";
-        corBarra = "#22c55e"; // Verde Sucesso
+    if (chaves.length === 0) {
+        textoProgresso = "🛒 Adicione itens para liberar FRETE GRÁTIS para todo o Brasil (Alvo: R$ 500,00)";
+        porcentageMeta = 0;
+    } else if (totalBrutoParaFrete >= 500) {
+        textoProgresso = "🎉 PARABÉNS! Você liberou Frete Grátis para todo o Brasil!";
+        corBarra = "#22c55e"; // Verde sucesso
     } else {
-        let faltam = 5 - maiorQtdDeUmItem;
-        textoProgresso = `📈 Adicione mais ${faltam} unidade${faltam > 1 ? 's' : ''} do mesmo item para ativar 10% de desconto de Atacado!`;
+        let restante = 500 - totalBrutoParaFrete;
+        textoProgresso = `🚚 Faltam apenas R$ ${restante.toFixed(2)} para liberar FRETE GRÁTIS para todo o Brasil!`;
     }
 
-    // Injeta o container da barra de progresso no topo do carrinho
+    // Injeta ou substitui a barra de progresso no topo da tabela
     const containerProgressoExistente = document.getElementById('wrapper-progresso-atacado');
     if (containerProgressoExistente) containerProgressoExistente.remove();
 
@@ -688,18 +684,18 @@ function atualizarInterface() {
         <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
                 <span>${textoProgresso}</span>
-                <span>${Math.round(porcentagemMeta)}%</span>
+                <span>${Math.round(porcentageMeta)}%</span>
             </div>
             <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
-                <div style="background: ${corBarra}; height: 100%; width: ${porcentagemMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+                <div style="background: ${corBarra}; height: 100%; width: ${porcentageMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
             </div>
         </div>
     `;
     
-    // Insere a barra logo antes da tabela de itens do carrinho
     corpo.closest('table').insertAdjacentHTML('beforebegin', progressoHtml);
 
-    if(chaves.length === 0) {
+    // 3. MONTAGEM DINÂMICA DAS LINHAS DA TABELA DO CARRINHO
+    if (chaves.length === 0) {
         corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--cor-subtexto);">Seu carrinho está vazio.</td></tr>`;
         descontoCupomAtivo = 0;
     } else {
@@ -709,17 +705,17 @@ function atualizarInterface() {
             let tagAtacado = "";
             itensTotais += item.qtd;
             
+            // CONDIÇÃO: SE TIVER 5 OU MAIS ITENS IGUAIS, GANHA 12.5% DE DESCONTO
             if (item.qtd >= 5) { 
-                let descUnidade = item.precoOriginal * 0.10; 
+                let descUnidade = item.precoOriginal * 0.125; 
                 precoFinal = item.precoOriginal - descUnidade; 
                 descontoAtacadoGeral += (descUnidade * item.qtd); 
-                tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -10%</span>"; 
+                tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -12.5%</span>"; 
             }
             
             let subtotalItem = item.qtd * precoFinal; 
             totalGeral += subtotalItem;
             
-            // Adiciona uma tag estilizada com o tamanho do produto logo ao lado do nome
             let tagTamanhoHtml = `<span style="background: #27273a; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px;">TAM: ${item.tamanho}</span>`;
 
             corpo.innerHTML += `
@@ -735,6 +731,7 @@ function atualizarInterface() {
         });
     }
 
+    // 4. ATUALIZAÇÃO DOS CAMPOS DE TOTAIS E VALIDAÇÃO DOS BOTÕES
     let totalFinal = totalGeral - descontoCupomAtivo;
     if (totalFinal < 0) totalFinal = 0;
 
@@ -757,7 +754,6 @@ function atualizarInterface() {
     }
     localStorage.setItem('controlstock_carrinho', JSON.stringify(carrinho));
 }
-
 // =======================================================================
 // BLOCO 8: 🚚 LOGÍSTICA DE ENTREGA E FRETE DO CHECKOUT
 // =======================================================================
