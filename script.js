@@ -452,7 +452,10 @@ function carregarHistoricoPedidos() {
     
     fetch(API_BASE_URL + '/api/pedidos/historico/' + usuarioLogado.email)
         .then(res => {
-            // 🔥 VERIFICA SE O BACKEND C# DEVOLVEU ERRO (EX: 404 POR NÃO TER PEDIDOS NESSA CONTA)
+            // 🔥 SE FOR 404, RETORNA UM ARRAY VAZIO PARA CAIR NO TRATAMENTO DE "NENHUM PEDIDO"
+            if (res.status === 404) {
+                return [];
+            }
             if (!res.ok) {
                 throw new Error(`Erro HTTP! Status: ${res.status}`);
             }
@@ -461,7 +464,8 @@ function carregarHistoricoPedidos() {
         .then(pedidos => {
             corpo.innerHTML = '';
             if (!pedidos || pedidos.length === 0) {
-                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Nenhum romaneio encontrado para este perfil.</td></tr>";
+                // Mensagem limpa sem quebrar o layout
+                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>📦 Nenhum romaneio encontrado para este perfil.</td></tr>";
                 return;
             }
             pedidos.forEach(p => {
@@ -469,9 +473,8 @@ function carregarHistoricoPedidos() {
             });
         })
         .catch(err => {
-            // 🔥 EXIBE O DIAGNÓSTICO EXATO NO CONSOLE (F12) PARA VOCÊ SABER SE O BACKEND CAIU OU REJEITOU
-            console.error("Falha na requisição do histórico:", err);
-            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico. Verifique o console.</td></tr>"; 
+            console.error("Falha crítica no faturamento:", err);
+            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao conectar com o servidor de romaneios.</td></tr>"; 
         });
 }
 
