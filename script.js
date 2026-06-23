@@ -106,10 +106,19 @@ tamanhoSelectedNoModal = null;
             containerTamanhos.appendChild(botao);
         });
     }
-
-    if (btnAddModal) {
+if (btnAddModal) {
         btnAddModal.onclick = () => {
-            adicionarAoCarrinho(prod.id, prod.nome, prod.preco, prod.quantidadeAtual, tamanhoSelectedNoModal);
+            // Captura o input numérico gerado dinamicamente
+            const campoQtd = document.getElementById('modal-quantidade-selecionada');
+            const qtdDesejada = campoQtd ? parseInt(campoQtd.value, 10) || 1 : 1;
+
+            // 🔥 Envia a quantidade direto para o carrinho sem precisar de loops
+            adicionarAoCarrinho(prod.id, prod.nome, prod.preco, prod.quantidadeAtual, tamanhoSelectedNoModal, qtdDesejada);
+            
+            // Remove o seletor da memória antes de fechar o modal
+            const wrapperQtd = document.getElementById('wrapper-quantidade-modal');
+            if (wrapperQtd) wrapperQtd.remove();
+            
             fecharModal(); 
         };
     }
@@ -603,29 +612,29 @@ function carregarProdutosDaAPI() {
 // =======================================================================
 // BLOCO 7: 🧮 LOGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
 // =======================================================================
-function adicionarAoCarrinho(id, nome, preco, estoqueMaximo, tamanhoEscolhido) {
-    // Caso o usuário tente burlar e não selecione o tamanho, barra aqui
+// SUBSTITUA DA ASSINATURA ATÉ O FECHAMENTO DO ELSE POR ESTE TRECHO:
+function adicionarAoCarrinho(id, nome, preco, estoqueMaximo, tamanhoEscolhido, qtdDesejada = 1) {
     if (!tamanhoEscolhido) {
         mostrarToast("⚠️ Por favor, selecione um tamanho nas especificações!", "aviso");
         return;
     }
 
-    // Cria uma chave única combinando ID e Tamanho (Ex: "3-M")
     const chaveItem = `${id}-${tamanhoEscolhido}`;
 
     if (carrinho[chaveItem]) {
-        if (carrinho[chaveItem].qtd >= estoqueMaximo) {
-            mostrarToast(`Estoque limite atingido para o tamanho ${tamanhoEscolhido}.`, 'aviso');
+        // Valida se a soma da quantidade atual com a nova desejada estoura o estoque
+        if ((carrinho[chaveItem].qtd + qtdDesejada) > estoqueMaximo) {
+            mostrarToast(`Estoque limite atingido! Disponível apenas ${estoqueMaximo} unidades.`, 'aviso');
             return;
         }
-        carrinho[chaveItem].qtd += 1;
+        carrinho[chaveItem].qtd += qtdDesejada; // Soma a quantidade inteira direto aqui
     } else {
         carrinho[chaveItem] = { 
             id: id, 
             nome: nome, 
             precoOriginal: preco, 
-            qtd: 1, 
-            tamanho: tamanhoEscolhido // Salva o tamanho na memória do item
+            qtd: qtdDesejada, // Define a quantidade direto na criação do item
+            tamanho: tamanhoEscolhido
         };
     }
     
