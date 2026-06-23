@@ -1776,3 +1776,33 @@ function filtrarPorCategoria(categoriaAlvo, botaoClicado) {
         }
     });
 }
+// 🔥 FORÇADOR DE VISIBILIDADE MOBILE - CONTROLSTOCK+
+function forcarLayoutBotoesMobile() {
+    // Verifica se a tela atual é tamanho mobile (até 768px)
+    const ehMobile = window.innerWidth <= 768;
+    if (!ehMobile) return;
+
+    // Pega o estado real do login baseado no que você já usa no seu sistema
+    // (Ajuste 'isAdmin' para a variável ou validação exata que seu script usa)
+    const usuarioLogado = localStorage.getItem('usuarioLogado') || sessionStorage.getItem('usuarioLogado');
+    const ehAdministrador = usuarioLogado === 'admin' || (typeof isAdmin !== 'undefined' && isAdmin);
+
+    // Seleciona os botões gerenciais
+    const btnHistorico = document.getElementById('btn-historico');
+    const btnAdmin = document.getElementById('btn-admin');
+
+    if (!ehAdministrador) {
+        // Se NÃO for admin deslogado, remove os botões do fluxo do HTML à força no mobile
+        if (btnHistorico) btnHistorico.style.setProperty('display', 'none', 'important');
+        if (btnAdmin) btnAdmin.style.setProperty('display', 'none', 'important');
+    } else {
+        // Se FOR admin logado, exibe os botões integrados no layout
+        if (btnHistorico) btnHistorico.style.setProperty('display', 'inline-flex', 'important');
+        if (btnAdmin) btnAdmin.style.setProperty('display', 'inline-flex', 'important');
+    }
+}
+
+// Executa automaticamente quando a página carregar
+window.addEventListener('DOMContentLoaded', forcarLayoutBotoesMobile);
+// Executa se o usuário girar o celular ou mudar o tamanho da janela
+window.addEventListener('resize', forcarLayoutBotoesMobile);
