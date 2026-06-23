@@ -448,14 +448,11 @@ function carregarHistoricoPedidos() {
     if (!usuarioLogado) return;
     const corpo = document.getElementById('lista-pedidos-corpo');
     if (!corpo) return;
-    corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando...</td></tr>";
+    corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando fluxo de faturamento...</td></tr>";
     
-    fetch(API_BASE_URL + '/api/pedidos/historico/' + usuarioLogado.email)
+    // 🔥 CORREÇÃO: Removemos o e-mail para bater na rota geral do Administrador
+    fetch(API_BASE_URL + '/api/pedidos/historico')
         .then(res => {
-            // 🔥 SE FOR 404, RETORNA UM ARRAY VAZIO PARA CAIR NO TRATAMENTO DE "NENHUM PEDIDO"
-            if (res.status === 404) {
-                return [];
-            }
             if (!res.ok) {
                 throw new Error(`Erro HTTP! Status: ${res.status}`);
             }
@@ -464,8 +461,7 @@ function carregarHistoricoPedidos() {
         .then(pedidos => {
             corpo.innerHTML = '';
             if (!pedidos || pedidos.length === 0) {
-                // Mensagem limpa sem quebrar o layout
-                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>📦 Nenhum romaneio encontrado para este perfil.</td></tr>";
+                corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>📦 Nenhum romaneio faturado no sistema até o momento.</td></tr>";
                 return;
             }
             pedidos.forEach(p => {
@@ -473,8 +469,8 @@ function carregarHistoricoPedidos() {
             });
         })
         .catch(err => {
-            console.error("Falha crítica no faturamento:", err);
-            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao conectar com o servidor de romaneios.</td></tr>"; 
+            console.error("Falha ao carregar romaneios gerenciais:", err);
+            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico de romaneios.</td></tr>"; 
         });
 }
 
