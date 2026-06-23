@@ -1509,3 +1509,35 @@ function filtrarProdutosVitrine() {
         }
     });
 }
+// =======================================================================
+// 🌗 SISTEMA CENTRAL DE ALTERNAÇÃO DE TEMA (DARK / LIGHT MODE)
+// =======================================================================
+function alternarTemaSite() {
+    const raizHtml = document.documentElement;
+    const btnTema = document.getElementById('btn-tema');
+    
+    // Verifica se o tema atual já é o claro (light)
+    const éTemaClaro = raizHtml.getAttribute('data-tema') === 'light';
+
+    if (éTemaClaro) {
+        // Voltar para o Tema Dark (Seu padrão original)
+        raizHtml.removeAttribute('data-tema');
+        raizHtml.style.setProperty('--bg-principal', '#000000');
+        raizHtml.style.setProperty('--bg-card', '#0d0d11');
+        raizHtml.style.setProperty('--cor-texto', '#ffffff');
+        raizHtml.style.setProperty('--cor-subtexto', '#94a3b8');
+        
+        btnTema.innerText = '🌙';
+        mostrarToast("🌌 Modo Escuro Ativado", "sucesso");
+    } else {
+        // Ativar o Tema Light (Visual Corporativo Claro)
+        raizHtml.setAttribute('data-tema', 'light');
+        raizHtml.style.setProperty('--bg-principal', '#f8fafc'); // Fundo claro (slate-50)
+        raizHtml.style.setProperty('--bg-card', '#ffffff');      // Cards brancos puros
+        raizHtml.style.setProperty('--cor-texto', '#0f172a');     // Texto escuro (slate-900)
+        raizHtml.style.setProperty('--cor-subtexto', '#475569');  // Subtexto cinza escuro
+        
+        btnTema.innerText = '☀️';
+        mostrarToast("☀️ Modo Claro Ativado", "sucesso");
+    }
+}
