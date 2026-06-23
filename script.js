@@ -928,32 +928,37 @@ function alternarCamposPagamento(tipo) {
         }
     }
 
-    // 🔥 CAPTURA O TOTAL REAL DO CARRINHO E POPULA O SIMULADOR DE CHECKOUT
+    // Captura o total real do carrinho e o container do simulador
     const elementoTotal = document.getElementById('txtTotal');
     const displaySimulador = document.getElementById('simulador-parcelas-checkout');
     if (!elementoTotal || !displaySimulador) return;
 
-    // Limpa a string de moeda (R$) para realizar os cálculos aritméticos limpos
-    const valorTotalReal = parseFloat(elementoTotal.innerText.replace("R$", "").replace(/\./g, "").replace(",", ".").trim()) || 0;
+    // 🔥 TRATAMENTO DO SISTEMA MONETÁRIO BRASILEIRO (PT-BR)
+    // Remove R$, espaços e pontos de milhar. Depois troca a vírgula decimal por ponto para o JavaScript entender.
+    let textoMoeda = elementoTotal.innerText.replace("R$", "").replace(/\s/g, "").replace(/\./g, "");
+    textoMoeda = textoMoeda.replace(",", ".");
+    
+    const valorTotalReal = parseFloat(textoMoeda) || 0;
 
     if (tipo === 'PIX') {
         const descontoPix = valorTotalReal * 0.05;
         const totalComDesconto = valorTotalReal - descontoPix;
         displaySimulador.style.color = "var(--cor-sucesso)";
-        displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toFixed(2).replace(".", ",")} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5% de taxa bancária)</span>`;
+        displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5% de taxa bancária)</span>`;
     
     } else if (tipo === 'Crédito' || tipo === 'CARTAO') {
         displaySimulador.style.color = "var(--cor-primaria)";
         
-        // 🔥 CRIAÇÃO DO MENU SELETOR COM DIVISÃO CORRETA DE 1A 12X
         let htmlSelect = `
             <label style="display:block; margin-bottom:8px; font-weight:bold; color:#fff;">💳 Opções de Parcelamento:</label>
             <select id="select-parcelas-checkout" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:4px; font-size:14px; cursor:pointer;">
         `;
 
+        // Gera as 12 parcelas dividindo o valor real corretamente
         for (let i = 1; i <= 12; i++) {
             const valorDaParcela = valorTotalReal / i;
-            htmlSelect += `<option value="${i}">${i}x de R$ ${valorDaParcela.toFixed(2).replace(".", ",")} sem juros</option>`;
+            const parcelaFormatada = valorDaParcela.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            htmlSelect += `<option value="${i}">${i}x de R$ ${parcelaFormatada} sem juros</option>`;
         }
 
         htmlSelect += `</select>`;
@@ -961,11 +966,11 @@ function alternarCamposPagamento(tipo) {
     
     } else if (tipo === 'Débito' || tipo === 'DEBITO') {
         displaySimulador.style.color = "#fff";
-        displaySimulador.innerHTML = `💳 <b>À vista no Débito:</b> 1x de R$ ${valorTotalReal.toFixed(2).replace(".", ",")} sem tarifas.`;
+        displaySimulador.innerHTML = `💳 <b>À vista no Débito:</b> 1x de R$ ${valorTotalReal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} sem tarifas.`;
     
     } else if (tipo === 'Boleto') {
         displaySimulador.style.color = "var(--cor-destaque)";
-        displaySimulador.innerHTML = `📄 <b>Boleto Bancário:</b> R$ ${valorTotalReal.toFixed(2).replace(".", ",")} à vista <span style="font-size:11px; color:var(--cor-subtexto);">(Compensação em até 48h úteis)</span>`;
+        displaySimulador.innerHTML = `📄 <b>Boleto Bancário:</b> R$ ${valorTotalReal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} à vista <span style="font-size:11px; color:var(--cor-subtexto);">(Compensação em até 48h úteis)</span>`;
     }
 }
 
