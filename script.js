@@ -19,9 +19,47 @@ function abrirModal(id) {
     const prod = listaProdutosGlobal.find(p => p.id === id);
     if (!prod) return;
 
-    document.getElementById('modalTitulo').innerText = prod.nome;
-    document.getElementById('modalPreco').innerText = `R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-    document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
+    // COMO DEVE FICAR O SEU TRECHO CONECTADO:
+document.getElementById('modalTitulo').innerText = prod.nome;
+document.getElementById('modalPreco').innerText = `R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
+
+// 🔥 TRECHO NOVO PARA ADICIONAR DAQUI:
+const containerAvaliacoesExistente = document.getElementById('bloco-dinamico-avaliacoes');
+if (containerAvaliacoesExistente) containerAvaliacoesExistente.remove();
+
+const blocoAvaliacoesHtml = `
+    <div id="bloco-dinamico-avaliacoes" class="bloco-avaliacoes" style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+        <h4 style="margin-bottom: 10px; color: #ffffff;">⭐ Avaliações dos Clientes</h4>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <span style="font-size: 24px; font-weight: bold; color: #ffca28;">4.8</span>
+            <div>
+                <div style="color: #ffca28;">★★★★★</div>
+                <span style="font-size: 12px; color: #94a3b8;">94% dos clientes recomendam este produto</span>
+            </div>
+        </div>
+        <div class="comentarios-lista" style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <strong style="font-size: 13px; color: #ffffff;">Lucas M.</strong>
+                    <span style="color: #ffca28; font-size: 12px;">★★★★★</span>
+                </div>
+                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Produto de altíssima qualidade, caimento perfeito e chegou muito rápido!</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <strong style="font-size: 13px; color: #ffffff;">Beatriz R.</strong>
+                    <span style="color: #ffca28; font-size: 12px;">★★★★☆</span>
+                </div>
+                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Muito bonito e confortável. Valeu super a pena o investimento.</p>
+            </div>
+        </div>
+    </div>
+`;
+document.getElementById('modalDescricao').insertAdjacentHTML('afterend', blocoAvaliacoesHtml);
+// 🛑 ATÉ AQUI.
+
+tamanhoSelectedNoModal = null;
 
     tamanhoSelectedNoModal = null; 
     const btnAddModal = document.getElementById('btn-add-modal');
