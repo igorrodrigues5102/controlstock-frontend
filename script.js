@@ -19,8 +19,7 @@ function abrirModal(id) {
     const prod = listaProdutosGlobal.find(p => p.id === id);
     if (!prod) return;
 
-    // COMO DEVE FICAR O SEU TRECHO CONECTADO:
-document.getElementById('modalTitulo').innerText = prod.nome;
+    document.getElementById('modalTitulo').innerText = prod.nome;
 document.getElementById('modalPreco').innerText = `R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
 document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
 
@@ -661,7 +660,7 @@ function atualizarInterface() {
     });
 
     // 2. LÓGICA E CRIAÇÃO DA BARRA DE PROGRESSO DO FRETE GRÁTIS (ALVO: R$ 500,00)
-    let porridgeMeta = Math.min((totalBrutoParaFrete / 500) * 100, 100);
+    let porcentagemMeta = Math.min((totalBrutoParaFrete / 500) * 100, 100);
     let textoProgresso = "";
     let corBarra = "var(--cor-primaria)";
 
@@ -1316,38 +1315,7 @@ function calcularFreteSimulado() {
         `;
     }
 }
-// =======================================================================
-// 🚚 CONSUMO DE API EXTERNA (VIACEP AUTOMÁTICO)
-// =======================================================================
-async function buscarCepAuto() {
-    const cepInput = document.getElementById('cep-checkout').value.trim();
-    const cep = cepInput.replace(/\D/g, ""); // Remove hífens, pontos ou espaços
 
-    // Só dispara a busca quando o usuário terminar de digitar os 8 números
-    if (cep.length !== 8) return;
-
-    try {
-        // Faz a chamada assíncrona para a API pública do ViaCEP
-        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        const dados = await resposta.json();
-
-        // Se a API responder que o CEP não existe na base deles
-        if (dados.erro) {
-            mostrarToast("❌ CEP não encontrado na base dos Correios.", "erro");
-            return;
-        }
-
-        // Preenche os campos de endereço do formulário automaticamente
-        document.getElementById('ent-rua').value = dados.logradouro;
-        document.getElementById('ent-bairro').value = dados.bairro;
-        
-        mostrarToast("✓ Endereço localizado e preenchido!", "sucesso");
-
-    } catch (erro) {
-        console.error("Erro ao buscar CEP:", erro);
-        mostrarToast("⚠️ Falha ao conectar com o serviço de CEP.", "aviso");
-    }
-}
 // =======================================================================
 // BLOCO 13: 🔌 INICIALIZAÇÃO DOS EVENT LISTENERS DO DOM
 // =======================================================================
