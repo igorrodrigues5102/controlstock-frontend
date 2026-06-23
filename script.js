@@ -93,16 +93,28 @@ tamanhoSelectedNoModal = null;
             botao.innerText = tam;
             
             botao.onclick = () => {
-                document.querySelectorAll('.btn-tamanho-opcao').forEach(b => b.classList.remove('selecionado'));
-                botao.classList.add('selecionado');
-                tamanhoSelectedNoModal = tam; 
-                
-                if (btnAddModal) {
-                    const esgotado = prod.quantidadeAtual <= 0;
-                    btnAddModal.disabled = esgotado;
-                    btnAddModal.innerText = esgotado ? "❌ Esgotado" : `🛒 Adicionar Tamanho ${tam}`;
-                }
-            };
+    document.querySelectorAll('.btn-tamanho-opcao').forEach(b => b.classList.remove('selecionado'));
+    botao.classList.add('selecionado');
+    tamanhoSelectedNoModal = tam; 
+
+    // 🔥 TRECHO QUE CRIA O SELETOR DE QUANTIDADE NA TELA COLE AQUI:
+    let campoQtd = document.getElementById('modal-quantidade-selecionada');
+    if (!campoQtd) {
+        const htmlQtd = `
+            <div id="wrapper-quantidade-modal" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                <label style="color: #fff; font-size: 13px; font-weight: 600;">Quantidade:</label>
+                <input type="number" id="modal-quantidade-selecionada" value="1" min="1" max="${prod.quantidadeAtual}" style="width: 60px; text-align: center; padding: 5px; border-radius: 4px; background: #1e293b; border: 1px solid #334155; color: #fff;">
+            </div>
+        `;
+        containerTamanhos.insertAdjacentHTML('afterend', htmlQtd);
+    }
+    
+    if (btnAddModal) {
+        const esgotado = prod.quantidadeAtual <= 0;
+        btnAddModal.disabled = esgotado;
+        btnAddModal.innerText = esgotado ? "❌ Esgotado" : `🛒 Adicionar Tamanho ${tam}`;
+    }
+};
             containerTamanhos.appendChild(botao);
         });
     }
