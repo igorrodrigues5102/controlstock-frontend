@@ -1016,63 +1016,61 @@ button {
     transform: translateY(-1px);
 }
 /* =======================================================================
-   🌗 VISUAL PREMIUM FOSCO AZULADO PARA O MODO CLARO (LIGHT MODE)
+   🌗 VISUAL TOTAL SLATE #0f172a PARA O MODO CLARO (LIGHT MODE)
    ======================================================================= */
 html[data-tema="light"] body {
-    background-color:#0f172a !important; /* Um tom cinza-azulado suave para o fundo geral */
-    color: #0f172a !important;
+    background-color: #0f172a !important; /* Todo o fundo do site */
+    color: #ffffff !important;
 }
 
-/* Força os cabeçalhos e títulos a ficarem escuros */
+/* Força os cabeçalhos, títulos e textos de destaque a ficarem brancos */
 html[data-tema="light"] h2, 
 html[data-tema="light"] h3, 
-html[data-tema="light"] .modal-titulo {
-    color: #0f172a !important;
+html[data-tema="light"] .modal-titulo,
+html[data-tema="light"] .nome-prod,
+html[data-tema="light"] .modal-descricao {
+    color: #ffffff !important;
     text-shadow: none !important;
 }
 
-/* Aplica o seu #E6E8FE na Barra Lateral Esquerda (Sidebar) */
+/* Pinta a Barra Lateral Esquerda (Sidebar) */
 html[data-tema="light"] .sidebar {
-    background-color: #E6E8FE !important; 
-    border-right: 1px solid #cbd5e1 !important;
+    background-color: #0f172a !important; 
+    border-right: 1px solid #1e293b !important;
 }
 
-/* Ajusta o texto da logo e botões da barra lateral no modo claro */
-html[data-tema="light"] .logo { color: #0f172a !important; text-shadow: none !important; }
-html[data-tema="light"] .sub { color: #475569 !important; }
-html[data-tema="light"] .menu-btn { color: #1e293b !important; }
-html[data-tema="light"] .menu-btn:hover { background-color: rgba(168, 85, 247, 0.1) !important; color: #000; }
+/* Ajusta o texto da logo e botões da barra lateral */
+html[data-tema="light"] .logo { color: #ffffff !important; text-shadow: none !important; }
+html[data-tema="light"] .sub { color: #94a3b8 !important; }
+html[data-tema="light"] .menu-btn { color: #cbd5e1 !important; }
+html[data-tema="light"] .menu-btn:hover { background-color: #1e293b !important; color: #fff; }
 
-/* Aplica o seu #E6E8FE no cabeçalho superior */
+/* Pinta o cabeçalho superior */
 html[data-tema="light"] .header-superior {
-    background-color: #E6E8FE !important;
-    border-bottom: 1px solid #cbd5e1 !important;
+    background-color: #0f172a !important;
+    border-bottom: 1px solid #1e293b !important;
 }
-html[data-tema="light"] .header-superior button { color: #0f172a !important; }
+html[data-tema="light"] .header-superior button { color: #ffffff !important; }
 
-/* Aplica o seu #E6E8FE nos cards, blocos e barra de pesquisa para destacarem na tela */
+/* Pinta os cards, blocos e barra de pesquisa */
 html[data-tema="light"] .card-produto,
 html[data-tema="light"] .bloco-form,
 html[data-tema="light"] .carrinho-esquerda,
 html[data-tema="light"] .carrinho-direita,
 html[data-tema="light"] #busca-vitrine {
-    background-color: #E6E8FE !important;
-    border: 1px solid #cbd5e1 !important;
-    color: #0f172a !important;
+    background-color: #0f172a !important;
+    border: 1px solid #1e293b !important;
+    color: #ffffff !important;
 }
 
-/* Garante a legibilidade dos textos internos */
-html[data-tema="light"] .nome-prod,
-html[data-tema="light"] .modal-descricao {
-    color: #0f172a !important;
-}
-html[data-tema="light"] .estoque-prod { color: #334155 !important; }
+/* Ajusta as cores secundárias e placeholders */
+html[data-tema="light"] .estoque-prod { color: #94a3b8 !important; }
 html[data-tema="light"] #busca-vitrine::placeholder { color: #64748b !important; }
 
-/* Ajusta os campos de input de formulários dentro dos cards */
+/* Ajusta os campos de input de formulários */
 html[data-tema="light"] input, 
 html[data-tema="light"] textarea {
-    background-color: #f8fafc !important; /* Um fundo levemente diferente para os inputs */
-    border: 1px solid #cbd5e1 !important;
-    color: #0f172a !important;
+    background-color: #1e293b !important; /* Um tom levemente diferente para dar profundidade ao input */
+    border: 1px solid #334155 !important;
+    color: #ffffff !important;
 }
