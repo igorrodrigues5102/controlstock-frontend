@@ -643,11 +643,56 @@ function removerDoCarrinho(chaveItem) {
 }
 
 function atualizarInterface() {
+   // COMO DEVE FICAR O SEU TRECHO CONECTADO:
+function atualizarInterface() {
     const corpo = document.getElementById('corpo-carrinho');
     if (!corpo) return;
     corpo.innerHTML = ""; 
     let totalGeral = 0, descontoAtacadoGeral = 0, itensTotais = 0;
-    const chaves = Object.keys(carrinho);
+
+    // 🔥 INSERÇÃO DA BARRA DE PROGRESSO DO ATACADO PROGRESSIVO
+    // Descobre a maior quantidade de um mesmo produto no carrinho
+    let maiorQtdDeUmItem = 0;
+    Object.keys(carrinho).forEach(chave => {
+        if (carrinho[chave].qtd > maiorQtdDeUmItem) {
+            maiorQtdDeUmItem = carrinho[chave].qtd;
+        }
+    });
+
+    // Se o carrinho tiver itens, calcula a porcentagem até chegar a 5 unidades
+    let porcentagemMeta = Math.min((maiorQtdDeUmItem / 5) * 100, 100);
+    let textoProgresso = "";
+    let corBarra = "var(--cor-primaria)";
+
+    if (Object.keys(carrinho).length === 0) {
+        textoProgresso = "🛒 Adicione itens para liberar o desconto de Atacado (10% OFF em 5 un.)";
+        porcentagemMeta = 0;
+    } else if (maiorQtdDeUmItem >= 5) {
+        textoProgresso = "🔥 PARABÉNS! Você liberou o desconto de Atacado de 10% no seu carrinho!";
+        corBarra = "#22c55e"; // Verde Sucesso
+    } else {
+        let faltam = 5 - maiorQtdDeUmItem;
+        textoProgresso = `📈 Adicione mais ${faltam} unidade${faltam > 1 ? 's' : ''} do mesmo item para ativar 10% de desconto de Atacado!`;
+    }
+
+    // Injeta o container da barra de progresso no topo do carrinho
+    const containerProgressoExistente = document.getElementById('wrapper-progresso-atacado');
+    if (containerProgressoExistente) containerProgressoExistente.remove();
+
+    const progressoHtml = `
+        <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
+                <span>${textoProgresso}</span>
+                <span>${Math.round(porcentagemMeta)}%</span>
+            </div>
+            <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
+                <div style="background: ${corBarra}; height: 100%; width: ${porcentagemMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+            </div>
+        </div>
+    `;
+    
+    // Insere a barra logo antes da tabela de itens do carrinho
+    corpo.closest('table').insertAdjacentHTML('beforebegin', progressoHtml);
 
     if(chaves.length === 0) {
         corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--cor-subtexto);">Seu carrinho está vazio.</td></tr>`;
