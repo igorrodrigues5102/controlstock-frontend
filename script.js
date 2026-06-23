@@ -943,14 +943,21 @@ function alternarCamposPagamento(tipo) {
         displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toFixed(2).replace(".", ",")} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5% de taxa bancária)</span>`;
     
     } else if (tipo === 'Crédito' || tipo === 'CARTAO') {
-        const parcelas3x = valorTotalReal / 3;
-        const parcelas5x = (valorTotalReal * 1.05) / 5; // 5% de juros simulado
         displaySimulador.style.color = "var(--cor-primaria)";
-        displaySimulador.innerHTML = `
-            CNH-Financeiro | Crédito:<br>
-            • Em até <b>3x de R$ ${parcelas3x.toFixed(2).replace(".", ",")}</b> sem juros<br>
-            • Ou em até <b>5x de R$ ${parcelas5x.toFixed(2).replace(".", ",")}</b> com juro do gateway
+        
+        // 🔥 CRIAÇÃO DO MENU SELETOR COM DIVISÃO CORRETA DE 1A 12X
+        let htmlSelect = `
+            <label style="display:block; margin-bottom:8px; font-weight:bold; color:#fff;">💳 Opções de Parcelamento:</label>
+            <select id="select-parcelas-checkout" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:4px; font-size:14px; cursor:pointer;">
         `;
+
+        for (let i = 1; i <= 12; i++) {
+            const valorDaParcela = valorTotalReal / i;
+            htmlSelect += `<option value="${i}">${i}x de R$ ${valorDaParcela.toFixed(2).replace(".", ",")} sem juros</option>`;
+        }
+
+        htmlSelect += `</select>`;
+        displaySimulador.innerHTML = htmlSelect;
     
     } else if (tipo === 'Débito' || tipo === 'DEBITO') {
         displaySimulador.style.color = "#fff";
@@ -992,7 +999,7 @@ function validarDadosCheckout(formaPgto) {
             return false;
         }
         if (!validarCartaoMatematico(num)) {
-            alert("❌ Antifraude: Número de cartão inválido rejeitado pelo teste matemático de Luhn!");
+            alert("❌ Antifraude: Número de cartão inválido ';rejeitado pelo teste matemático de Luhn!");
             return false;
         }
     }
