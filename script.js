@@ -329,9 +329,16 @@ function aplicarSessaoUsuario() {
     document.getElementById('avatar-letra').innerText = usuarioLogado.nome.substring(0,1).toUpperCase();
     document.getElementById('alerta-login-checkout').style.display = "none";
     
+    // Oculta os botões administrativos por padrão para segurança visual
+    const botoesAdmin = document.querySelectorAll('.admin-only');
+    botoesAdmin.forEach(btn => btn.style.display = "none");
+
     if(usuarioLogado.nivel === "ADMIN") {
         document.getElementById('painel-admin-bloqueado').style.display = "none";
         document.getElementById('painel-admin-liberado').style.display = "block";
+        
+        // Se for ADMIN, exibe os botões novamente na barra lateral
+        botoesAdmin.forEach(btn => btn.style.display = "block");
         
         atualizarDashboardAdmin();
         carregarTabelasInventarioEAuditoria();
@@ -433,6 +440,9 @@ function deslogarUsuario() {
     document.getElementById('alerta-login-checkout').style.display = "block";
     document.getElementById('painel-admin-bloqueado').style.display = "block";
     document.getElementById('painel-admin-liberado').style.display = "none";
+    
+    // Garante que os botões suma da barra lateral ao deslogar
+    document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = "none");
     
     document.getElementById('login-email').value = "";
     document.getElementById('login-senha').value = "";
