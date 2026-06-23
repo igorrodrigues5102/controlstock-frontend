@@ -120,14 +120,18 @@ tamanhoSelectedNoModal = null;
     }
 if (btnAddModal) {
         btnAddModal.onclick = () => {
-            // Captura o input numérico gerado dinamicamente
             const campoQtd = document.getElementById('modal-quantidade-selecionada');
             const qtdDesejada = campoQtd ? parseInt(campoQtd.value, 10) || 1 : 1;
 
-            // 🔥 Envia a quantidade direto para o carrinho sem precisar de loops
+            // 🔥 BARRA A VENDA SE A QUANTIDADE PASSAR DO ESTOQUE REAL DO BANCO
+            if (qtdDesejada > prod.quantidadeAtual) {
+                alert(`❌ Erro de Estoque: Você tentou selecionar ${qtdDesejada} unidades, mas temos apenas ${prod.quantidadeAtual} disponíveis.`);
+                if (campoQtd) campoQtd.value = prod.quantidadeAtual; // Força o input a voltar para o máximo
+                return; // Corta a execução aqui e não deixa fechar o modal
+            }
+
             adicionarAoCarrinho(prod.id, prod.nome, prod.preco, prod.quantidadeAtual, tamanhoSelectedNoModal, qtdDesejada);
             
-            // Remove o seletor da memória antes de fechar o modal
             const wrapperQtd = document.getElementById('wrapper-quantidade-modal');
             if (wrapperQtd) wrapperQtd.remove();
             
