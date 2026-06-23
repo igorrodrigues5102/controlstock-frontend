@@ -590,10 +590,17 @@ function carregarProdutosDaAPI() {
                 let staticLineEstoqueHtml = "";
                 
                 if (usuarioLogado && usuarioLogado.nivel === "ADMIN") {
-                    staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-primaria); font-weight:bold;">Disponível: ${prod.quantidadeAtual} un</div>`;
-                } else {
-                    staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-subtexto); font-size:12px;">${esgotado ? '❌ Temporariamente Esgotado' : '⚡ Item Disponível'}</div>`;
-                }
+    staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-primaria); font-weight:bold;">Disponível: ${prod.quantidadeAtual} un</div>`;
+} else {
+    if (esgotado) {
+        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-erro); font-size:12px;">❌ Temporariamente Esgotado</div>`;
+    } else if (prod.quantidadeAtual <= 3) {
+        // 🔥 BADGE DE ESTOQUE CRÍTICO PARA O CLIENTE
+        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:#ef4444; font-size:12px; font-weight:bold; animation: pulse 1.5s infinite;">⚡ Apenas ${prod.quantidadeAtual} un. restantes!</div>`;
+    } else {
+        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-subtexto); font-size:12px;">⚡ Item Disponível</div>`;
+    }
+}
 
                 const classeAlertaCritico = (prod.quantidadeAtual <= 5 && prod.quantidadeAtual > 0) ? "alerta-critico" : "";
                 const urlPrimeiraFoto = (prod.fotos && prod.fotos.length > 0) ? prod.fotos[0].url : 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500';
@@ -1241,7 +1248,7 @@ async function carregarTabelasInventarioEAuditoria() {
                         <td><b>#${p.id}</b></td>
                         <td>${p.nome}</td>
                         <td>R$ ${p.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                        <td style="font-weight:bold; text-align: center; color:${p.quantidadeAtual <= 2 ? 'var(--cor-erro)' : 'var(--cor-sucesso)'}">${p.quantidadeAtual} un.</td>
+                        <td style="font-weight:bold; text-align: center; color:${p.quantidadeAtual <= 3 ? '#ef4444' : 'var(--cor-sucesso)'}; background:${p.quantidadeAtual <= 3 ? 'rgba(239,68,68,0.1)' : 'transparent'}">${p.quantidadeAtual} un.</td>
                         <td style="text-align: center;"><span style="font-size:12px; color:var(--cor-primaria)">✓ Sincronizado no SQLite</span></td>
                     </tr>
                 `;
