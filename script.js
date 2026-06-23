@@ -465,7 +465,62 @@ function carregarHistoricoPedidos() {
 }
 
 function verDetalhesRomaneio(id) {
-    document.getElementById('modalRomaneio').classList.add('aberto');
+    const modal = document.getElementById('modalRomaneio');
+    const corpoTabela = document.getElementById('detalhes-romaneio-itens-corpo');
+    
+    if (!modal) return;
+    modal.classList.add('aberto');
+
+    // Se você tiver elementos de texto para o topo do modal, limpa/prepara eles
+    const txtCodigo = document.getElementById('romaneio-modal-codigo');
+    if (txtCodigo) txtCodigo.innerText = `Carregando Romaneio #${id}...`;
+    if (corpoTabela) corpoTabela.innerHTML = "<tr><td colspan='4' style='text-align:center; color:var(--cor-subtexto);'>Buscando itens faturados...</td></tr>";
+
+    // 🔥 BUSCA OS DETALHES DO PEDIDO ESPECÍFICO NO BACKEND C# / SQLITE
+    fetch(`${API_BASE_URL}/api/pedidos/detalhes/${id}`)
+        .then(res => {
+            if (!res.ok) throw new Error("Erro ao buscar detalhes do romaneio.");
+            return res.json();
+        })
+        .then(pedido => {
+            if (txtCodigo) txtCodigo.innerText = `ROMANEIO: ${pedido.codigo || pedido.id}`;
+            
+            const txtData = document.getElementById('romaneio-modal-data');
+            if (txtData) txtData.innerText = pedido.dataEmissao || pedido.data || '-';
+
+            const txtTotal = document.getElementById('romaneio-modal-total');
+            if (txtTotal) txtTotal.innerText = `R$ ${parseFloat(pedido.total || 0).toFixed(2)}`;
+
+            if (corpoTabela) {
+                corpoTabela.innerHTML = "";
+                if (!pedido.itens || pedido.itens.length === 0) {
+                    corpoTabela.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum item listado neste faturamento.</td></tr>";
+                    return;
+                }
+
+                // Renderiza cada linha de produto comprado no histórico
+                pedido.itens.forEach(item => {
+                    let tagTamanho = item.tamanho ? `<span style="background: #27273a; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px;">TAM: ${item.tamanho}</span>` : '';
+                    let precoUnitario = parseFloat(item.precoUnitario || item.preco || 0);
+                    let subtotal = parseInt(item.quantidade || item.qtd || 1) * precoUnitario;
+
+                    corpoTabela.innerHTML += `
+                        <tr>
+                            <td><b>${item.nome || 'Produto'}</b>${tagTamanho}</td>
+                            <td style="text-align:center;">${item.quantidade || item.qtd}</td>
+                            <td style="text-align:right;">R$ ${precoUnitario.toFixed(2)}</td>
+                            <td style="text-align:right; font-weight:bold;">R$ ${subtotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (corpoTabela) {
+                corpoTabela.innerHTML = "<tr><td colspan='4' style='text-align:center; color:var(--cor-erro);'>Falha ao carregar os itens deste romaneio.</td></tr>";
+            }
+        });
 }
 
 // =======================================================================

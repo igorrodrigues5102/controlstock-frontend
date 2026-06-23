@@ -353,28 +353,29 @@
     </div>
 
     <div class="modal-background" id="modalRomaneio">
-        <div class="modal-container" style="max-width: 600px;">
-            <button class="modal-fechar" onclick="fecharModalRomaneio()">X</button>
-            <div class="modal-titulo" style="border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px;">📄 Detalhes do Romaneio <span id="romaneio-titulo-cod" style="color: var(--cor-primaria);"></span></div>
-            <div style="margin-bottom: 15px; font-size: 14px; color: var(--cor-subtexto); line-height: 1.6;">
-                <p>📅 <strong>Emissão:</strong> <span id="romaneio-data" style="color: #fff;"></span></p>
-                <p>🟢 <strong>Status:</strong> <span id="romaneio-status" style="font-weight: bold; color: var(--cor-sucesso);"></span></p>
-                <p>💬 <strong>Observações:</strong> <span id="romaneio-obs" style="color: #fff;">-</span></p>
-            </div>
-            <table class="tabela-carrinho" style="margin-bottom: 15px;">
-                <thead>
-                    <tr>
-                        <th>Prod ID</th>
-                        <th style="text-align: center;">Qtd</th>
-                        <th style="text-align: right;">Unitário</th>
-                        <th style="text-align: right;">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody id="romaneio-itens-corpo"></tbody>
-            </table>
-            <div style="text-align: right; font-size: 18px; font-weight: bold; border-top: 1px dashed #334155; padding-top: 15px; color: #fff;">Total: <span id="romaneio-total-geral" style="color: var(--cor-sucesso);">R$ 0,00</span></div>
+    <div class="modal-container" style="max-width: 600px;">
+        <button class="modal-fechar" onclick="fecharModalRomaneio()">X</button>
+        <div class="modal-titulo" id="romaneio-modal-codigo" style="border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px;">📄 Detalhes do Romaneio</div>
+        <div style="margin-bottom: 15px; font-size: 14px; color: var(--cor-subtexto); line-height: 1.6;">
+            <p>📅 <strong>Emissão:</strong> <span id="romaneio-modal-data" style="color: #fff;">-</span></p>
+            <p>🟢 <strong>Status:</strong> <span style="font-weight: bold; color: var(--cor-sucesso);">✓ Processado e Faturado</span></p>
         </div>
+        <table class="tabela-carrinho" style="margin-bottom: 15px;">
+            <thead>
+                <tr>
+                    <th>Especificação do Produto</th>
+                    <th style="text-align: center;">Qtd</th>
+                    <th style="text-align: right;">Métrica Unitária</th>
+                    <th style="text-align: right;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="detalhes-romaneio-itens-corpo">
+                <tr><td colspan="4" style="text-align:center; color:var(--cor-subtexto);">Aguardando seleção...</td></tr>
+            </tbody>
+        </table>
+        <div style="text-align: right; font-size: 18px; font-weight: bold; border-top: 1px dashed #334155; padding-top: 15px; color: #fff;">Total Faturado: <span id="romaneio-modal-total" style="color: var(--cor-sucesso);">R$ 0,00</span></div>
     </div>
+</div>
 
     <div class="modal-background" id="modalAuth">
         <div class="modal-container">
