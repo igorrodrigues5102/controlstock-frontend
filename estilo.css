@@ -1015,3 +1015,57 @@ button {
     background: #3b82f6 !important;
     transform: translateY(-1px);
 }
+/* =======================================================================
+   🌗 AJUSTES CIRÚRGICOS PARA O MODO CLARO (LIGHT MODE)
+   ======================================================================= */
+html[data-tema="light"] body {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+/* Força os cabeçalhos e títulos a ficarem escuros e remove o brilho neon */
+html[data-tema="light"] h2, 
+html[data-tema="light"] h3, 
+html[data-tema="light"] .modal-titulo {
+    color: #0f172a !important;
+    text-shadow: none !important;
+}
+
+/* Corrige o cabeçalho superior para um cinza corporativo claro */
+html[data-tema="light"] .header-superior {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+}
+
+/* Garante que o ícone do sol e do carrinho fiquem visíveis no topo */
+html[data-tema="light"] .header-superior button {
+    color: #0f172a !important;
+}
+
+/* Altera os cards para fundo branco com uma leve borda cinza limpa */
+html[data-tema="light"] .card-produto,
+html[data-tema="light"] .bloco-form,
+html[data-tema="light"] .carrinho-esquerda,
+html[data-tema="light"] .carrinho-direita {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Força os nomes dos produtos a ficarem pretos (evita sumir no fundo branco) */
+html[data-tema="light"] .nome-prod,
+html[data-tema="light"] .modal-descricao {
+    color: #1e293b !important;
+}
+
+/* Ajusta o texto de "Disponível" nos produtos */
+html[data-tema="light"] .estoque-prod {
+    color: #64748b !important;
+}
+
+/* Dá um fundo cinza claro para os inputs para destacar no card branco */
+html[data-tema="light"] input, 
+html[data-tema="light"] textarea {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
