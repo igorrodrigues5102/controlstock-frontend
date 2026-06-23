@@ -1232,7 +1232,38 @@ function calcularFreteSimulado() {
         `;
     }
 }
+// =======================================================================
+// 🚚 CONSUMO DE API EXTERNA (VIACEP AUTOMÁTICO)
+// =======================================================================
+async function buscarCepAuto() {
+    const cepInput = document.getElementById('cep-checkout').value.trim();
+    const cep = cepInput.replace(/\D/g, ""); // Remove hífens, pontos ou espaços
 
+    // Só dispara a busca quando o usuário terminar de digitar os 8 números
+    if (cep.length !== 8) return;
+
+    try {
+        // Faz a chamada assíncrona para a API pública do ViaCEP
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const dados = await resposta.json();
+
+        // Se a API responder que o CEP não existe na base deles
+        if (dados.erro) {
+            mostrarToast("❌ CEP não encontrado na base dos Correios.", "erro");
+            return;
+        }
+
+        // Preenche os campos de endereço do formulário automaticamente
+        document.getElementById('ent-rua').value = dados.logradouro;
+        document.getElementById('ent-bairro').value = dados.bairro;
+        
+        mostrarToast("✓ Endereço localizado e preenchido!", "sucesso");
+
+    } catch (erro) {
+        console.error("Erro ao buscar CEP:", erro);
+        mostrarToast("⚠️ Falha ao conectar com o serviço de CEP.", "aviso");
+    }
+}
 // =======================================================================
 // BLOCO 13: 🔌 INICIALIZAÇÃO DOS EVENT LISTENERS DO DOM
 // =======================================================================
