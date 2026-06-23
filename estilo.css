@@ -801,7 +801,7 @@ button {
 }
 
 /* =======================================================================
-   📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE COMPLETA COMPLETA
+   📱 CSS BLOCO 13: RESPONSIVIDADE MOBILE DEFINITIVA
    ======================================================================= */
 
 /* TABLET: 769px - 1024px */
@@ -827,31 +827,32 @@ button {
         flex-direction: column;
     }
 
-    /* ── SIDEBAR ADAPTADA PARA ORDEM DINÂMICA NO MOBILE ── */
+    /* ── SIDEBAR (NAVBAR SUPERIOR NO MOBILE) ── */
     .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 15px 12px;
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        padding: 15px 12px !important;
         
-        /* Força o comportamento flexbox vertical para controlar a ordem dos blocos */
+        /* Ativa o flexbox vertical para reordenar o topo pelo CSS */
         display: flex !important;
         flex-direction: column !important;
-        align-items: stretch;
+        align-items: stretch !important;
         
-        border-right: none;
-        border-bottom: 1px solid #1e1b29;
-        overflow-y: visible;
-        box-sizing: border-box;
+        border-right: none !important;
+        border-bottom: 1px solid #1e1b29 !important;
+        overflow-y: visible !important;
+        box-sizing: border-box !important;
     }
 
-    /* Garante a marca do sistema no começo de tudo */
-    .logo { font-size: 22px; text-align: center; order: 1 !important; }
-    .sub { text-align: center; margin-bottom: 15px; order: 2 !important; }
+    /* Mantém os títulos fixos no topo */
+    .logo { font-size: 22px !important; text-align: center !important; order: 1 !important; }
+    .sub { text-align: center !important; margin-bottom: 15px !important; order: 2 !important; }
 
-    /* 🔥 CORREÇÃO: JOGA A ÁREA DE LOGIN / PERFIL PARA CIMA DO MENU */
+    /* 🔥 CORREÇÃO 1: PEGA A BARRA DA LUA/CARRINHO/LOGIN E JOGA PARA CIMA */
+    /* Este seletor mira em qualquer div flex interna ou nos painéis de usuário */
+    .sidebar > div[style*="display: flex"],
     .sidebar #painel-user-topo,
-    .sidebar div[style*="display: flex"]:has(#btn-login),
     .sidebar .barra-usuario-topo {
         display: flex !important;
         flex-direction: row !important;
@@ -859,50 +860,48 @@ button {
         justify-content: space-between !important;
         padding: 10px 12px !important;
         margin-top: 0 !important;
-        margin-bottom: 15px !important; /* Espaço confortável antes dos botões começarem */
+        margin-bottom: 15px !important; /* Afasta da linha de botões de baixo */
         background: rgba(255, 255, 255, 0.02) !important;
-        border-radius: 8px;
-        border: 1px solid #1e1b29;
-        width: 100%;
-        box-sizing: border-box;
+        border-radius: 8px !important;
+        border: 1px solid #1e1b29 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
         
-        order: 3 !important; /* Terceiro elemento na ordem de leitura */
+        order: 3 !important; /* Sobe para ficar logo abaixo do título */
     }
 
-    /* 🔥 CONTAINER DO GRID EM 2 COLUNAS ABAIXO DA LUA */
-    .sidebar .menu-principal-navegacao {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-        width: 100%;
-        box-sizing: border-box;
-        
-        order: 4 !important; /* Quarto elemento na ordem de leitura (vai para baixo) */
-    }
-
-    /* 🔥 BOTÕES DO MENU AJUSTADOS */
+    /* 🔥 CORREÇÃO 2: COLOCA TODOS OS BOTÕES DE NAVEGAÇÃO EMBAIXO (ORDER 4) */
     .sidebar .menu-btn {
         width: 100% !important;
         padding: 12px 8px !important;
         font-size: 13px !important;
         margin: 0 !important;
         text-align: center !important;
-        box-sizing: border-box;
+        box-sizing: border-box !important;
         
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
+        /* inline-flex alinha os emojis internamente sem forçar bloco vertical */
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        
+        order: 4 !important; /* Joga os botões para baixo da barra de login */
     }
 
-    /* 🔥 RECONCILIANDO OCULTAÇÃO DO JAVASCRIPT: 
-       Evita que o grid force a exibição de botões com display:none ativo no script */
+    /* 🔥 CORREÇÃO 3: ADICIONA ESPAÇAMENTO ENTRE OS BOTÕES VISÍVEIS */
+    .sidebar .menu-btn + .menu-btn {
+        margin-top: 8px !important;
+    }
+
+    /* 🔥 CORREÇÃO 4: CONCILIAÇÃO COM O JAVASCRIPT */
+    /* Se o JS aplicar style="display: none", o CSS respeita e some com o botão da tela */
     .sidebar .menu-btn[style*="display: none"],
-    .sidebar .menu-btn.admin-only[style*="display: none"] {
+    .sidebar .menu-btn.admin-only[style*="display: none"],
+    .sidebar .admin-only[style*="display: none"] {
         display: none !important;
     }
 
-    /* ── HEADER ── */
+    /* ── HEADER DE CONTEÚDO ── */
     .header-superior {
         position: relative;
         left: 0;
