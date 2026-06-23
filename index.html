@@ -131,11 +131,15 @@
                         <div class="campo">
                             <label style="font-weight: 600; color: #fff;">Selecione a Forma de Pagamento:</label>
                             <div class="opcoes-pagamento-neon" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
-                                <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payPix" value="PIX" checked onclick="alternarCamposPagamento('PIX')"> 📱 PIX</label>
-                                <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payCredito" value="Crédito" onclick="alternarCamposPagamento('CARTAO')"> 💳 Cartão de Crédito</label>
-                                <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payDebito" value="Débito" onclick="alternarCamposPagamento('DEBITO')"> 💳 Cartão de Débito</label>
-                                <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payBoleto" value="Boleto" onclick="alternarCamposPagamento('BOLETO')"> 📄 Boleto Bancário</label>
-                            </div>
+    <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payPix" value="PIX" checked onclick="alternarCamposPagamento('PIX')"> 📱 PIX</label>
+    <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payCredito" value="Crédito" onclick="alternarCamposPagamento('CARTAO')"> 💳 Cartão de Crédito</label>
+    <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payDebito" value="Débito" onclick="alternarCamposPagamento('DEBITO')"> 💳 Cartão de Débito</label>
+    <label class="card-pagamento-neon" style="cursor: pointer; display: block;"><input type="radio" name="formaPagamento" id="payBoleto" value="Boleto" onclick="alternarCamposPagamento('BOLETO')"> 📄 Boleto Bancário</label>
+</div>
+
+<div id="simulador-parcelas-checkout" style="margin-top: 12px; padding: 10px; background: rgba(255,255,255,0.02); border: 1px dashed #334155; border-radius: 6px; font-size: 13px; color: var(--cor-sucesso); font-weight: 500; min-height: 20px;">
+    💡 Selecione uma opção acima para ver as condições.
+</div>
                         </div>
 
                         <div id="dados-cartao" style="display: none; flex-direction: column; background: #050507; padding: 15px; border-radius: 6px; border: 1px solid #2a253b; gap: 12px;">
