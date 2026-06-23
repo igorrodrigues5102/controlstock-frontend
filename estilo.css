@@ -1016,10 +1016,10 @@ button {
     transform: translateY(-1px);
 }
 /* =======================================================================
-   🌗 VISUAL PREMIUM FOSCO PARA O MODO CLARO (LIGHT MODE)
+   🌗 VISUAL PREMIUM FOSCO AZULADO PARA O MODO CLARO (LIGHT MODE)
    ======================================================================= */
 html[data-tema="light"] body {
-    background-color: #f8fafc !important; /* Fundo cinza fosco bem suave */
+    background-color: #f1f3f9 !important; /* Um tom cinza-azulado suave para o fundo geral */
     color: #0f172a !important;
 }
 
@@ -1031,48 +1031,48 @@ html[data-tema="light"] .modal-titulo {
     text-shadow: none !important;
 }
 
-/* Clareia a Barra Lateral Esquerda (Sidebar) */
+/* Aplica o seu #E6E8FE na Barra Lateral Esquerda (Sidebar) */
 html[data-tema="light"] .sidebar {
-    background-color: #ffffff !important; /* Sidebar branca para contrastar com o fundo fosco */
-    border-right: 1px solid #e2e8f0 !important;
+    background-color: #E6E8FE !important; 
+    border-right: 1px solid #cbd5e1 !important;
 }
 
 /* Ajusta o texto da logo e botões da barra lateral no modo claro */
 html[data-tema="light"] .logo { color: #0f172a !important; text-shadow: none !important; }
-html[data-tema="light"] .sub { color: #64748b !important; }
-html[data-tema="light"] .menu-btn { color: #334155 !important; }
-html[data-tema="light"] .menu-btn:hover { background-color: #f1f5f9 !important; color: #000; }
+html[data-tema="light"] .sub { color: #475569 !important; }
+html[data-tema="light"] .menu-btn { color: #1e293b !important; }
+html[data-tema="light"] .menu-btn:hover { background-color: rgba(168, 85, 247, 0.1) !important; color: #000; }
 
-/* Corrige o cabeçalho superior */
+/* Aplica o seu #E6E8FE no cabeçalho superior */
 html[data-tema="light"] .header-superior {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    background-color: #E6E8FE !important;
+    border-bottom: 1px solid #cbd5e1 !important;
 }
 html[data-tema="light"] .header-superior button { color: #0f172a !important; }
 
-/* Altera os cards e blocos para branco puro (destacando no fundo fosco) */
+/* Aplica o seu #E6E8FE nos cards, blocos e barra de pesquisa para destacarem na tela */
 html[data-tema="light"] .card-produto,
 html[data-tema="light"] .bloco-form,
 html[data-tema="light"] .carrinho-esquerda,
 html[data-tema="light"] .carrinho-direita,
 html[data-tema="light"] #busca-vitrine {
-    background-color: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
+    background-color: #E6E8FE !important;
+    border: 1px solid #cbd5e1 !important;
     color: #0f172a !important;
 }
 
-/* Evita que os textos sumam nos cards */
+/* Garante a legibilidade dos textos internos */
 html[data-tema="light"] .nome-prod,
 html[data-tema="light"] .modal-descricao {
-    color: #1e293b !important;
+    color: #0f172a !important;
 }
-html[data-tema="light"] .estoque-prod { color: #64748b !important; }
-html[data-tema="light"] #busca-vitrine::placeholder { color: #94a3b8 !important; }
+html[data-tema="light"] .estoque-prod { color: #334155 !important; }
+html[data-tema="light"] #busca-vitrine::placeholder { color: #64748b !important; }
 
-/* Ajusta os inputs dos formulários */
+/* Ajusta os campos de input de formulários dentro dos cards */
 html[data-tema="light"] input, 
 html[data-tema="light"] textarea {
-    background-color: #f1f5f9 !important;
+    background-color: #f8fafc !important; /* Um fundo levemente diferente para os inputs */
     border: 1px solid #cbd5e1 !important;
     color: #0f172a !important;
 }
