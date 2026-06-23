@@ -1261,8 +1261,8 @@ function excluirProdutoDoSistema() {
     });
 }
 
-🔥 MOTOR DE INTEGRAÇÃO COM IA (Cole exatamente aqui, antes de cadastrarProdutoPeloSite)
-async function gerarProdutoComIA() {
+        // 🔥 MOTOR DE INTEGRAÇÃO COM IA
+        async function gerarProdutoComIA() {
     const inputPrompt = document.getElementById('prod-prompt-ia');
     const inputNome = document.getElementById('prod-nome');
     
