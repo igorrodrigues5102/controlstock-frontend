@@ -759,7 +759,12 @@ function atualizarInterface() {
 function calcularFreteCheckout() {
     const cepInput = document.getElementById('cep-checkout').value.trim();
     const display = document.getElementById('resultado-frete-checkout');
-
+    // 🔥 VERIFICA SE O VALOR TOTAL DO CARRINHO JÁ PASSOU DE R$ 500 PARA DAR FRETE GRÁTIS
+    let totalFinal = parseFloat(document.getElementById('txtTotal').innerText.replace("R$ ", "").replace(".", "").replace(",", "."));
+    if (totalFinal >= 500) {
+        display.innerHTML = '<span style="color:#22c55e; font-weight:bold;">🚚 Frete Grátis Ativado por atingir o valor mínimo!</span>';
+        return;
+    }
     if (!cepInput) {
         alert("⚠️ Por favor, informe o CEP para calcular o frete.");
         return;
