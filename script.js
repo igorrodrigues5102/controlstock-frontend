@@ -1695,3 +1695,35 @@ function alternarTemaSite() {
         mostrarToast("☀️ Modo Claro Ativado", "sucesso");
     }
 }
+// 🔥 FUNÇÃO DE FILTRO POR CATEGORIA EM TEMPO REAL
+function filtrarPorCategoria(categoriaAlvo, botaoClicado) {
+    // Reseta o estilo de todos os botões de filtro
+    document.querySelectorAll('.btn-filtro-tag').forEach(btn => {
+        btn.style.background = "#1e1b29";
+        btn.style.color = "#fff";
+        btn.style.border = "1px solid #334155";
+    });
+
+    // Destaca o botão que foi clicado
+    botaoClicado.style.background = "var(--cor-primaria)";
+    botaoClicado.style.color = "#000";
+    botaoClicado.style.border = "none";
+
+    const cards = document.querySelectorAll('.card-produto'); // Certifique-se de que seus cards têm essa classe
+    
+    cards.forEach(card => {
+        // Captura o nome ou uma tag invisível dentro do card para checar
+        const nomeProduto = card.querySelector('h3')?.innerText.toUpperCase() || "";
+        
+        if (categoriaAlvo === 'TODOS') {
+            card.style.display = "block";
+        } else {
+            // Verifica se o nome do produto contém a palavra-chave (ex: "CASACO", "CAMISA")
+            if (nomeProduto.includes(categoriaAlvo) || nomeProduto.includes('JAQUETA') && categoriaAlvo === 'AGASALHO') {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        }
+    });
+}

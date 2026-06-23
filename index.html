@@ -48,11 +48,17 @@
     <<div class="conteudo-principal">
         
         <div id="aba-vitrine" class="aba-painel ativa">
-            <div style="margin-bottom: 25px; max-width: 400px;">
-                <input type="text" id="busca-vitrine" placeholder="🔍 Buscar produtos por nome..." oninput="filtrarProdutosVitrine()" style="width: 100%; padding: 12px 15px; background: #0d0d11; border: 1px solid #2a253b; color: #fff; border-radius: 8px; font-size: 14px;">
-            </div>
+    <div style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px;">
+        <input type="text" id="busca-vitrine" placeholder="🔍 Buscar produtos por nome..." oninput="filtrarProdutosVitrine()" style="max-width: 400px; width: 100%; padding: 12px 15px; background: #0d0d11; border: 1px solid #2a253b; color: #fff; border-radius: 8px; font-size: 14px;">
+        
+        <div class="container-filtros-tags" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-filtro-tag ativa" onclick="filtrarPorCategoria('TODOS', this)" style="padding: 6px 14px; background: var(--cor-primaria); color: #000; border: none; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold;">🛍️ Todos</button>
+            <button class="btn-filtro-tag" onclick="filtrarPorCategoria('AGASALHO', this)" style="padding: 6px 14px; background: #1e1b29; color: #fff; border: 1px solid #334155; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold;">🧥 Agasalhos</button>
+            <button class="btn-filtro-tag" onclick="filtrarPorCategoria('CAMISA', this)" style="padding: 6px 14px; background: #1e1b29; color: #fff; border: 1px solid #334155; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold;">👕 Camisas</button>
+        </div>
+    </div>
 
-            <h2>Produtos em Destaque</h2>
+    <h2>Produtos em Destaque</h2>
             <div class="lista-produtos" id="vitrine-produtos"></div>
         </div>
 
