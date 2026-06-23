@@ -679,17 +679,17 @@ function atualizarInterface() {
     const containerProgressoExistente = document.getElementById('wrapper-progresso-atacado');
     if (containerProgressoExistente) containerProgressoExistente.remove();
 
-    const progressoHtml = `
-        <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
-                <span>${textoProgresso}</span>
-                <span>${Math.round(porcentageMeta)}%</span>
-            </div>
-            <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
-                <div style="background: ${corBarra}; height: 100%; width: ${porcentageMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
-            </div>
+   const progressoHtml = `
+    <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
+            <span>${textoProgresso}</span>
+            <span>${Math.round(porcentagemMeta)}%</span>
         </div>
-    `;
+        <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
+            <div style="background: ${corBarra}; height: 100%; width: ${porcentagemMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+        </div>
+    </div>
+`;
     
     corpo.closest('table').insertAdjacentHTML('beforebegin', progressoHtml);
 
