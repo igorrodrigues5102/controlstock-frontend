@@ -20,8 +20,7 @@ function abrirModal(id) {
     if (!prod) return;
 
     document.getElementById('modalTitulo').innerText = prod.nome;
-document.getElementById('modalPreco').innerText = `R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
+document.getElementById('modalParcelas').innerText = `ou até 3x de R$ ${(parseFloat(prod.preco) / 3).toFixed(2)} sem juros`;document.getElementById('modalDescricao').innerText = prod.descricao || "Sem descrição disponível.";
 
 // 🔥 TRECHO NOVO PARA ADICIONAR DAQUI:
 const containerAvaliacoesExistente = document.getElementById('bloco-dinamico-avaliacoes');
