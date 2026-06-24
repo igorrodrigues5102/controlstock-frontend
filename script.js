@@ -9,60 +9,96 @@ let usuarioLogado = JSON.parse(localStorage.getItem('controlstock_sessao')) || n
 let cpfCadastroValido = false;
 let fotoCarrosselAtual = 0;
 let fotosDoProdutoModal = [];
-let descontoCupomAtivo = 0; // Armazena o valor bruto deduzido pelo cupom
+let descontoCupomAtivo = 0;
+let intervaloCarrossel;
 
 console.log("O motor lógico do script.js foi carregado com sucesso!");
 
-let intervaloCarrossel;
 
+// =======================================================================
+// BLOCO 2: 🪟 FUNÇÕES DE CONTROLE DOS MODAIS E AUTENTICAÇÃO
+// =======================================================================
+function abrirAuthModal() {
+    document.getElementById('modalAuth').classList.add('aberto');
+}
+
+function fecharAuthModal() {
+    document.getElementById('modalAuth').classList.remove('aberto');
+}
+
+function fecharModal() {
+    document.getElementById('modalDetalhes').classList.remove('aberto');
+}
+
+function fecharModalRomaneio() {
+    document.getElementById('modalRomaneio').classList.remove('aberto');
+}
+
+function fecharModalGateway() {
+    document.getElementById('modalGatewayPagamento').classList.remove('aberto');
+}
+
+function mudarAbasAuth(aba) {
+    document.querySelectorAll('.aba-auth').forEach(b => b.classList.remove('ativa'));
+    document.querySelectorAll('.secao-auth').forEach(s => s.classList.remove('ativa'));
+    document.getElementById('aba-' + aba).classList.add('ativa');
+    document.getElementById('form-' + aba).classList.add('ativa');
+}
+
+function loginSocialSimulado(provedor) {
+    alert('🔒 Login com ' + provedor + ' é uma demonstração acadêmica. Use o formulário de e-mail.');
+}
+
+function executarLoginCorporativo() {
+    ejecutarLoginCorporativo();
+}
+
+
+// =======================================================================
+// BLOCO 3: 🛍️ MODAL DE PRODUTO (CARROSSEL + TAMANHOS + AVALIAÇÕES)
+// =======================================================================
 function abrirModal(id) {
     const prod = listaProdutosGlobal.find(p => p.id === id);
     if (!prod) return;
 
-    // 1. Força o preço principal a renderizar o valor correto vindo do banco
     document.getElementById('modalPreco').innerText = `R$ ${parseFloat(prod.preco).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-
-    // 2. Atualiza o simulador de parcelas com o cálculo exato dividido por 3
     document.getElementById('modalParcelas').innerText = `ou até 3x de R$ ${(parseFloat(prod.preco) / 3).toFixed(2)} sem juros`;
 
-// 🔥 TRECHO NOVO PARA ADICIONAR DAQUI:
-const containerAvaliacoesExistente = document.getElementById('bloco-dinamico-avaliacoes');
-if (containerAvaliacoesExistente) containerAvaliacoesExistente.remove();
+    const containerAvaliacoesExistente = document.getElementById('bloco-dinamico-avaliacoes');
+    if (containerAvaliacoesExistente) containerAvaliacoesExistente.remove();
 
-const blocoAvaliacoesHtml = `
-    <div id="bloco-dinamico-avaliacoes" class="bloco-avaliacoes" style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-        <h4 style="margin-bottom: 10px; color: #ffffff;">⭐ Avaliações dos Clientes</h4>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <span style="font-size: 24px; font-weight: bold; color: #ffca28;">4.8</span>
-            <div>
-                <div style="color: #ffca28;">★★★★★</div>
-                <span style="font-size: 12px; color: #94a3b8;">94% dos clientes recomendam este produto</span>
+    const blocoAvaliacoesHtml = `
+        <div id="bloco-dinamico-avaliacoes" class="bloco-avaliacoes" style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <h4 style="margin-bottom: 10px; color: #ffffff;">⭐ Avaliações dos Clientes</h4>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <span style="font-size: 24px; font-weight: bold; color: #ffca28;">4.8</span>
+                <div>
+                    <div style="color: #ffca28;">★★★★★</div>
+                    <span style="font-size: 12px; color: #94a3b8;">94% dos clientes recomendam este produto</span>
+                </div>
+            </div>
+            <div class="comentarios-lista" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="font-size: 13px; color: #ffffff;">Lucas M.</strong>
+                        <span style="color: #ffca28; font-size: 12px;">★★★★★</span>
+                    </div>
+                    <p style="font-size: 12px; color: #94a3b8; margin: 0;">Produto de altíssima qualidade, caimento perfeito e chegou muito rápido!</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="font-size: 13px; color: #ffffff;">Beatriz R.</strong>
+                        <span style="color: #ffca28; font-size: 12px;">★★★★☆</span>
+                    </div>
+                    <p style="font-size: 12px; color: #94a3b8; margin: 0;">Muito bonito e confortável. Valeu super a pena o investimento.</p>
+                </div>
             </div>
         </div>
-        <div class="comentarios-lista" style="display: flex; flex-direction: column; gap: 12px;">
-            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <strong style="font-size: 13px; color: #ffffff;">Lucas M.</strong>
-                    <span style="color: #ffca28; font-size: 12px;">★★★★★</span>
-                </div>
-                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Produto de altíssima qualidade, caimento perfeito e chegou muito rápido!</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border: 1px solid #1e293b;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <strong style="font-size: 13px; color: #ffffff;">Beatriz R.</strong>
-                    <span style="color: #ffca28; font-size: 12px;">★★★★☆</span>
-                </div>
-                <p style="font-size: 12px; color: #94a3b8; margin: 0;">Muito bonito e confortável. Valeu super a pena o investimento.</p>
-            </div>
-        </div>
-    </div>
-`;
-document.getElementById('modalDescricao').insertAdjacentHTML('afterend', blocoAvaliacoesHtml);
-// 🛑 ATÉ AQUI.
+    `;
+    document.getElementById('modalDescricao').insertAdjacentHTML('afterend', blocoAvaliacoesHtml);
 
-tamanhoSelectedNoModal = null;
+    tamanhoSelectedNoModal = null;
 
-    tamanhoSelectedNoModal = null; 
     const btnAddModal = document.getElementById('btn-add-modal');
     if (btnAddModal) {
         btnAddModal.disabled = true;
@@ -79,115 +115,73 @@ tamanhoSelectedNoModal = null;
     } else {
         fotosDoProdutoModal = ['https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500'];
     }
-    
+
     fotoCarrosselAtual = 0;
     mostrarFotoCarrossel();
     gerarIndicadoresCarrossel();
 
     const containerTamanhos = document.getElementById('container-tamanhos-botoes');
     if (containerTamanhos) {
-        containerTamanhos.innerHTML = ""; 
+        containerTamanhos.innerHTML = "";
         const listaTamanhosPadrao = ["P", "M", "G", "GG"];
-        
+
         listaTamanhosPadrao.forEach(tam => {
             const botao = document.createElement('button');
             botao.className = "btn-tamanho-opcao";
             botao.innerText = tam;
-            
-            botao.onclick = () => {
-    document.querySelectorAll('.btn-tamanho-opcao').forEach(b => b.classList.remove('selecionado'));
-    botao.classList.add('selecionado');
-    tamanhoSelectedNoModal = tam; 
 
-    // 🔥 TRECHO QUE CRIA O SELETOR DE QUANTIDADE NA TELA COLE AQUI:
-    let campoQtd = document.getElementById('modal-quantidade-selecionada');
-    if (!campoQtd) {
-        const htmlQtd = `
-            <div id="wrapper-quantidade-modal" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
-                <label style="color: #fff; font-size: 13px; font-weight: 600;">Quantidade:</label>
-                <input type="number" id="modal-quantidade-selecionada" value="1" min="1" max="${prod.quantidadeAtual}" style="width: 60px; text-align: center; padding: 5px; border-radius: 4px; background: #1e293b; border: 1px solid #334155; color: #fff;">
-            </div>
-        `;
-        containerTamanhos.insertAdjacentHTML('afterend', htmlQtd);
-    }
-    
-    if (btnAddModal) {
-        const esgotado = prod.quantidadeAtual <= 0;
-        btnAddModal.disabled = esgotado;
-        btnAddModal.innerText = esgotado ? "❌ Esgotado" : `🛒 Adicionar Tamanho ${tam}`;
-    }
-};
+            botao.onclick = () => {
+                document.querySelectorAll('.btn-tamanho-opcao').forEach(b => b.classList.remove('selecionado'));
+                botao.classList.add('selecionado');
+                tamanhoSelectedNoModal = tam;
+
+                let campoQtd = document.getElementById('modal-quantidade-selecionada');
+                if (!campoQtd) {
+                    const htmlQtd = `
+                        <div id="wrapper-quantidade-modal" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                            <label style="color: #fff; font-size: 13px; font-weight: 600;">Quantidade:</label>
+                            <input type="number" id="modal-quantidade-selecionada" value="1" min="1" max="${prod.quantidadeAtual}" style="width: 60px; text-align: center; padding: 5px; border-radius: 4px; background: #1e293b; border: 1px solid #334155; color: #fff;">
+                        </div>
+                    `;
+                    containerTamanhos.insertAdjacentHTML('afterend', htmlQtd);
+                }
+
+                if (btnAddModal) {
+                    const esgotado = prod.quantidadeAtual <= 0;
+                    btnAddModal.disabled = esgotado;
+                    btnAddModal.innerText = esgotado ? "❌ Esgotado" : `🛒 Adicionar Tamanho ${tam}`;
+                }
+            };
             containerTamanhos.appendChild(botao);
         });
     }
-if (btnAddModal) {
+
+    if (btnAddModal) {
         btnAddModal.onclick = () => {
             const campoQtd = document.getElementById('modal-quantidade-selecionada');
             const qtdDesejada = campoQtd ? parseInt(campoQtd.value, 10) || 1 : 1;
 
-            // 🔥 BARRA A VENDA SE A QUANTIDADE PASSAR DO ESTOQUE REAL DO BANCO
             if (qtdDesejada > prod.quantidadeAtual) {
                 alert(`❌ Erro de Estoque: Você tentou selecionar ${qtdDesejada} unidades, mas temos apenas ${prod.quantidadeAtual} disponíveis.`);
-                if (campoQtd) campoQtd.value = prod.quantidadeAtual; // Força o input a voltar para o máximo
-                return; // Corta a execução aqui e não deixa fechar o modal
+                if (campoQtd) campoQtd.value = prod.quantidadeAtual;
+                return;
             }
 
             adicionarAoCarrinho(prod.id, prod.nome, prod.preco, prod.quantidadeAtual, tamanhoSelectedNoModal, qtdDesejada);
-            
+
             const wrapperQtd = document.getElementById('wrapper-quantidade-modal');
             if (wrapperQtd) wrapperQtd.remove();
-            
-            fecharModal(); 
+
+            fecharModal();
         };
     }
 
     document.getElementById('modalDetalhes').classList.add('aberto');
 }
 
-function fecharModal() {
-    document.getElementById('modalDetalhes').classList.remove('aberto');
-}
-// =======================================================================
-// BLOCO 2.1: 🔀 CONTROLE DO FLUXO DO CHECKOUT (WIZARD EM ETAPAS)
-// =======================================================================
-function avancarWizard(passo) {
-    // Esconde as seções da esquerda
-    document.getElementById('checkout-secao-itens').style.display = 'none';
-    document.getElementById('checkout-secao-endereco').style.display = 'none';
-
-    // Captura o bloco da direita
-    const secaoPagamento = document.getElementById('checkout-secao-pagamento');
-
-    // Reseta os indicadores visuais do topo
-    document.getElementById('step-1').style.color = 'var(--cor-subtexto)';
-    document.getElementById('step-1').style.textShadow = 'none';
-    document.getElementById('step-2').style.color = 'var(--cor-subtexto)';
-    document.getElementById('step-2').style.textShadow = 'none';
-    document.getElementById('step-3').style.color = 'var(--cor-subtexto)';
-    document.getElementById('step-3').style.textShadow = 'none';
-
-    if (passo === 1) {
-        document.getElementById('checkout-secao-itens').style.display = 'block';
-        if (secaoPagamento) secaoPagamento.style.display = 'none';
-        document.getElementById('step-1').style.color = 'var(--cor-primaria)';
-        document.getElementById('step-1').style.textShadow = '0 0 8px var(--cor-primaria)';
-    } else if (passo === 2) {
-        document.getElementById('checkout-secao-endereco').style.display = 'block';
-        if (secaoPagamento) secaoPagamento.style.display = 'none';
-        document.getElementById('step-2').style.color = 'var(--cor-primaria)';
-        document.getElementById('step-2').style.textShadow = '0 0 8px var(--cor-primaria)';
-    } else if (passo === 3) {
-        // Mantém a tela de endereço visível na esquerda e altera o pagamento na direita
-        document.getElementById('checkout-secao-endereco').style.display = 'block';
-        if (secaoPagamento) secaoPagamento.style.display = 'block';
-        document.getElementById('step-3').style.color = 'var(--cor-primaria)';
-        document.getElementById('step-3').style.textShadow = '0 0 8px var(--cor-primaria)';
-    }
-}
-
 
 // =======================================================================
-// BLOCO 3: 📸 CONTROLE INTERNO DO CARROSSEL DE FOTOS
+// BLOCO 4: 📸 CONTROLE INTERNO DO CARROSSEL DE FOTOS
 // =======================================================================
 function gerarIndicadoresCarrossel() {
     const containerPontos = document.getElementById('carrossel-pontos');
@@ -223,7 +217,42 @@ function mostrarFotoCarrossel() {
 
 
 // =======================================================================
-// BLOCO 4: 🔐 PROCESSAMENTO DE AUTENTICAÇÃO E VALIDÇÕES ANTIFRAUDE MATEMÁTICAS
+// BLOCO 5: 🔀 CONTROLE DO FLUXO DO CHECKOUT (WIZARD EM ETAPAS)
+// =======================================================================
+function avancarWizard(passo) {
+    document.getElementById('checkout-secao-itens').style.display = 'none';
+    document.getElementById('checkout-secao-endereco').style.display = 'none';
+
+    const secaoPagamento = document.getElementById('checkout-secao-pagamento');
+
+    document.getElementById('step-1').style.color = 'var(--cor-subtexto)';
+    document.getElementById('step-1').style.textShadow = 'none';
+    document.getElementById('step-2').style.color = 'var(--cor-subtexto)';
+    document.getElementById('step-2').style.textShadow = 'none';
+    document.getElementById('step-3').style.color = 'var(--cor-subtexto)';
+    document.getElementById('step-3').style.textShadow = 'none';
+
+    if (passo === 1) {
+        document.getElementById('checkout-secao-itens').style.display = 'block';
+        if (secaoPagamento) secaoPagamento.style.display = 'none';
+        document.getElementById('step-1').style.color = 'var(--cor-primaria)';
+        document.getElementById('step-1').style.textShadow = '0 0 8px var(--cor-primaria)';
+    } else if (passo === 2) {
+        document.getElementById('checkout-secao-endereco').style.display = 'block';
+        if (secaoPagamento) secaoPagamento.style.display = 'none';
+        document.getElementById('step-2').style.color = 'var(--cor-primaria)';
+        document.getElementById('step-2').style.textShadow = '0 0 8px var(--cor-primaria)';
+    } else if (passo === 3) {
+        document.getElementById('checkout-secao-endereco').style.display = 'block';
+        if (secaoPagamento) secaoPagamento.style.display = 'block';
+        document.getElementById('step-3').style.color = 'var(--cor-primaria)';
+        document.getElementById('step-3').style.textShadow = '0 0 8px var(--cor-primaria)';
+    }
+}
+
+
+// =======================================================================
+// BLOCO 6: 🔐 VALIDAÇÕES ANTIFRAUDE MATEMÁTICAS (CPF E CARTÃO)
 // =======================================================================
 function verificarCPF(cpf) {
     cpf = cpf.replace(/\D/g, "");
@@ -238,7 +267,6 @@ function verificarCPF(cpf) {
     return true;
 }
 
-// Algoritmo de Luhn — validação matemática real de número de cartão de crédito
 function validarCartaoMatematico(numero) {
     const n = numero.replace(/\D/g, '');
     let soma = 0;
@@ -269,7 +297,6 @@ function validarCpfCadastro() {
     }
 }
 
-// Validação e feedback em tempo real para o CPF na tela de entrega (Passo 2)
 function validarCpfEntregaLive() {
     const campo = document.getElementById('ent-cpf');
     const msg = document.getElementById('msg-cpf-entrega');
@@ -290,14 +317,12 @@ function validarCpfEntregaLive() {
     }
 }
 
-// Validação em tempo real do número do cartão com máscara visual (Passo 3)
 function validarCartaoLive() {
     const campo = document.getElementById('card-numero');
     const msg = document.getElementById('msg-card-validacao');
     const btnFinalizar = document.getElementById('btnFinalizar');
     let valor = campo.value.replace(/\D/g, "");
 
-    // Aplica a máscara visual em blocos de 4 dígitos automática
     if (valor.length > 0) {
         campo.value = valor.match(/.{1,4}/g).join(" ");
     }
@@ -316,6 +341,10 @@ function validarCartaoLive() {
     }
 }
 
+
+// =======================================================================
+// BLOCO 7: 🔐 AUTENTICAÇÃO — LOGIN E CADASTRO
+// =======================================================================
 function ejecutarLoginCorporativo() {
     const email = document.getElementById('login-email').value.trim();
     const senha = document.getElementById('login-senha').value.trim();
@@ -350,10 +379,6 @@ function mapearTecladoLogin(event) {
     }
 }
 
-
-// =======================================================================
-// BLOCO 5: 👤 GERENCIAMENTO DE REFRESH DE SESSÃO (ADMIN VS CLIENTE)
-// =======================================================================
 function executarCadastroMarketplace() {
     const nome = document.getElementById('cad-nome').value.trim();
     const email = document.getElementById('cad-email').value.trim();
@@ -382,28 +407,26 @@ function executarCadastroMarketplace() {
     .catch(err => alert(`❌ Erro ao cadastrar: ${err.message}`));
 }
 
-function baixarRelatorioEstoqueCSV() {
-    window.open(`${API_BASE_URL}/api/admin/relatorios/exportar`);
-}
 
+// =======================================================================
+// BLOCO 8: 👤 GERENCIAMENTO DE SESSÃO (ADMIN VS CLIENTE)
+// =======================================================================
 function aplicarSessaoUsuario() {
     document.getElementById('btn-entrar-topo').style.display = "none";
     document.getElementById('painel-user-topo').style.display = "flex";
     document.getElementById('label-nome-user').innerText = usuarioLogado.nome;
     document.getElementById('avatar-letra').innerText = usuarioLogado.nome.substring(0,1).toUpperCase();
     document.getElementById('alerta-login-checkout').style.display = "none";
-    
-    // Oculta os botões administrativos por padrão para segurança visual
+
     const botoesAdmin = document.querySelectorAll('.admin-only');
     botoesAdmin.forEach(btn => btn.style.display = "none");
 
-    if(usuarioLogado.nivel === "ADMIN") {
+    if (usuarioLogado.nivel === "ADMIN") {
         document.getElementById('painel-admin-bloqueado').style.display = "none";
         document.getElementById('painel-admin-liberado').style.display = "block";
-        
-        // Se for ADMIN, exibe os botões novamente na barra lateral
+
         botoesAdmin.forEach(btn => btn.style.display = "block");
-        
+
         atualizarDashboardAdmin();
         carregarTabelasInventarioEAuditoria();
         carregarDadosEPrevisoesAdmin();
@@ -412,47 +435,67 @@ function aplicarSessaoUsuario() {
     atualizarInterface();
 }
 
+function deslogarUsuario() {
+    usuarioLogado = null;
+    localStorage.removeItem('controlstock_sessao');
+
+    document.getElementById('btn-entrar-topo').style.display = "flex";
+    document.getElementById('painel-user-topo').style.display = "none";
+    document.getElementById('alerta-login-checkout').style.display = "block";
+    document.getElementById('painel-admin-bloqueado').style.display = "block";
+    document.getElementById('painel-admin-liberado').style.display = "none";
+
+    document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = "none");
+
+    document.getElementById('login-email').value = "";
+    document.getElementById('login-senha').value = "";
+    document.getElementById('cad-nome').value = "";
+    document.getElementById('cad-email').value = "";
+    document.getElementById('cad-cpf').value = "";
+    document.getElementById('cad-senha').value = "";
+    document.getElementById('msg-cpf-cad').innerText = "";
+
+    carregarProdutosDaAPI();
+    atualizarInterface();
+    mudarAba('vitrine');
+}
+
+
 // =======================================================================
-// BLOCO: 🪟 FUNÇÕES DE CONTROLE DOS MODAIS E AUTENTICAÇÃO
+// BLOCO 9: 🗂️ NAVEGAÇÃO ENTRE ABAS DO MARKETPLACE
 // =======================================================================
-function abrirAuthModal() {
-    document.getElementById('modalAuth').classList.add('aberto');
+function mudarAba(nomeAba) {
+    document.querySelectorAll('.aba-painel').forEach(aba => aba.classList.remove('ativa'));
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('ativo'));
+    const abaAlvo = document.getElementById('aba-' + nomeAba);
+    if (abaAlvo) abaAlvo.classList.add('ativa');
+    const btnAlvo = document.getElementById('btn-' + nomeAba);
+    if (btnAlvo) btnAlvo.classList.add('ativo');
+    if (nomeAba === 'carrinho') { atualizarInterface(); avancarWizard(1); }
+    if (nomeAba === 'historico' && usuarioLogado) { carregarHistoricoPedidos(); }
+    if (nomeAba === 'admin') {
+        if (usuarioLogado && usuarioLogado.nivel === 'ADMIN') {
+            document.getElementById('painel-admin-bloqueado').style.display = 'none';
+            document.getElementById('painel-admin-liberado').style.display = 'block';
+            atualizarDashboardAdmin();
+            carregarTabelasInventarioEAuditoria();
+        } else {
+            document.getElementById('painel-admin-bloqueado').style.display = 'block';
+            document.getElementById('painel-admin-liberado').style.display = 'none';
+        }
+    }
 }
 
-function fecharAuthModal() {
-    document.getElementById('modalAuth').classList.remove('aberto');
-}
 
-function mudarAbasAuth(aba) {
-    document.querySelectorAll('.aba-auth').forEach(b => b.classList.remove('ativa'));
-    document.querySelectorAll('.secao-auth').forEach(s => s.classList.remove('ativa'));
-    document.getElementById('aba-' + aba).classList.add('ativa');
-    document.getElementById('form-' + aba).classList.add('ativa');
-}
-
-function fecharModalRomaneio() {
-    document.getElementById('modalRomaneio').classList.remove('aberto');
-}
-
-function fecharModalGateway() {
-    document.getElementById('modalGatewayPagamento').classList.remove('aberto');
-}
-
-function loginSocialSimulado(provedor) {
-    alert('🔒 Login com ' + provedor + ' é uma demonstração acadêmica. Use o formulário de e-mail.');
-}
-
-function executarLoginCorporativo() {
-    ejecutarLoginCorporativo();
-}
-
+// =======================================================================
+// BLOCO 10: 📦 HISTÓRICO DE PEDIDOS E ROMANEIOS
+// =======================================================================
 function carregarHistoricoPedidos() {
     if (!usuarioLogado) return;
     const corpo = document.getElementById('lista-pedidos-corpo');
     if (!corpo) return;
     corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-subtexto);'>Carregando fluxo de faturamento...</td></tr>";
-    
-    // 🔥 CORREÇÃO: Removemos o e-mail para bater na rota geral do Administrador
+
     fetch(API_BASE_URL + '/api/pedidos/historico')
         .then(res => {
             if (!res.ok) {
@@ -472,23 +515,21 @@ function carregarHistoricoPedidos() {
         })
         .catch(err => {
             console.error("Falha ao carregar romaneios gerenciais:", err);
-            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico de romaneios.</td></tr>"; 
+            corpo.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--cor-erro);'>Erro ao carregar histórico de romaneios.</td></tr>";
         });
 }
 
 function verDetalhesRomaneio(id) {
     const modal = document.getElementById('modalRomaneio');
     const corpoTabela = document.getElementById('detalhes-romaneio-itens-corpo');
-    
+
     if (!modal) return;
     modal.classList.add('aberto');
 
-    // Se você tiver elementos de texto para o topo do modal, limpa/prepara eles
     const txtCodigo = document.getElementById('romaneio-modal-codigo');
     if (txtCodigo) txtCodigo.innerText = `Carregando Romaneio #${id}...`;
     if (corpoTabela) corpoTabela.innerHTML = "<tr><td colspan='4' style='text-align:center; color:var(--cor-subtexto);'>Buscando itens faturados...</td></tr>";
 
-    // 🔥 BUSCA OS DETALHES DO PEDIDO ESPECÍFICO NO BACKEND C# / SQLITE
     fetch(`${API_BASE_URL}/api/pedidos/detalhes/${id}`)
         .then(res => {
             if (!res.ok) throw new Error("Erro ao buscar detalhes do romaneio.");
@@ -496,7 +537,7 @@ function verDetalhesRomaneio(id) {
         })
         .then(pedido => {
             if (txtCodigo) txtCodigo.innerText = `ROMANEIO: ${pedido.codigo || pedido.id}`;
-            
+
             const txtData = document.getElementById('romaneio-modal-data');
             if (txtData) txtData.innerText = pedido.dataEmissao || pedido.data || '-';
 
@@ -510,7 +551,6 @@ function verDetalhesRomaneio(id) {
                     return;
                 }
 
-                // Renderiza cada linha de produto comprado no histórico
                 pedido.itens.forEach(item => {
                     let tagTamanho = item.tamanho ? `<span style="background: #27273a; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px;">TAM: ${item.tamanho}</span>` : '';
                     let precoUnitario = parseFloat(item.precoUnitario || item.preco || 0);
@@ -535,71 +575,20 @@ function verDetalhesRomaneio(id) {
         });
 }
 
-// =======================================================================
-// BLOCO: 🗂️ NAVEGAÇÃO ENTRE ABAS DO MARKETPLACE
-// =======================================================================
-function mudarAba(nomeAba) {
-    document.querySelectorAll('.aba-painel').forEach(aba => aba.classList.remove('ativa'));
-    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('ativo'));
-    const abaAlvo = document.getElementById('aba-' + nomeAba);
-    if (abaAlvo) abaAlvo.classList.add('ativa');
-    const btnAlvo = document.getElementById('btn-' + nomeAba);
-    if (btnAlvo) btnAlvo.classList.add('ativo');
-    if (nomeAba === 'carrinho') { atualizarInterface(); avancarWizard(1); }
-    if (nomeAba === 'historico' && usuarioLogado) { carregarHistoricoPedidos(); }
-    if (nomeAba === 'admin') {
-        if (usuarioLogado && usuarioLogado.nivel === 'ADMIN') {
-            document.getElementById('painel-admin-bloqueado').style.display = 'none';
-            document.getElementById('painel-admin-liberado').style.display = 'block';
-            atualizarDashboardAdmin();
-            carregarTabelasInventarioEAuditoria();
-        } else {
-            document.getElementById('painel-admin-bloqueado').style.display = 'block';
-            document.getElementById('painel-admin-liberado').style.display = 'none';
-        }
-    }
-}
-
-function deslogarUsuario() {
-    usuarioLogado = null;
-    localStorage.removeItem('controlstock_sessao');
-    
-    document.getElementById('btn-entrar-topo').style.display = "flex";
-    document.getElementById('painel-user-topo').style.display = "none";
-    document.getElementById('alerta-login-checkout').style.display = "block";
-    document.getElementById('painel-admin-bloqueado').style.display = "block";
-    document.getElementById('painel-admin-liberado').style.display = "none";
-    
-    // Garante que os botões suma da barra lateral ao deslogar
-    document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = "none");
-    
-    document.getElementById('login-email').value = "";
-    document.getElementById('login-senha').value = "";
-    document.getElementById('cad-nome').value = "";
-    document.getElementById('cad-email').value = "";
-    document.getElementById('cad-cpf').value = ""; 
-    document.getElementById('cad-senha').value = "";
-    document.getElementById('msg-cpf-cad').innerText = "";
-    
-    carregarProdutosDaAPI();
-    atualizarInterface();
-    mudarAba('vitrine');
-}
-
 
 // =======================================================================
-// 🎯 MOTOR DE VALIDAÇÃO E CÁLCULO DE CUPONS DE DESCONTO (MARKETPLACE)
+// BLOCO 11: 🎯 MOTOR DE VALIDAÇÃO E CÁLCULO DE CUPONS DE DESCONTO
 // =======================================================================
 function aplicarCupomDesconto() {
     const cupomTexto = document.getElementById('input-cupom').value.trim().toUpperCase();
     const msgResultado = document.getElementById('msg-cupom-resultado');
     const txtCupomValor = document.getElementById('txtCupomValor');
-    
+
     let totalCarrinhoBruto = 0;
     Object.keys(carrinho).forEach(id => {
         let item = carrinho[id];
         let precoFinal = item.precoOriginal;
-        if (item.qtd >= 5) precoFinal = item.precoOriginal * 0.90; // Regra de atacado
+        if (item.qtd >= 5) precoFinal = item.precoOriginal * 0.90;
         totalCarrinhoBruto += (precoFinal * item.qtd);
     });
 
@@ -616,11 +605,11 @@ function aplicarCupomDesconto() {
     }
 
     if (cupomTexto === "NOTA10") {
-        descontoCupomAtivo = totalCarrinhoBruto * 0.15; // 15% de dedução
+        descontoCupomAtivo = totalCarrinhoBruto * 0.15;
         msgResultado.innerText = `✓ Cupom NOTA10 Aplicado! Você ganhou 15% de desconto.`;
         msgResultado.style.color = "var(--cor-sucesso)";
     } else if (cupomTexto === "CONTROLSTOCK") {
-        descontoCupomAtivo = 10.00; // Desconto fixo de R$ 10
+        descontoCupomAtivo = 10.00;
         msgResultado.innerText = "✓ Cupom CONTROLSTOCK Aplicado! R$ 10,00 deduzidos.";
         msgResultado.style.color = "var(--cor-sucesso)";
     } else {
@@ -632,13 +621,13 @@ function aplicarCupomDesconto() {
     txtCupomValor.innerText = `R$ ${descontoCupomAtivo.toFixed(2)}`;
     let novoTotalFinal = totalCarrinhoBruto - descontoCupomAtivo;
     if (novoTotalFinal < 0) novoTotalFinal = 0;
-    
+
     document.getElementById('txtTotal').innerText = `R$ ${novoTotalFinal.toFixed(2)}`;
 }
 
 
 // =======================================================================
-// BLOCO 6: 🛒 MECANISMO DE PRODUTOS E CARREGAMENTO DO BANCO SQLITE
+// BLOCO 12: 🛒 MECANISMO DE PRODUTOS E CARREGAMENTO DO BANCO SQLITE
 // =======================================================================
 function carregarProdutosDaAPI() {
     const vitrine = document.getElementById('vitrine-produtos');
@@ -650,8 +639,8 @@ function carregarProdutosDaAPI() {
         .then(produtos => {
             vitrine.innerHTML = "";
             listaProdutosGlobal = produtos;
-            
-            if(produtos.length === 0) {
+
+            if (produtos.length === 0) {
                 vitrine.innerHTML = "<p>Nenhum item cadastrado no banco.</p>";
                 return;
             }
@@ -659,19 +648,18 @@ function carregarProdutosDaAPI() {
             produtos.forEach(prod => {
                 const esgotado = prod.quantidadeAtual <= 0;
                 let staticLineEstoqueHtml = "";
-                
+
                 if (usuarioLogado && usuarioLogado.nivel === "ADMIN") {
-    staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-primaria); font-weight:bold;">Disponível: ${prod.quantidadeAtual} un</div>`;
-} else {
-    if (esgotado) {
-        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-erro); font-size:12px;">❌ Temporariamente Esgotado</div>`;
-    } else if (prod.quantidadeAtual <= 3) {
-        // 🔥 BADGE DE ESTOQUE CRÍTICO PARA O CLIENTE
-        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:#ef4444; font-size:12px; font-weight:bold; animation: pulse 1.5s infinite;">⚡ Apenas ${prod.quantidadeAtual} un. restantes!</div>`;
-    } else {
-        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-subtexto); font-size:12px;">⚡ Item Disponível</div>`;
-    }
-}
+                    staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-primaria); font-weight:bold;">Disponível: ${prod.quantidadeAtual} un</div>`;
+                } else {
+                    if (esgotado) {
+                        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-erro); font-size:12px;">❌ Temporariamente Esgotado</div>`;
+                    } else if (prod.quantidadeAtual <= 3) {
+                        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:#ef4444; font-size:12px; font-weight:bold; animation: pulse 1.5s infinite;">⚡ Apenas ${prod.quantidadeAtual} un. restantes!</div>`;
+                    } else {
+                        staticLineEstoqueHtml = `<div class="estoque-prod" style="color:var(--cor-subtexto); font-size:12px;">⚡ Item Disponível</div>`;
+                    }
+                }
 
                 const classeAlertaCritico = (prod.quantidadeAtual <= 5 && prod.quantidadeAtual > 0) ? "alerta-critico" : "";
                 const urlPrimeiraFoto = (prod.fotos && prod.fotos.length > 0) ? prod.fotos[0].url : 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500';
@@ -685,7 +673,6 @@ function carregarProdutosDaAPI() {
                             <div class="nome-prod">${prod.nome}</div>
                             <div class="preco-prod">R$ ${prod.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
                             ${staticLineEstoqueHtml}
-                            
                             <div class="container-botoes-card">
                                 <button class="btn-detalhes" onclick="abrirModal(${prod.id})">🔍 Detalhes</button>
                                 <button class="btn-add" ${esgotado ? "disabled" : ""} onclick="abrirModal(${prod.id})">${esgotado ? 'Esgotado' : 'Adicionar'}</button>
@@ -695,14 +682,15 @@ function carregarProdutosDaAPI() {
                 `;
             });
             setTimeout(iniciarCarrosselAutomatico, 1000);
-        }).catch(() => { 
-            vitrine.innerHTML = "<p style='color:var(--cor-erro);font-weight:bold;'>Servidor Backend Desconectado.</p>"; 
+        }).catch(() => {
+            vitrine.innerHTML = "<p style='color:var(--cor-erro);font-weight:bold;'>Servidor Backend Desconectado.</p>";
         });
 }
+
+
 // =======================================================================
-// BLOCO 7: 🧮 LOGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
+// BLOCO 13: 🧮 LÓGICA E CÁLCULOS DA INTERFACE DO CARRINHO (ATACADO)
 // =======================================================================
-// SUBSTITUA DA ASSINATURA ATÉ O FECHAMENTO DO ELSE POR ESTE TRECHO:
 function adicionarAoCarrinho(id, nome, preco, estoqueMaximo, tamanhoEscolhido, qtdDesejada = 1) {
     if (!tamanhoEscolhido) {
         mostrarToast("⚠️ Por favor, selecione um tamanho nas especificações!", "aviso");
@@ -712,22 +700,21 @@ function adicionarAoCarrinho(id, nome, preco, estoqueMaximo, tamanhoEscolhido, q
     const chaveItem = `${id}-${tamanhoEscolhido}`;
 
     if (carrinho[chaveItem]) {
-        // Valida se a soma da quantidade atual com a nova desejada estoura o estoque
         if ((carrinho[chaveItem].qtd + qtdDesejada) > estoqueMaximo) {
             mostrarToast(`Estoque limite atingido! Disponível apenas ${estoqueMaximo} unidades.`, 'aviso');
             return;
         }
-        carrinho[chaveItem].qtd += qtdDesejada; // Soma a quantidade inteira direto aqui
+        carrinho[chaveItem].qtd += qtdDesejada;
     } else {
-        carrinho[chaveItem] = { 
-            id: id, 
-            nome: nome, 
-            precoOriginal: preco, 
-            qtd: qtdDesejada, // Define a quantidade direto na criação do item
+        carrinho[chaveItem] = {
+            id: id,
+            nome: nome,
+            precoOriginal: preco,
+            qtd: qtdDesejada,
             tamanho: tamanhoEscolhido
         };
     }
-    
+
     mostrarToast(`✓ ${nome} (${tamanhoEscolhido}) adicionado ao carrinho!`, 'sucesso');
     atualizarInterface();
 }
@@ -743,77 +730,75 @@ function removerDoCarrinho(chaveItem) {
 function atualizarInterface() {
     const corpo = document.getElementById('corpo-carrinho');
     if (!corpo) return;
-    corpo.innerHTML = ""; 
+    corpo.innerHTML = "";
     let totalGeral = 0, descontoAtacadoGeral = 0, itensTotais = 0;
     const chaves = Object.keys(carrinho);
 
-    // 1. CÁLCULO PRÉVIO DO TOTAL BRUTO JÁ COM O DESCONTO DE 12.5% APLICADO (PARA A BARRA DE FRETE)
+    // 1. CÁLCULO PRÉVIO DO TOTAL BRUTO PARA A BARRA DE FRETE
     let totalBrutoParaFrete = 0;
     chaves.forEach(chave => {
         let item = carrinho[chave];
         let precoFinal = item.precoOriginal;
         if (item.qtd >= 5) {
-            precoFinal = item.precoOriginal * 0.875; // Aplica 12.5% de desconto (1 - 0.125)
+            precoFinal = item.precoOriginal * 0.875;
         }
         totalBrutoParaFrete += (precoFinal * item.qtd);
     });
 
-    // 2. LÓGICA E CRIAÇÃO DA BARRA DE PROGRESSO DO FRETE GRÁTIS (ALVO: R$ 500,00)
+    // 2. BARRA DE PROGRESSO DO FRETE GRÁTIS (ALVO: R$ 500,00)
     let porcentagemMeta = Math.min((totalBrutoParaFrete / 500) * 100, 100);
     let textoProgresso = "";
     let corBarra = "var(--cor-primaria)";
 
     if (chaves.length === 0) {
         textoProgresso = "🛒 Adicione itens para liberar FRETE GRÁTIS para todo o Brasil (Alvo: R$ 500,00)";
-        porcentageMeta = 0;
+        porcentagemMeta = 0;
     } else if (totalBrutoParaFrete >= 500) {
         textoProgresso = "🎉 PARABÉNS! Você liberou Frete Grátis para todo o Brasil!";
-        corBarra = "#22c55e"; // Verde sucesso
+        corBarra = "#22c55e";
     } else {
         let restante = 500 - totalBrutoParaFrete;
         textoProgresso = `🚚 Faltam apenas R$ ${restante.toFixed(2)} para liberar FRETE GRÁTIS para todo o Brasil!`;
     }
 
-    // Injeta ou substitui a barra de progresso no topo da tabela
     const containerProgressoExistente = document.getElementById('wrapper-progresso-atacado');
     if (containerProgressoExistente) containerProgressoExistente.remove();
 
-   const progressoHtml = `
-    <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
-            <span>${textoProgresso}</span>
-            <span>${Math.round(porcentagemMeta)}%</span>
+    const progressoHtml = `
+        <div id="wrapper-progresso-atacado" style="background: rgba(255,255,255,0.02); border: 1px solid #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">
+                <span>${textoProgresso}</span>
+                <span>${Math.round(porcentagemMeta)}%</span>
+            </div>
+            <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
+                <div style="background: ${corBarra}; height: 100%; width: ${porcentagemMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+            </div>
         </div>
-        <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; width: 100%;">
-            <div style="background: ${corBarra}; height: 100%; width: ${porcentagemMeta}%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
-        </div>
-    </div>
-`;
-    
+    `;
+
     corpo.closest('table').insertAdjacentHTML('beforebegin', progressoHtml);
 
-    // 3. MONTAGEM DINÂMICA DAS LINHAS DA TABELA DO CARRINHO
+    // 3. MONTAGEM DAS LINHAS DA TABELA DO CARRINHO
     if (chaves.length === 0) {
         corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--cor-subtexto);">Seu carrinho está vazio.</td></tr>`;
         descontoCupomAtivo = 0;
     } else {
         chaves.forEach(chave => {
-            let item = carrinho[chave]; 
-            let precoFinal = item.precoOriginal; 
+            let item = carrinho[chave];
+            let precoFinal = item.precoOriginal;
             let tagAtacado = "";
             itensTotais += item.qtd;
-            
-            // CONDIÇÃO: SE TIVER 5 OU MAIS ITENS IGUAIS, GANHA 12.5% DE DESCONTO
-            if (item.qtd >= 5) { 
-                let descUnidade = item.precoOriginal * 0.125; 
-                precoFinal = item.precoOriginal - descUnidade; 
-                descontoAtacadoGeral += (descUnidade * item.qtd); 
-                tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -12.5%</span>"; 
+
+            if (item.qtd >= 5) {
+                let descUnidade = item.precoOriginal * 0.125;
+                precoFinal = item.precoOriginal - descUnidade;
+                descontoAtacadoGeral += (descUnidade * item.qtd);
+                tagAtacado = "<span style='color: var(--cor-destaque); font-size: 11px; margin-left:8px;'>🔥 Atacado -12.5%</span>";
             }
-            
-            let subtotalItem = item.qtd * precoFinal; 
+
+            let subtotalItem = item.qtd * precoFinal;
             totalGeral += subtotalItem;
-            
+
             let tagTamanhoHtml = `<span style="background: #27273a; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px;">TAM: ${item.tamanho}</span>`;
 
             corpo.innerHTML += `
@@ -829,20 +814,20 @@ function atualizarInterface() {
         });
     }
 
-    // 4. ATUALIZAÇÃO DOS CAMPOS DE TOTAIS E VALIDAÇÃO DOS BOTÕES
+    // 4. ATUALIZAÇÃO DOS CAMPOS DE TOTAIS E BOTÕES
     let totalFinal = totalGeral - descontoCupomAtivo;
     if (totalFinal < 0) totalFinal = 0;
 
     document.getElementById('txtTotal').innerText = `R$ ${totalFinal.toFixed(2)}`;
     document.getElementById('txtDesconto').innerText = `- R$ ${descontoAtacadoGeral.toFixed(2)}`;
     document.getElementById('badge-qtd').innerText = itensTotais;
-    
+
     const btnPasso1 = document.getElementById('btn-avancar-para-endereco');
     const alertaLogin = document.getElementById('alerta-login-checkout');
     const btnFinalizar = document.getElementById('btnFinalizar');
 
     if (itensTotais > 0 && usuarioLogado !== null) {
-        if (btnPasso1) btnPasso1.disabled = false; 
+        if (btnPasso1) btnPasso1.disabled = false;
         if (alertaLogin) alertaLogin.style.display = "none";
         if (btnFinalizar) btnFinalizar.disabled = false;
     } else {
@@ -852,18 +837,21 @@ function atualizarInterface() {
     }
     localStorage.setItem('controlstock_carrinho', JSON.stringify(carrinho));
 }
+
+
 // =======================================================================
-// BLOCO 8: 🚚 LOGÍSTICA DE ENTREGA E FRETE DO CHECKOUT
+// BLOCO 14: 🚚 LOGÍSTICA DE ENTREGA E FRETE DO CHECKOUT
 // =======================================================================
 function calcularFreteCheckout() {
     const cepInput = document.getElementById('cep-checkout').value.trim();
     const display = document.getElementById('resultado-frete-checkout');
-    // 🔥 VERIFICA SE O VALOR TOTAL DO CARRINHO JÁ PASSOU DE R$ 500 PARA DAR FRETE GRÁTIS
+
     let totalFinal = parseFloat(document.getElementById('txtTotal').innerText.replace("R$ ", "").replace(".", "").replace(",", "."));
     if (totalFinal >= 500) {
         display.innerHTML = '<span style="color:#22c55e; font-weight:bold;">🚚 Frete Grátis Ativado por atingir o valor mínimo!</span>';
         return;
     }
+
     if (!cepInput) {
         alert("⚠️ Por favor, informe o CEP para calcular o frete.");
         return;
@@ -881,31 +869,25 @@ function calcularFreteCheckout() {
         display.innerHTML = '<span style="color:var(--cor-primaria);">📦 Envio Padrão Nacional: R$ 24,90 (4 a 7 dias úteis)</span>';
     }
 }
-// =======================================================================
-// 🚚 CONSUMO DE API EXTERNA (VIACEP AUTOMÁTICO)
-// =======================================================================
+
 async function buscarCepAuto() {
     const cepInput = document.getElementById('cep-checkout').value.trim();
-    const cep = cepInput.replace(/\D/g, ""); // Remove hífens ou pontos
+    const cep = cepInput.replace(/\D/g, "");
 
-    // Valida se o CEP tem os 8 dígitos obrigatórios antes de gastar internet
     if (cep.length !== 8) return;
 
     try {
-        // Faz a requisição assíncrona para a API pública do ViaCEP
         const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
         const dados = await resposta.json();
 
-        // Se a API retornar que o CEP não existe
         if (dados.erro) {
             mostrarToast("❌ CEP não encontrado na base dos Correios.", "erro");
             return;
         }
 
-        // Preenche os inputs do HTML automaticamente com os dados retornados
         document.getElementById('ent-rua').value = dados.logradouro;
         document.getElementById('ent-bairro').value = dados.bairro;
-        
+
         mostrarToast("✓ Endereço localizado e preenchido!", "sucesso");
 
     } catch (erro) {
@@ -914,10 +896,10 @@ async function buscarCepAuto() {
     }
 }
 
-// =======================================================================
-// BLOCO 9: 💳 CHECKOUT, GATEWAY E SISTEMA IMPRESSOR DE ROMANEIO (PDF)
-// =======================================================================
 
+// =======================================================================
+// BLOCO 15: 💳 CHECKOUT, GATEWAY E SISTEMA IMPRESSOR DE ROMANEIO (PDF)
+// =======================================================================
 function alternarCamposPagamento(tipo) {
     const card = document.getElementById('dados-cartao');
     if (card) {
@@ -932,30 +914,20 @@ function alternarCamposPagamento(tipo) {
     const displaySimulador = document.getElementById('simulador-parcelas-checkout');
     if (!elementoTotal || !displaySimulador) return;
 
-    // 🔥 PARSER BRUTO INTEGRADO: Extrai apenas o que importa do padrão brasileiro
     let textoObtido = elementoTotal.innerText;
-    
-    // Remove R$, espaços e tudo que não for dígito, ponto ou vírgula
     let apenasNumeros = textoObtido.replace(/[^\d,. ]/g, "").trim();
-    
     let valorTotalReal = 0;
 
-    // Se o texto tiver ponto e vírgula (Ex: 1.250,50)
     if (apenasNumeros.includes(".") && apenasNumeros.includes(",")) {
         apenasNumeros = apenasNumeros.replace(/\./g, "").replace(",", ".");
         valorTotalReal = parseFloat(apenasNumeros);
-    } 
-    // Se tiver apenas a vírgula dos centavos (Ex: 959,70)
-    else if (apenasNumeros.includes(",")) {
+    } else if (apenasNumeros.includes(",")) {
         apenasNumeros = apenasNumeros.replace(",", ".");
         valorTotalReal = parseFloat(apenasNumeros);
-    } 
-    // Se já for um número puro com ponto decimal
-    else {
+    } else {
         valorTotalReal = parseFloat(apenasNumeros);
     }
 
-    // Validação de segurança caso o parse falhe feio
     if (isNaN(valorTotalReal) || valorTotalReal <= 0) {
         valorTotalReal = 0;
     }
@@ -965,10 +937,10 @@ function alternarCamposPagamento(tipo) {
         const totalComDesconto = valorTotalReal - descontoPix;
         displaySimulador.style.color = "var(--cor-sucesso)";
         displaySimulador.innerHTML = `📱 <b>À vista no PIX:</b> R$ ${totalComDesconto.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style="font-size:11px; color:var(--cor-subtexto);">(Economize 5%)</span>`;
-    
+
     } else if (tipo === 'Crédito' || tipo === 'CARTAO') {
         displaySimulador.style.color = "var(--cor-primaria)";
-        
+
         let htmlSelect = `
             <label style="display:block; margin-bottom:8px; font-weight:bold; color:#fff;">💳 Opções de Parcelamento:</label>
             <select id="select-parcelas-checkout" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:4px; font-size:14px; cursor:pointer;">
@@ -982,16 +954,16 @@ function alternarCamposPagamento(tipo) {
 
         htmlSelect += `</select>`;
         displaySimulador.innerHTML = htmlSelect;
-    
+
     } else if (tipo === 'Débito' || tipo === 'DEBITO') {
         displaySimulador.style.color = "#fff";
         displaySimulador.innerHTML = `💳 <b>À vista no Débito:</b> 1x de R$ ${valorTotalReal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} sem tarifas.`;
-    
+
     } else if (tipo === 'Boleto') {
         displaySimulador.style.color = "var(--cor-destaque)";
         displaySimulador.innerHTML = `📄 <b>Boleto Bancário:</b> R$ ${valorTotalReal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} à vista <span style="font-size:11px; color:var(--cor-subtexto);">(Compensação em até 48h úteis)</span>`;
     }
-} 
+}
 
 function validarDadosCheckout(formaPgto) {
     const campoNome = document.getElementById('ent-nome');
@@ -1033,12 +1005,12 @@ function validarDadosCheckout(formaPgto) {
 function baixarRomaneioPDF() {
     const codRomaneio = document.getElementById('romaneio-titulo-cod')?.innerText || ("CS-" + Math.floor(Math.random() * 90000 + 10000));
     const dataEmissao = document.getElementById('romaneio-data')?.innerText || new Date().toLocaleString('pt-BR');
-    
+
     const rua = document.getElementById('ent-rua')?.value || "";
     const num = document.getElementById('ent-num')?.value || "";
     const bairro = document.getElementById('ent-bairro')?.value || "";
     const localEntrega = `${rua}, ${num} - ${bairro}`;
-    
+
     const totalGeral = document.getElementById('txtTotal').innerText;
     const nomeDestinatario = document.getElementById('ent-nome')?.value || "Não informado";
     const itensCorpoHtml = document.getElementById('corpo-carrinho').innerHTML;
@@ -1125,27 +1097,25 @@ function baixarRomaneioPDF() {
     janelaImpressao.document.close();
     janelaImpressao.print();
 }
+
+
 // =======================================================================
-// BLOCO 10: ⚙️ COMUNICAÇÃO DE ADMINISTRAÇÃO (LOTE, GESTÃO AVANÇADA E CADASTROS)
+// BLOCO 16: ⚙️ ADMINISTRAÇÃO — LOTE, GESTÃO DE PRODUTOS E CADASTROS
 // =======================================================================
 function registrarEntradaLote() {
-    // Captura os elementos do HTML de forma segura
     const inputId = document.getElementById('lote-id');
     const inputQtd = document.getElementById('lote-qtd');
     const inputObs = document.getElementById('lote-obs');
 
-    // Valida se os elementos existem na tela antes de ler o valor
     if (!inputId || !inputQtd) {
         console.error("Erro de portfólio: Os inputs 'lote-id' ou 'lote-qtd' não foram encontrados no HTML.");
         return;
     }
 
-    // Pega os valores e converte garantindo que não fiquem vazios
     const id = parseInt(inputId.value, 10);
     const qtd = parseInt(inputQtd.value, 10);
     const obs = inputObs ? inputObs.value.trim() : "Carga de reabastecimento.";
 
-    // Validação robusta de Portfólio (Impede o envio de dados zerados ou inválidos)
     if (isNaN(id) || isNaN(qtd) || qtd <= 0) {
         alert("⚠️ Por favor, informe um ID válido e uma Quantidade maior que zero!");
         return;
@@ -1156,7 +1126,7 @@ function registrarEntradaLote() {
     fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ produtoId: id, quantidade: qtd, observacao: obs })
+        body: JSON.stringify({ produtoId: id, quantidade: qtd, observacao: obs })
     })
     .then(res => {
         if (!res.ok) throw new Error("Erro ao registrar entrada.");
@@ -1167,7 +1137,7 @@ function registrarEntradaLote() {
         inputId.value = "";
         inputQtd.value = "";
         if (inputObs) inputObs.value = "";
-        
+
         carregarProdutosDaAPI();
         atualizarDashboardAdmin();
         carregarTabelasInventarioEAuditoria();
@@ -1217,7 +1187,7 @@ function salvarAlteracoesProduto() {
         document.getElementById('gerenciar-url1').value = "";
         document.getElementById('gerenciar-url2').value = "";
         document.getElementById('gerenciar-url3').value = "";
-        
+
         carregarProdutosDaAPI();
         atualizarDashboardAdmin();
         carregarTabelasInventarioEAuditoria();
@@ -1250,7 +1220,7 @@ function excluirProdutoDoSistema() {
     .then(dados => {
         alert(dados.mensagem);
         document.getElementById('gerenciar-id').value = "";
-        
+
         carregarProdutosDaAPI();
         atualizarDashboardAdmin();
         carregarTabelasInventarioEAuditoria();
@@ -1261,14 +1231,49 @@ function excluirProdutoDoSistema() {
     });
 }
 
-        // 🔥 MOTOR DE INTEGRAÇÃO COM IA
-        async function gerarProdutoComIA() {
+function cadastrarProdutoPeloSite() {
+    const nome = document.getElementById('prod-nome').value.trim();
+    const preco = parseFloat(document.getElementById('prod-preco').value);
+    const estoque = parseInt(document.getElementById('prod-qtd').value) || 0;
+    const url1 = document.getElementById('prod-url-1').value.trim();
+    const url2 = document.getElementById('prod-url-2').value.trim();
+    const url3 = document.getElementById('prod-url-3').value.trim();
+
+    if (!nome || !preco || !url1 || !url2) {
+        alert("⚠️ Preencha Nome, Preço e pelo menos as 2 primeiras fotos obrigatórias.");
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/api/admin/produtos/novo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, preco, estoqueInicial: estoque, url1, url2, url3 })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Erro ao cadastrar.");
+        return res.json();
+    })
+    .then(dados => {
+        alert(dados.mensagem);
+        document.getElementById('prod-nome').value = "";
+        document.getElementById('prod-preco').value = "";
+        document.getElementById('prod-qtd').value = "";
+        document.getElementById('prod-url-1').value = "";
+        document.getElementById('prod-url-2').value = "";
+        document.getElementById('prod-url-3').value = "";
+
+        carregarProdutosDaAPI();
+        atualizarDashboardAdmin();
+        carregarTabelasInventarioEAuditoria();
+    }).catch(() => alert("❌ Falha crítica ao salvar produto no banco de dados."));
+}
+
+async function gerarProdutoComIA() {
     const inputPrompt = document.getElementById('prod-prompt-ia');
     const inputNome = document.getElementById('prod-nome');
-    
-    // Se existir o input de prompt, usa ele. Se não, tenta usar o próprio campo de nome
-    const termoBusca = (inputPrompt && inputPrompt.value.trim() !== "") 
-        ? inputPrompt.value.trim() 
+
+    const termoBusca = (inputPrompt && inputPrompt.value.trim() !== "")
+        ? inputPrompt.value.trim()
         : (inputNome ? inputNome.value.trim() : "");
 
     if (!termoBusca) {
@@ -1286,19 +1291,17 @@ function excluirProdutoDoSistema() {
 
     try {
         mostrarToast("🤖 Buscando dados e fotos oficiais...", "aviso");
-        
+
         const resposta = await fetch(`${API_BASE_URL}/api/ia/gerar-produto?termo=${encodeURIComponent(termoBusca)}`);
         if (!resposta.ok) throw new Error("Erro na resposta do backend.");
 
         const dados = await resposta.json();
 
-        // Autocompila os inputs reais do formulário
         if (inputNome && dados.nome) inputNome.value = dados.nome;
-        
+
         const inputPreco = document.getElementById('prod-preco');
         if (inputPreco && dados.preco) inputPreco.value = dados.preco;
 
-        // Distribui as 3 fotos oficiais nos campos do seu painel
         if (dados.imagens && dados.imagens.length > 0) {
             const inputUrl1 = document.getElementById('prod-url-1');
             const inputUrl2 = document.getElementById('prod-url-2');
@@ -1322,183 +1325,30 @@ function excluirProdutoDoSistema() {
     }
 }
 
-function registrarEntradaLote() {
-    // Captura os elementos do HTML de forma segura
-    const inputId = document.getElementById('lote-id');
-    const inputQtd = document.getElementById('lote-qtd');
-    const inputObs = document.getElementById('lote-obs');
-
-    // Valida se os elementos existem na tela antes de ler o valor
-    if (!inputId || !inputQtd) {
-        console.error("Erro de portfólio: Os inputs 'lote-id' ou 'lote-qtd' não foram encontrados no HTML.");
-        return;
-    }
-
-    // Pega os valores e converte garantindo que não fiquem vazios
-    const id = parseInt(inputId.value, 10);
-    const qtd = parseInt(inputQtd.value, 10);
-    const obs = inputObs ? inputObs.value.trim() : "Carga de reabastecimento.";
-
-    // Validação robusta de Portfólio (Impede o envio de dados zerados ou inválidos)
-    if (isNaN(id) || isNaN(qtd) || qtd <= 0) {
-        alert("⚠️ Por favor, informe um ID válido e uma Quantidade maior que zero!");
-        return;
-    }
-
-    if (!id || !qtd) { alert("⚠️ Preencha o ID e a Quantidade do lote."); return; }
-
-    fetch(`${API_BASE_URL}/api/admin/estoque/lote`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ produtoId: id, quantidade: qtd, observacao: obs })
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Erro ao registrar entrada.");
-        return res.json();
-    })
-    .then(dados => {
-        alert(dados.mensagem);
-        inputId.value = "";
-        inputQtd.value = "";
-        if (inputObs) inputObs.value = "";
-        
-        carregarProdutosDaAPI();
-        atualizarDashboardAdmin();
-        carregarTabelasInventarioEAuditoria();
-    })
-    .catch(() => alert("❌ Erro ao salvar lote no banco SQLite."));
+function baixarRelatorioEstoqueCSV() {
+    window.open(`${API_BASE_URL}/api/admin/relatorios/exportar`);
 }
 
-function salvarAlteracoesProduto() {
-    const id = document.getElementById('gerenciar-id').value;
-    const nome = document.getElementById('gerenciar-nome').value.trim();
-    const precoBase = parseFloat(document.getElementById('gerenciar-preco').value) || 0;
-    const desconto = parseInt(document.getElementById('gerenciar-desconto').value) || 0;
-    const url1 = document.getElementById('gerenciar-url1').value.trim();
-    const url2 = document.getElementById('gerenciar-url2').value.trim();
-    const url3 = document.getElementById('gerenciar-url3').value.trim();
+function buscarImagensAutomaticas() {
+    const url1 = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600';
+    let url2 = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600';
+    let url3 = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600';
 
-    if (!id) {
-        alert("⚠️ Você precisa informar o ID do produto para editá-lo!");
-        return;
-    }
+    document.getElementById('prod-url-1').value = url1;
+    document.getElementById('prod-url-2').value = url2;
+    document.getElementById('prod-url-3').value = url3;
 
-    const payload = {
-        produtoId: parseInt(id),
-        novoNome: nome || null,
-        novoPrecoBase: precoBase,
-        porcentagemDesconto: desconto,
-        url1: url1 || null,
-        url2: url2 || null,
-        url3: url3 || null
-    };
-
-    fetch(`${API_BASE_URL}/api/admin/produtos/precos`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Não foi possível atualizar o produto. Status: " + res.status);
-        return res.json();
-    })
-    .then(dados => {
-        alert(dados.mensagem);
-        document.getElementById('gerenciar-id').value = "";
-        document.getElementById('gerenciar-nome').value = "";
-        document.getElementById('gerenciar-preco').value = "";
-        document.getElementById('gerenciar-desconto').value = "";
-        document.getElementById('gerenciar-url1').value = "";
-        document.getElementById('gerenciar-url2').value = "";
-        document.getElementById('gerenciar-url3').value = "";
-        
-        carregarProdutosDaAPI();
-        atualizarDashboardAdmin();
-        carregarTabelasInventarioEAuditoria();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("❌ Erro ao atualizar o produto. Verifique se o ID existe e se o C# está rodando.");
-    });
+    alert("🤖 Modo de Demonstração Acadêmica: URLs padrão do catálogo de teste vinculadas com sucesso!");
 }
 
-function excluirProdutoDoSistema() {
-    const id = document.getElementById('gerenciar-id').value;
-
-    if (!id) {
-        alert("⚠️ Digite o ID do produto para poder excluí-lo!");
-        return;
-    }
-
-    if (!confirm(`🚨 ATENÇÃO: Tem certeza absoluta que deseja excluir o produto ID ${id} permanentemente do banco de dados?`)) {
-        return;
-    }
-
-    fetch(`${API_BASE_URL}/api/admin/produtos/excluir/${id}`, {
-        method: 'DELETE'
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Erro ao deletar registro.");
-        return res.json();
-    })
-    .then(dados => {
-        alert(dados.mensagem);
-        document.getElementById('gerenciar-id').value = "";
-        
-        carregarProdutosDaAPI();
-        atualizarDashboardAdmin();
-        carregarTabelasInventarioEAuditoria();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("❌ Falha ao tentar excluir. O produto pode não existir.");
-    });
-}
-
-function cadastrarProdutoPeloSite() {
-    const nome = document.getElementById('prod-nome').value.trim();
-    const preco = parseFloat(document.getElementById('prod-preco').value);
-    const estoque = parseInt(document.getElementById('prod-qtd').value) || 0;
-    const url1 = document.getElementById('prod-url-1').value.trim();
-    const url2 = document.getElementById('prod-url-2').value.trim();
-    const url3 = document.getElementById('prod-url-3').value.trim();
-
-    if (!nome || !preco || !url1 || !url2) { 
-        alert("⚠️ Preencha Nome, Preço e pelo menos as 2 primeiras fotos obrigatórias."); 
-        return; 
-    }
-
-    fetch(`${API_BASE_URL}/api/admin/produtos/novo`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, preco, estoqueInicial: estoque, url1, url2, url3 })
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Erro ao cadastrar.");
-        return res.json();
-    })
-    .then(dados => {
-        alert(dados.mensagem);
-        document.getElementById('prod-nome').value = "";
-        document.getElementById('prod-preco').value = "";
-        document.getElementById('prod-qtd').value = "";
-        document.getElementById('prod-url-1').value = "";
-        document.getElementById('prod-url-2').value = "";
-        document.getElementById('prod-url-3').value = "";
-        
-        carregarProdutosDaAPI();
-        atualizarDashboardAdmin();
-        carregarTabelasInventarioEAuditoria();
-    }).catch(() => alert("❌ Falha crítica ao salvar produto no banco de dados."));
-}
 
 // =======================================================================
-// BLOCO 11: 📊 SINCRONIZADORES FINANCEIROS E REPASSE DE TABELAS LIVE (IA)
+// BLOCO 17: 📊 DASHBOARD ADMIN — SINCRONIZADORES FINANCEIROS E TABELAS LIVE
 // =======================================================================
 function carregarDadosEPrevisoesAdmin() {
     const containerPrevisoes = document.getElementById('lista-previsoes-ia');
     if (!containerPrevisoes) return;
-    
+
     fetch(`${API_BASE_URL}/api/admin/previsoes`)
         .then(res => res.json())
         .then(dados => {
@@ -1522,7 +1372,7 @@ async function atualizarDashboardAdmin() {
         if (!resposta.ok) return;
 
         const dados = await resposta.json();
-        
+
         const txtPatrimonio = document.getElementById('dash-patrimonio');
         const txtPedidos = document.getElementById('dash-vendas');
         const txtSaidas = document.getElementById('dash-itens');
@@ -1571,7 +1421,7 @@ async function carregarTabelasInventarioEAuditoria() {
             tabelaAuditoria.innerHTML = "";
             dados.auditoria.forEach(aud => {
                 const badgeTipo = aud.tipo == "ENTRADA" || aud.tipo == "CADASTRO"
-                    ? `<span style="color:var(--cor-sucesso); font-weight:bold;">📥 ${aud.tipo}</span>` 
+                    ? `<span style="color:var(--cor-sucesso); font-weight:bold;">📥 ${aud.tipo}</span>`
                     : `<span style="color:var(--cor-erro); font-weight:bold;">📤 ${aud.tipo}</span>`;
 
                 tabelaAuditoria.innerHTML += `
@@ -1611,24 +1461,12 @@ async function carregarTabelasInventarioEAuditoria() {
 
 
 // =======================================================================
-// BLOCO 12: 🤖 MÓDULO DE IMAGENS DE DEMONSTRAÇÃO ACADÊMICA E FRETE REGIONAL
+// BLOCO 18: 🚚 FRETE SIMULADO NO MODAL DO PRODUTO
 // =======================================================================
-function buscarImagensAutomaticas() {
-    const url1 = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600'; 
-    let url2 = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600';
-    let url3 = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600';
-
-    document.getElementById('prod-url-1').value = url1;
-    document.getElementById('prod-url-2').value = url2;
-    document.getElementById('prod-url-3').value = url3;
-
-    alert("🤖 Modo de Demonstração Acadêmica: URLs padrão do catálogo de teste vinculadas com sucesso!");
-}
-
 function calcularFreteSimulado() {
     const cepInput = document.getElementById('cep-frete').value.trim();
     const containerResultado = document.getElementById('resultado-frete-modal');
-    
+
     if (!cepInput) {
         alert("⚠️ Por favor, digite um CEP para realizar a simulação.");
         return;
@@ -1660,8 +1498,210 @@ function calcularFreteSimulado() {
     }
 }
 
+
 // =======================================================================
-// BLOCO 13: 🔌 INICIALIZAÇÃO DOS EVENT LISTENERS DO DOM
+// BLOCO 19: 🛍️ FILTROS DA VITRINE (BUSCA E CATEGORIA)
+// =======================================================================
+function filtrarProdutosVitrine() {
+    const termoBusca = document.getElementById('busca-vitrine').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.lista-produtos .card-produto');
+
+    cards.forEach(card => {
+        const nomeProduto = card.querySelector('.nome-prod').innerText.toLowerCase();
+        if (nomeProduto.includes(termoBusca)) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+function filtrarPorCategoria(categoriaAlvo, botaoClicado) {
+    document.querySelectorAll('.btn-filtro-tag').forEach(btn => {
+        btn.style.background = "#1e1b29";
+        btn.style.color = "#fff";
+        btn.style.border = "1px solid #334155";
+    });
+
+    botaoClicado.style.background = "var(--cor-primaria)";
+    botaoClicado.style.color = "#000";
+    botaoClicado.style.border = "none";
+
+    const cards = document.querySelectorAll('.card-produto');
+
+    cards.forEach(card => {
+        const nomeProduto = card.querySelector('h3')?.innerText.toUpperCase() || "";
+
+        if (categoriaAlvo === 'TODOS') {
+            card.style.display = "block";
+        } else {
+            if (nomeProduto.includes(categoriaAlvo) || nomeProduto.includes('JAQUETA') && categoriaAlvo === 'AGASALHO') {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        }
+    });
+}
+
+
+// =======================================================================
+// BLOCO 20: 🌗 SISTEMA DE ALTERNAÇÃO DE TEMA (DARK / LIGHT MODE)
+// =======================================================================
+function alternarTemaSite() {
+    const raizHtml = document.documentElement;
+    const btnTema = document.getElementById('btn-tema');
+
+    const éTemaClaro = raizHtml.getAttribute('data-tema') === 'light';
+
+    if (éTemaClaro) {
+        raizHtml.removeAttribute('data-tema');
+        raizHtml.style.setProperty('--bg-principal', '#000000');
+        raizHtml.style.setProperty('--bg-card', '#0d0d11');
+        raizHtml.style.setProperty('--cor-texto', '#ffffff');
+        raizHtml.style.setProperty('--cor-subtexto', '#94a3b8');
+
+        btnTema.innerText = '🌙';
+        mostrarToast("🌌 Modo Escuro Ativado", "sucesso");
+    } else {
+        raizHtml.setAttribute('data-tema', 'light');
+        raizHtml.style.setProperty('--bg-principal', '#f8fafc');
+        raizHtml.style.setProperty('--bg-card', '#ffffff');
+        raizHtml.style.setProperty('--cor-texto', '#0f172a');
+        raizHtml.style.setProperty('--cor-subtexto', '#475569');
+
+        btnTema.innerText = '☀️';
+        mostrarToast("☀️ Modo Claro Ativado", "sucesso");
+    }
+}
+
+
+// =======================================================================
+// BLOCO 21: 📱 FORÇADOR DE VISIBILIDADE MOBILE
+// =======================================================================
+function forcarLayoutBotoesMobile() {
+    const ehMobile = window.innerWidth <= 768;
+    if (!ehMobile) return;
+
+    const usuarioLogado = localStorage.getItem('usuarioLogado') || sessionStorage.getItem('usuarioLogado');
+    const ehAdministrador = usuarioLogado === 'admin' || (typeof isAdmin !== 'undefined' && isAdmin);
+
+    const btnHistorico = document.getElementById('btn-historico');
+    const btnAdmin = document.getElementById('btn-admin');
+
+    if (!ehAdministrador) {
+        if (btnHistorico) btnHistorico.style.setProperty('display', 'none', 'important');
+        if (btnAdmin) btnAdmin.style.setProperty('display', 'none', 'important');
+    } else {
+        if (btnHistorico) btnHistorico.style.setProperty('display', 'inline-flex', 'important');
+        if (btnAdmin) btnAdmin.style.setProperty('display', 'inline-flex', 'important');
+    }
+}
+
+window.addEventListener('DOMContentLoaded', forcarLayoutBotoesMobile);
+window.addEventListener('resize', forcarLayoutBotoesMobile);
+
+
+// =======================================================================
+// BLOCO 22: 🔔 SISTEMA CENTRALIZADO DE NOTIFICAÇÕES TOAST
+// =======================================================================
+function mostrarToast(mensagem, tipo = 'sucesso') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.style.padding = '12px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.color = '#ffffff';
+    toast.style.fontSize = '14px';
+    toast.style.fontWeight = '600';
+    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+    toast.style.transition = 'all 0.4s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(50px)';
+    toast.innerText = mensagem;
+
+    if (tipo === 'sucesso') {
+        toast.style.backgroundColor = '#22c55e';
+        toast.style.borderLeft = '5px solid #15803d';
+    } else if (tipo === 'erro') {
+        toast.style.backgroundColor = '#ef4444';
+        toast.style.borderLeft = '5px solid #b91c1c';
+    } else {
+        toast.style.backgroundColor = '#f59e0b';
+        toast.style.borderLeft = '5px solid #b45309';
+    }
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 50);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(50px)';
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
+}
+
+
+// =======================================================================
+// BLOCO 23: 🖼️ CARROSSEL AUTOMÁTICO DA VITRINE
+// =======================================================================
+function iniciarCarrosselAutomatico() {
+    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
+
+    const indicesFotosProdutos = {};
+
+    intervaloCarrossel = setInterval(() => {
+        if (!listaProdutosGlobal || listaProdutosGlobal.length === 0) return;
+
+        listaProdutosGlobal.forEach(prod => {
+            const fotosDisponiveis = [];
+            if (prod.fotos && prod.fotos.length > 0) {
+                prod.fotos.forEach(f => fotosDisponiveis.push(f.url));
+            } else {
+                if (prod.url1) fotosDisponiveis.push(prod.url1);
+                if (prod.url2) fotosDisponiveis.push(prod.url2);
+                if (prod.url3) fotosDisponiveis.push(prod.url3);
+            }
+
+            if (fotosDisponiveis.length > 1) {
+                if (indicesFotosProdutos[prod.id] === undefined) {
+                    indicesFotosProdutos[prod.id] = 0;
+                }
+
+                indicesFotosProdutos[prod.id]++;
+                if (indicesFotosProdutos[prod.id] >= fotosDisponiveis.length) {
+                    indicesFotosProdutos[prod.id] = 0;
+                }
+
+                const imgElement = document.getElementById(`img-card-${prod.id}`);
+                if (imgElement) {
+                    imgElement.src = fotosDisponiveis[indicesFotosProdutos[prod.id]];
+                }
+            }
+        });
+    }, 3000);
+}
+
+
+// =======================================================================
+// BLOCO 24: ⏱️ INTERVALO DE ATUALIZAÇÃO EM TEMPO REAL (ADMIN)
+// =======================================================================
+setInterval(() => {
+    if (usuarioLogado && usuarioLogado.nivel === "ADMIN") {
+        atualizarDashboardAdmin();
+        carregarTabelasInventarioEAuditoria();
+        carregarDadosEPrevisoesAdmin();
+    }
+}, 3000);
+
+
+// =======================================================================
+// BLOCO 25: 🔌 INICIALIZAÇÃO — EVENT LISTENERS DO DOM
 // =======================================================================
 document.addEventListener('DOMContentLoaded', () => {
     carregarProdutosDaAPI();
@@ -1675,20 +1715,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inputEmail) inputEmail.addEventListener('keydown', mapearTecladoLogin);
     if (inputSenha) inputSenha.addEventListener('keydown', mapearTecladoLogin);
 
-    // ESCUTADOR CENTRAL E ÚNICO DO BOTÃO FINALIZAR COMPRA
     const btnFinalizar = document.getElementById('btnFinalizar');
     if (btnFinalizar) {
         btnFinalizar.addEventListener('click', () => {
             const formaPgtoElement = document.querySelector('input[name="formaPagamento"]:checked');
             const formaPgto = formaPgtoElement ? formaPgtoElement.value : 'PIX';
 
-            // Executa as verificações matemáticas antifraude (Luhn/CPF) antes de mandar ao servidor
             if (!validarDadosCheckout(formaPgto)) return;
 
-            const itensParaEnviar = Object.keys(carrinho).map(id => ({ 
-                id: parseInt(id), 
-                nome: carrinho[id].nome, 
-                Qtd: carrinho[id].qtd 
+            const itensParaEnviar = Object.keys(carrinho).map(id => ({
+                id: parseInt(id),
+                nome: carrinho[id].nome,
+                Qtd: carrinho[id].qtd
             }));
 
             fetch(`${API_BASE_URL}/api/pedidos/fechar`, {
@@ -1706,7 +1744,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(dados => {
-                // Abre a janela de confirmação na tela (Gateway Visual)
                 const modalGateway = document.getElementById('modalGatewayPagamento');
                 const tituloGateway = document.getElementById('gateway-titulo');
                 const conteudoGateway = document.getElementById('gateway-conteudo');
@@ -1742,16 +1779,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
 
-                // 🔥 DISPARA E EMITE O COMPROVANTE DE ROMANEIO COMPLETO EM PDF AUTOMATICAMENTE NO FATURAMENTO
                 baixarRomaneioPDF();
 
                 if (modalGateway) modalGateway.classList.add('aberto');
 
-                // Limpa de forma segura o estado global do carrinho após a transação bem-sucedida
-                carrinho = {}; 
+                carrinho = {};
                 localStorage.removeItem('controlstock_carrinho');
                 descontoCupomAtivo = 0;
-                
+
                 const inputCupom = document.getElementById('input-cupom');
                 const msgCupom = document.getElementById('msg-cupom-resultado');
                 const txtCupom = document.getElementById('txtCupomValor');
@@ -1759,14 +1794,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (msgCupom) msgCupom.innerText = "";
                 if (txtCupom) txtCupom.innerText = "R$ 0,00";
 
-                atualizarInterface(); 
-                carregarProdutosDaAPI(); 
+                atualizarInterface();
+                carregarProdutosDaAPI();
                 if (usuarioLogado && usuarioLogado.nivel === "ADMIN") {
                     atualizarDashboardAdmin();
                     carregarTabelasInventarioEAuditoria();
                 }
-                
-                // Reseta os campos de faturamento sensíveis do formulário por motivos de segurança
+
                 const cNum = document.getElementById('card-numero');
                 const cNome = document.getElementById('card-nome');
                 const cVal = document.getElementById('card-validade');
@@ -1782,220 +1816,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 }); // 🎯 FECHAMENTO EXATO DO DOMContentLoaded AQUI!
-
-// =======================================================================
-// INTERVALO DE EXECUÇÃO EM TEMPO REAL (ATUALIZA A CADA 3 SEGUNDOS)
-// =======================================================================
-setInterval(() => {
-    if (usuarioLogado && usuarioLogado.nivel === "ADMIN") {
-        atualizarDashboardAdmin();
-        carregarTabelasInventarioEAuditoria();
-        carregarDadosEPrevisoesAdmin(); 
-    }
-}, 3000);
-
-// ====== SISTEMA DA VITRINE INTERATIVA (CARROSSEL AUTOMÁTICO) ======
-function iniciarCarrosselAutomatico() {
-    if (intervaloCarrossel) clearInterval(intervaloCarrossel);
-
-    // Cria um objeto na memória para controlar qual foto cada produto está exibindo
-    const indicesFotosProdutos = {};
-
-    intervaloCarrossel = setInterval(() => {
-        if (!listaProdutosGlobal || listaProdutosGlobal.length === 0) return;
-
-        listaProdutosGlobal.forEach(prod => {
-            // Cria a lista de fotos disponíveis para este produto
-            const fotosDisponiveis = [];
-            if (prod.fotos && prod.fotos.length > 0) {
-                prod.fotos.forEach(f => fotosDisponiveis.push(f.url));
-            } else {
-                // Fallback caso venha do cadastro básico simplificado
-                if (prod.url1) fotosDisponiveis.push(prod.url1);
-                if (prod.url2) fotosDisponiveis.push(prod.url2);
-                if (prod.url3) fotosDisponiveis.push(prod.url3);
-            }
-
-            // Se o produto tiver mais de uma foto, faz o slide acontecer
-            if (fotosDisponiveis.length > 1) {
-                if (indicesFotosProdutos[prod.id] === undefined) {
-                    indicesFotosProdutos[prod.id] = 0;
-                }
-
-                // Avança para a próxima foto
-                indicesFotosProdutos[prod.id]++;
-                if (indicesFotosProdutos[prod.id] >= fotosDisponiveis.length) {
-                    indicesFotosProdutos[prod.id] = 0; // Volta para a primeira
-                }
-
-                // Alvo exato da tag img do card deste produto específico
-                const imgElement = document.getElementById(`img-card-${prod.id}`);
-                if (imgElement) {
-                    imgElement.src = fotosDisponiveis[indicesFotosProdutos[prod.id]];
-                }
-            }
-        });
-    }, 3000); // Troca a foto a cada 3 segundos de forma automática
-}
-
-// Sistema Centralizado de Notificações Toast para o Portfólio
-function mostrarToast(mensagem, tipo = 'sucesso') {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-
-    // Cria o bloco do toast
-    const toast = document.createElement('div');
-    toast.style.padding = '12px 20px';
-    toast.style.borderRadius = '8px';
-    toast.style.color = '#ffffff';
-    toast.style.fontSize = '14px';
-    toast.style.fontWeight = '600';
-    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-    toast.style.transition = 'all 0.4s ease';
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(50px)';
-    toast.innerText = mensagem;
-
-    // Define a cor de fundo com base no tipo de alerta
-    if (tipo === 'sucesso') {
-        toast.style.backgroundColor = '#22c55e'; // Verde sucesso
-        toast.style.borderLeft = '5px solid #15803d';
-    } else if (tipo === 'erro') {
-        toast.style.backgroundColor = '#ef4444'; // Vermelho erro
-        toast.style.borderLeft = '5px solid #b91c1c';
-    } else {
-        toast.style.backgroundColor = '#f59e0b'; // Amarelo aviso
-        toast.style.borderLeft = '5px solid #b45309';
-    }
-
-    container.appendChild(toast);
-
-    // Efeito de entrada suave
-    setTimeout(() => {
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateX(0)';
-    }, 50);
-
-    // Remove o toast automaticamente após 3 segundos
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(50px)';
-        setTimeout(() => toast.remove(), 400);
-    }, 3000);
-}
-// =======================================================================
-// 🛍️ MOTOR DE FILTRO EM TEMPO REAL DA VITRINE
-// =======================================================================
-function filtrarProdutosVitrine() {
-    // 1. Pega o termo digitado e joga para minúsculo para ignorar letras maiúsculas
-    const termoBusca = document.getElementById('busca-vitrine').value.toLowerCase().trim();
-    
-    // 2. Captura todos os cards de produtos que estão renderizados na tela
-    const cards = document.querySelectorAll('.lista-produtos .card-produto');
-
-    cards.forEach(card => {
-        // 3. Pega o nome do produto dentro deste card específico
-        const nomeProduto = card.querySelector('.nome-prod').innerText.toLowerCase();
-
-        // 4. Se o nome do produto contiver o termo buscado, mostra o card, senão esconde
-        if (nomeProduto.includes(termoBusca)) {
-            card.style.display = "flex"; // Volta ao padrão do grid
-        } else {
-            card.style.display = "none"; // Faz sumir da tela
-        }
-    });
-}
-// =======================================================================
-// 🌗 SISTEMA CENTRAL DE ALTERNAÇÃO DE TEMA (DARK / LIGHT MODE)
-// =======================================================================
-function alternarTemaSite() {
-    const raizHtml = document.documentElement;
-    const btnTema = document.getElementById('btn-tema');
-    
-    // Verifica se o tema atual já é o claro (light)
-    const éTemaClaro = raizHtml.getAttribute('data-tema') === 'light';
-
-    if (éTemaClaro) {
-        // Voltar para o Tema Dark (Seu padrão original)
-        raizHtml.removeAttribute('data-tema');
-        raizHtml.style.setProperty('--bg-principal', '#000000');
-        raizHtml.style.setProperty('--bg-card', '#0d0d11');
-        raizHtml.style.setProperty('--cor-texto', '#ffffff');
-        raizHtml.style.setProperty('--cor-subtexto', '#94a3b8');
-        
-        btnTema.innerText = '🌙';
-        mostrarToast("🌌 Modo Escuro Ativado", "sucesso");
-    } else {
-        // Ativar o Tema Light (Visual Corporativo Claro)
-        raizHtml.setAttribute('data-tema', 'light');
-        raizHtml.style.setProperty('--bg-principal', '#f8fafc'); // Fundo claro (slate-50)
-        raizHtml.style.setProperty('--bg-card', '#ffffff');      // Cards brancos puros
-        raizHtml.style.setProperty('--cor-texto', '#0f172a');     // Texto escuro (slate-900)
-        raizHtml.style.setProperty('--cor-subtexto', '#475569');  // Subtexto cinza escuro
-        
-        btnTema.innerText = '☀️';
-        mostrarToast("☀️ Modo Claro Ativado", "sucesso");
-    }
-}
-// 🔥 FUNÇÃO DE FILTRO POR CATEGORIA EM TEMPO REAL
-function filtrarPorCategoria(categoriaAlvo, botaoClicado) {
-    // Reseta o estilo de todos os botões de filtro
-    document.querySelectorAll('.btn-filtro-tag').forEach(btn => {
-        btn.style.background = "#1e1b29";
-        btn.style.color = "#fff";
-        btn.style.border = "1px solid #334155";
-    });
-
-    // Destaca o botão que foi clicado
-    botaoClicado.style.background = "var(--cor-primaria)";
-    botaoClicado.style.color = "#000";
-    botaoClicado.style.border = "none";
-
-    const cards = document.querySelectorAll('.card-produto'); // Certifique-se de que seus cards têm essa classe
-    
-    cards.forEach(card => {
-        // Captura o nome ou uma tag invisível dentro do card para checar
-        const nomeProduto = card.querySelector('h3')?.innerText.toUpperCase() || "";
-        
-        if (categoriaAlvo === 'TODOS') {
-            card.style.display = "block";
-        } else {
-            // Verifica se o nome do produto contém a palavra-chave (ex: "CASACO", "CAMISA")
-            if (nomeProduto.includes(categoriaAlvo) || nomeProduto.includes('JAQUETA') && categoriaAlvo === 'AGASALHO') {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        }
-    });
-}
-// 🔥 FORÇADOR DE VISIBILIDADE MOBILE - CONTROLSTOCK+
-function forcarLayoutBotoesMobile() {
-    // Verifica se a tela atual é tamanho mobile (até 768px)
-    const ehMobile = window.innerWidth <= 768;
-    if (!ehMobile) return;
-
-    // Pega o estado real do login baseado no que você já usa no seu sistema
-    // (Ajuste 'isAdmin' para a variável ou validação exata que seu script usa)
-    const usuarioLogado = localStorage.getItem('usuarioLogado') || sessionStorage.getItem('usuarioLogado');
-    const ehAdministrador = usuarioLogado === 'admin' || (typeof isAdmin !== 'undefined' && isAdmin);
-
-    // Seleciona os botões gerenciais
-    const btnHistorico = document.getElementById('btn-historico');
-    const btnAdmin = document.getElementById('btn-admin');
-
-    if (!ehAdministrador) {
-        // Se NÃO for admin deslogado, remove os botões do fluxo do HTML à força no mobile
-        if (btnHistorico) btnHistorico.style.setProperty('display', 'none', 'important');
-        if (btnAdmin) btnAdmin.style.setProperty('display', 'none', 'important');
-    } else {
-        // Se FOR admin logado, exibe os botões integrados no layout
-        if (btnHistorico) btnHistorico.style.setProperty('display', 'inline-flex', 'important');
-        if (btnAdmin) btnAdmin.style.setProperty('display', 'inline-flex', 'important');
-    }
-}
-
-// Executa automaticamente quando a página carregar
-window.addEventListener('DOMContentLoaded', forcarLayoutBotoesMobile);
-// Executa se o usuário girar o celular ou mudar o tamanho da janela
-window.addEventListener('resize', forcarLayoutBotoesMobile);
