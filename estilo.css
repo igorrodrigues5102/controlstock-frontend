@@ -33,7 +33,9 @@ body {
     overflow-x: hidden;
 }
 
-h2, h3, .logo {
+h2,
+h3,
+.logo {
     color: #ffffff !important;
     text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.4);
     margin-bottom: 15px;
@@ -64,7 +66,9 @@ h2, h3, .logo {
     margin-bottom: 5px;
 }
 
-.logo span { color: var(--cor-destaque); }
+.logo span {
+    color: var(--cor-destaque);
+}
 
 .sub {
     font-size: 11px;
@@ -193,7 +197,9 @@ h2, h3, .logo {
     min-width: 0;
 }
 
-.aba-painel { display: none; }
+.aba-painel {
+    display: none;
+}
 
 .aba-painel.ativa {
     display: block;
@@ -282,8 +288,12 @@ h2, h3, .logo {
 }
 
 @keyframes pulsarAlerta {
-    0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
-    100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+    0% {
+        box-shadow: 0 0 5px rgba(239, 68, 68, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+    }
 }
 
 /* =======================================================================
@@ -306,7 +316,9 @@ button {
     font-size: 13px;
 }
 
-.btn-detalhes:hover { background-color: #3f3f5a; }
+.btn-detalhes:hover {
+    background-color: #3f3f5a;
+}
 
 .btn-add {
     flex: 1;
@@ -342,11 +354,16 @@ button {
     padding: 25px;
     border-radius: 12px;
     border-left: 5px solid var(--cor-primaria);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
-.card-metrica.verde { border-left-color: var(--cor-sucesso); }
-.card-metrica.rosa { border-left-color: var(--cor-destaque); }
+.card-metrica.verde {
+    border-left-color: var(--cor-sucesso);
+}
+
+.card-metrica.rosa {
+    border-left-color: var(--cor-destaque);
+}
 
 .card-metrica h3 {
     margin: 0 0 10px 0;
@@ -380,9 +397,15 @@ button {
     border: 1px solid #1e1b29;
 }
 
-.bloco-form h3 { font-size: 16px; margin-bottom: 15px; color: #fff; }
+.bloco-form h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #fff;
+}
 
-.campo { margin-bottom: 15px; }
+.campo {
+    margin-bottom: 15px;
+}
 
 .campo label {
     display: block;
@@ -391,7 +414,8 @@ button {
     margin-bottom: 6px;
 }
 
-.campo input, .campo textarea {
+.campo input,
+.campo textarea {
     width: 100%;
     background-color: #050507;
     border: 1px solid #2a253b;
@@ -401,7 +425,8 @@ button {
     box-sizing: border-box;
 }
 
-.campo input:focus, .campo textarea:focus {
+.campo input:focus,
+.campo textarea:focus {
     border-color: var(--cor-primaria);
     box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
     outline: none;
@@ -481,7 +506,10 @@ button {
    ======================================================================= */
 .modal-background {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.85);
     z-index: 100;
     display: flex;
@@ -519,7 +547,8 @@ button {
 
 .modal-fechar {
     position: absolute;
-    top: 15px; right: 15px;
+    top: 15px;
+    right: 15px;
     background: transparent;
     color: var(--cor-subtexto);
     font-size: 16px;
@@ -528,7 +557,9 @@ button {
     z-index: 2;
 }
 
-.modal-fechar:hover { color: #fff; }
+.modal-fechar:hover {
+    color: #fff;
+}
 
 .modal-titulo {
     font-size: 18px;
@@ -587,9 +618,17 @@ button {
     z-index: 2;
 }
 
-.carrossel-nav:hover { background: var(--cor-primaria); }
-.carrossel-nav.prev { left: 10px; }
-.carrossel-nav.next { right: 10px; }
+.carrossel-nav:hover {
+    background: var(--cor-primaria);
+}
+
+.carrossel-nav.prev {
+    left: 10px;
+}
+
+.carrossel-nav.next {
+    right: 10px;
+}
 
 .carrossel-indicadores {
     position: absolute;
@@ -640,24 +679,46 @@ button {
     transition: all 0.3s;
 }
 
-.aba-auth:hover { color: #fff; }
+.aba-auth:hover {
+    color: #fff;
+}
+
 .aba-auth.ativa {
     color: var(--cor-primaria);
     border-bottom: 2px solid var(--cor-primaria);
     text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
 }
 
-.secao-auth { display: none; }
-.secao-auth.ativa { display: block; animation: fadeIn 0.3s ease; }
-
-.status-validacao { font-size: 11px; margin-top: 4px; font-weight: 600; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+.secao-auth {
+    display: none;
 }
 
-#modalAuth .modal-container { max-width: 420px; padding: 34px 30px; }
+.secao-auth.ativa {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.status-validacao {
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#modalAuth .modal-container {
+    max-width: 420px;
+    padding: 34px 30px;
+}
 
 .container-sociais {
     display: flex;
@@ -688,8 +749,13 @@ button {
     background-color: #f4f4f5;
 }
 
-.btn-social.apple { background-color: #f1f1f3; }
-.btn-social.apple:hover { background-color: #e4e4e7; }
+.btn-social.apple {
+    background-color: #f1f1f3;
+}
+
+.btn-social.apple:hover {
+    background-color: #e4e4e7;
+}
 
 .divisor-ou {
     display: flex;
@@ -702,15 +768,21 @@ button {
     margin: 24px 0 18px 0;
 }
 
-.divisor-ou::before, .divisor-ou::after {
+.divisor-ou::before,
+.divisor-ou::after {
     content: '';
     flex: 1;
     height: 1px;
     background: linear-gradient(90deg, transparent, #2a253b, transparent);
 }
 
-.divisor-ou::before { margin-right: 14px; }
-.divisor-ou::after { margin-left: 14px; }
+.divisor-ou::before {
+    margin-right: 14px;
+}
+
+.divisor-ou::after {
+    margin-left: 14px;
+}
 
 .btn-acao-auth {
     width: 100%;
@@ -733,13 +805,24 @@ button {
     box-shadow: 0 10px 26px rgba(217, 70, 239, 0.45);
 }
 
-#modalAuth .campo input { padding: 13px 14px; border-radius: 10px; font-size: 14px; }
-#modalAuth .campo label { font-size: 12.5px; font-weight: 600; margin-bottom: 7px; }
+#modalAuth .campo input {
+    padding: 13px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+#modalAuth .campo label {
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
 
 /* =======================================================================
    CSS BLOCO 12: 🔮 MÉTODOS DE PAGAMENTO NEON
    ======================================================================= */
-.opcoes-pagamento-neon input[type="radio"] { display: none; }
+.opcoes-pagamento-neon input[type="radio"] {
+    display: none;
+}
 
 .opcoes-pagamento-neon {
     display: flex;
@@ -833,12 +916,12 @@ button {
         height: auto !important;
         position: relative !important;
         padding: 15px 12px !important;
-        
+
         /* Ativa o flexbox vertical para reordenar o topo pelo CSS */
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        
+
         border-right: none !important;
         border-bottom: 1px solid #1e1b29 !important;
         overflow-y: visible !important;
@@ -846,8 +929,17 @@ button {
     }
 
     /* Mantém os títulos fixos no topo */
-    .logo { font-size: 22px !important; text-align: center !important; order: 1 !important; }
-    .sub { text-align: center !important; margin-bottom: 15px !important; order: 2 !important; }
+    .logo {
+        font-size: 22px !important;
+        text-align: center !important;
+        order: 1 !important;
+    }
+
+    .sub {
+        text-align: center !important;
+        margin-bottom: 15px !important;
+        order: 2 !important;
+    }
 
     /* 🔥 CORREÇÃO 1: PEGA A BARRA DA LUA/CARRINHO/LOGIN E JOGA PARA CIMA */
     /* Este seletor mira em qualquer div flex interna ou nos painéis de usuário */
@@ -866,7 +958,7 @@ button {
         border: 1px solid #1e1b29 !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        
+
         order: 3 !important; /* Sobe para ficar logo abaixo do título */
     }
 
@@ -878,13 +970,13 @@ button {
         margin: 0 !important;
         text-align: center !important;
         box-sizing: border-box !important;
-        
+
         /* inline-flex alinha os emojis internamente sem forçar bloco vertical */
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
         gap: 6px !important;
-        
+
         order: 4 !important; /* Joga os botões para baixo da barra de login */
     }
 
@@ -937,15 +1029,21 @@ button {
         height: 150px;
     }
 
-    .nome-prod { font-size: 13px; }
-    .preco-prod { font-size: 15px; }
+    .nome-prod {
+        font-size: 13px;
+    }
+
+    .preco-prod {
+        font-size: 15px;
+    }
 
     .container-botoes-card {
         flex-direction: column;
         gap: 6px;
     }
 
-    .btn-detalhes, .btn-add {
+    .btn-detalhes,
+    .btn-add {
         padding: 9px 0;
         font-size: 12px;
     }
@@ -1035,8 +1133,13 @@ button {
     }
 
     /* ── TÍTULOS ── */
-    h2 { font-size: 18px; }
-    h3 { font-size: 15px; }
+    h2 {
+        font-size: 18px;
+    }
+
+    h3 {
+        font-size: 15px;
+    }
 }
 
 /* MOBILE PEQUENO: até 400px (iPhone SE, Galaxy A) */
@@ -1064,6 +1167,7 @@ button {
     background: #3b82f6 !important;
     transform: translateY(-1px);
 }
+
 /* =======================================================================
    🌗 VISUAL TOTAL SLATE #0f172a PARA O MODO CLARO (LIGHT MODE)
    ======================================================================= */
@@ -1073,8 +1177,8 @@ html[data-tema="light"] body {
 }
 
 /* Força os cabeçalhos, títulos e textos de destaque a ficarem brancos */
-html[data-tema="light"] h2, 
-html[data-tema="light"] h3, 
+html[data-tema="light"] h2,
+html[data-tema="light"] h3,
 html[data-tema="light"] .modal-titulo,
 html[data-tema="light"] .nome-prod,
 html[data-tema="light"] .modal-descricao {
@@ -1084,22 +1188,38 @@ html[data-tema="light"] .modal-descricao {
 
 /* Pinta a Barra Lateral Esquerda (Sidebar) */
 html[data-tema="light"] .sidebar {
-    background-color: #0f172a !important; 
+    background-color: #0f172a !important;
     border-right: 1px solid #1e293b !important;
 }
 
 /* Ajusta o texto da logo e botões da barra lateral */
-html[data-tema="light"] .logo { color: #ffffff !important; text-shadow: none !important; }
-html[data-tema="light"] .sub { color: #94a3b8 !important; }
-html[data-tema="light"] .menu-btn { color: #cbd5e1 !important; }
-html[data-tema="light"] .menu-btn:hover { background-color: #1e293b !important; color: #fff; }
+html[data-tema="light"] .logo {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+html[data-tema="light"] .sub {
+    color: #94a3b8 !important;
+}
+
+html[data-tema="light"] .menu-btn {
+    color: #cbd5e1 !important;
+}
+
+html[data-tema="light"] .menu-btn:hover {
+    background-color: #1e293b !important;
+    color: #fff;
+}
 
 /* Pinta o cabeçalho superior */
 html[data-tema="light"] .header-superior {
     background-color: #0f172a !important;
     border-bottom: 1px solid #1e293b !important;
 }
-html[data-tema="light"] .header-superior button { color: #ffffff !important; }
+
+html[data-tema="light"] .header-superior button {
+    color: #ffffff !important;
+}
 
 /* Pinta os cards, blocos e barra de pesquisa */
 html[data-tema="light"] .card-produto,
@@ -1113,11 +1233,16 @@ html[data-tema="light"] #busca-vitrine {
 }
 
 /* Ajusta as cores secundárias e placeholders */
-html[data-tema="light"] .estoque-prod { color: #94a3b8 !important; }
-html[data-tema="light"] #busca-vitrine::placeholder { color: #64748b !important; }
+html[data-tema="light"] .estoque-prod {
+    color: #94a3b8 !important;
+}
+
+html[data-tema="light"] #busca-vitrine::placeholder {
+    color: #64748b !important;
+}
 
 /* Ajusta os campos de input de formulários */
-html[data-tema="light"] input, 
+html[data-tema="light"] input,
 html[data-tema="light"] textarea {
     background-color: #1e293b !important; /* Um tom levemente diferente para dar profundidade ao input */
     border: 1px solid #334155 !important;
